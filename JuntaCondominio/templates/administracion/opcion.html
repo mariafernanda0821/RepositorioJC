@@ -1,0 +1,43 @@
+{% extends 'administracion/base_admin.html' %}
+{% load static %}
+
+{% block panel-content %}
+
+<div class="grid-x grid-margin-x grid-padding-x">
+
+    <div class="cell grid-x grid-margin-x">
+        <h1 class= "cell"> Opciones de Egreso: </h1>
+       <div class=" cell">
+            <button data-open="exampleModal1" class="cell button success" style="padding: 1.5em;">
+                <i class="fi-print"></i>
+                <span>Listar Por Mes </span>
+            </button>
+       </div>
+    </div>
+    <div class="reveal" id="exampleModal1" data-reveal>
+        <h3> Escoga un mes :</h3>
+        <form action="" class="grid-x grid-margin-x" 
+          method="POST">{% csrf_token %}
+          
+          <div class="cell medium-6">
+            <label> Mes:</label>
+            <div class="input-group">
+              <!-- <span class="input-group-label"><i class="fi-credit-card"></i></span> -->
+                {{form.mes}}
+                
+            </div>
+            {% for error in form.mes.errors %}
+              <p class="cell" style="color: red;">
+                {{ error|escape }}
+              </p>
+            {% endfor %}
+
+          </div>
+          <button type="submit" class="cell success button">Listar</button>
+    </div>
+
+
+</div>
+
+{% endblock panel-content %}
+

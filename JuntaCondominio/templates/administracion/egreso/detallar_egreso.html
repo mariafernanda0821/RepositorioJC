@@ -1,0 +1,13 @@
+{% extends 'administracion/egreso/base_egreso.html' %}
+{% load static %}
+{% block panel-content %}
+<div class="grid-x grid-margin-x">
+    <p class="cell medium-2">{{prueba.id}}</p>
+    <p class="cell medium-4">{{prueba.egreso}}</p>
+    <p class="cell medium-2">{{prueba.monto}}</p>
+    <p class="cell medium-4">{{prueba.descripcion}}</p>
+</div>
+
+
+
+{% endblock panel-content %}

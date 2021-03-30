@@ -1,0 +1,139 @@
+<!DOCTYPE  HTML>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- <link href="css/app.css" rel="stylesheet" type="text/css" MEDIA="screen, print"> -->
+    <title>Recibo</title>
+    <style type="text/css">
+        td {
+            vertical-align: center ; 
+            text-align: center;
+            font-size: 14px;
+            border-bottom: 1px grey solid; 
+            padding-top: 3px; 
+        }
+       
+        th{
+            font-size: 14px;
+            text-align: center;
+            background-color: #D2CECD;
+            vertical-align: center;
+            padding-top: 5px;
+
+        }
+        h1{
+            font-weight: bolder;
+            text-align: center;
+            font-size: 18px;
+        }
+        p{
+            text-align: center;
+            font-size: 13px;
+            border-bottom: 2px gray solid;
+            padding-bottom: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class= "mini-bloque1">
+            <div class= "mini-bloque2"></div>
+                <p>
+                    <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San Jose</span>
+                    <br>Avenida Fuerzas Armadas, Esq. San Jose a San Luis 
+                    Parroquia San Jose, Edificio Torres de San Jose. <br>
+                    Rif: J-30793298-8 - NIL 298677-1 <br>
+                    <span style="font-weight: bolder; "> En el Registro Nacional de Empresas Bajo el N-.7 - Tomo 49, de fecha 12/06/2009.</span>               
+                </p>
+            </div>
+        </div> 
+        <div class="mini-bloque1">
+            <h1 >Recibo de Condominio {{ Mes}}</h1>
+            <table>
+                <td style="font-weight: bolder; font-size:16px;"> N-Control 00{{reporte.id}}</td>
+                <td style="font-weight: bolder; font-size:16px;"> {{reporte.fecha}} </td>
+            </table>
+        </div>
+        <div class="mini-bloque1" >
+            <table >
+              <thead>
+                <!-- <th> Cod</th> -->
+                <th>Torre</th>
+                <th>Aprt</th>
+                <th>Piso</th>
+                <th>Propietario</th>
+                <th>Mes</th>
+              </thead >
+              <tbody>
+                    <tr >
+                        <td>{{apart.get_torre_display}}</td>
+                        <td>{{reporte.apartamento}}</td>
+                        <td>{{apart.piso}}</td>
+                        <td>{{propietario.nombre}} {{propietario.apellido}}</td>
+                        <td>{{mes.get_mes_display}}</td>
+                    </tr>
+              </tbody>
+            </table>
+        </div>
+        <div class="mini-bloque1" >
+            <table>
+                <thead>
+                    <th>Alicuota</th>
+                    <th>Mensualidad</th>
+                    <th>Deuda Acumulada</th>
+                    <th>Total de Pagar</th>
+                </thead >
+                <tbody>
+                        <tr>
+                            <td>{{apart.alicuota}}</td>
+                            <td>{{reporte.monto}}</td>
+                            <td>{{reporte.deuda}}</td>
+                            <td>{{reporte.total_pagar}}</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mini-bloque1" >
+            <table>
+                <thead>
+                    <th>Reserva del mes</th>
+                    <th>Reserva Acumulada</th>
+                </thead >
+                <tbody>
+                        <tr>
+                            <td>{{mes.reserva}}</td>
+                            <td>{{mes.reserva}}</td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+        {% comment %} <h1> Descripcion de gastos </h1> {% endcomment %}
+        <div class="mini-bloque1" >
+            <table class="tabla" >
+              <thead class="encabezado">
+                <!-- <th> Cod</th> -->
+                <th>Tipo</th>
+                <th>Gastos</th>
+                <th>Monto</th>
+                <!-- <th>Fecha</th> -->
+
+              </thead >
+              <tbody>
+                {% for gasto in gastos %}
+                    <tr>
+                        <!-- <td> {{gasto}} <td> -->
+                        <td>{{gasto.get_tipo_egreso_display}}</td>
+                        <td>{{gasto.egreso}}</td>
+                        <td>{{gasto.monto}}</td> 
+                        <!-- <td>{{gasto.fecha}}</td>  -->
+
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>

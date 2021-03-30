@@ -1,0 +1,88 @@
+<!DOCTYPE  html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PDF DE GASTOS</title>
+    <style type="text/css">
+       td{
+            vertical-align: center ; 
+            text-align: center;
+            font-size: 15px;
+            border-bottom: 1px grey solid; 
+            padding-top: 8px; 
+        } 
+        th{
+            font-size: 16px;
+            text-align: center;
+            background-color: #616161;
+            vertical-align: center;
+            padding-top: 5px;
+
+        }
+        h1{
+            font-weight: bolder;
+            text-align: center;
+            font-size: 20px;
+        }
+        p{
+            text-align: center;
+            font-size: 13px;
+            border-bottom: 2px gray solid;
+            padding-bottom: 3px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="container">
+
+        <div class= "mini-bloque1">
+            <div class= "mini-bloque2"></div>
+                <p>
+                    <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San Jose</span>
+                    <br>Avenida Fuerzas Armadas, Esq. San Jose a San Luis 
+                    Parroquia San Jose, Edificio Torres de San Jose. <br>
+                    Rif: J-30793298-8 - NIL 298677-1 <br>
+                    <span style="font-weight: bolder; "> En el Registro Nacional de Empresas Bajo el N-.7 - Tomo 49, de fecha 12/06/2009.</span>               
+                </p>
+            </div>
+        </div> 
+        
+        <div class="mini-bloque1">
+            <h1> Gasto del mes de {{ mes.get_mes_display}}</h1>
+        </div>
+
+        <div class="mini-bloque1" >
+            <table class="tabla" >
+              <thead class="encabezado">
+                <!-- <th> Cod</th> -->
+                <th>Tipo</th>
+                <th>Gastos</th>
+                <th>Monto</th>
+                <th>Fecha</th>
+                <th>Descripcion</th>
+              </thead >
+              <tbody>
+                {% for gasto in gastos %}
+                    <tr>
+                        <!-- <td> {{gasto}} <td> -->
+                        <td>{{gasto.get_tipo_egreso_display}}</td>
+                        <td>{{gasto.egreso}}</td>
+                        <td>{{gasto.monto}}</td>
+                        <td>{{gasto.fecha}}</td>
+                        <td>{{gasto.descripcion}}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <table>
+                <th>Total de gastos</th>
+                <td> {{total}}</td>
+            </table>
+        </div>
+    </div>
+
+</body>
+

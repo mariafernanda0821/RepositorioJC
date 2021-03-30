@@ -1,0 +1,55 @@
+{% extends 'administracion/base_egreso.html' %}
+{% load static %}
+{% block panel-content %}
+<div class="grid-x grid-margin-x">
+    <div class ="cell">
+        <h1>Gastos</h1>
+    </div>
+    <form class="cell grid-x grid-margin-x" method="GET">
+        <div  class="cell grid-x grid-margin-x">
+            <div class="cell medium-4">
+                <input type="date" name="date_start" id="date_start" class="cell medium-4">
+                <input type="date" name="date_end" id="date_end" class="cell medium-4">
+                <button class="cell medium-4 button success">Filtrar</button>
+            </div>
+        </div>
+    </form>
+
+    <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
+        <table class="hover">
+        <thead>
+            <th>Tipo</th>
+            <th>Egreso</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Descripcion</th>
+            <th>Mes</th>
+            <th>Acciones</th>
+        </thead>
+        <tbody>
+            {% for gasto in gastos_mes %}
+                <tr>
+                    <td>{{gasto.get_tipo_egreso_display}}</td>
+                    <td>{{gasto.egreso}}</td>
+                    <td>{{gasto.monto}}</td>
+                    <td>{{gasto.fecha}}</td> 
+                    <td>{{gasto.descripcion}} </td> 
+                    <td>{{gasto.corte_mes}} </td>
+                    <td>
+                    <a href="#" class="button"><i class="fi-pencil"></i></a>
+                    <a href="#" class="button warning"><i class="fi-eye"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+  </div>
+
+
+
+
+</div>
+
+
+
+{% endblock panel-content %}
