@@ -68,7 +68,25 @@ urlpatterns = [
         'recibo-pdf/<pk>/',
         views.ReporteVoucherPdf.as_view(),
         name = "recibo_pdf",
-    ), 
+    ),
+    path(
+            'reporte-torreA/<pk>/',
+            views.ReporteTorreA.as_view(),
+            name = "reporte_torreA",
+    ),
+    path(
+            'reporte-torreB/<pk>/',
+            views.ReporteTorreB.as_view(),
+            name = "reporte_torreB",
+    ),
+    path(
+            'reporte-alquiler/<pk>/',
+            views.ReporteAlquiler.as_view(),
+            name = "reporte_alquiler",
+    ),
+
+
+    # corte de mes 
     path(
         'cerrar-mes/<pk>/',
         views.CerrarMesUpdateView.as_view(),

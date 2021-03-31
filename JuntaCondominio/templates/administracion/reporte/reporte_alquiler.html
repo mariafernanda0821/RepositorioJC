@@ -1,0 +1,59 @@
+{% extends 'administracion/reporte/base_reporte.html' %}
+{% load static %}
+
+{% block panel-content %}
+<div class="grid-x grid-margin-x">
+  <div class="cell grid-x grid-margin-x grid-padding-x">  
+    <h3 class="cell small-6 align-dows"> Reporte  del mes: {{mes.get_mes_display}}  </h3> 
+    <h3 class="cell small-6 align-right">  Alquiler  </h3> 
+
+  </div>
+  <div class="cell grid-x grid-margin-x align-center">
+    
+   {% comment %}  <div class="cell small-3">
+      <a href="#" class="button success">Registrar</a>
+    </div>
+    <div class="cell small-3">
+      <a href="#" class="button success">Registro de PDF</a>
+    </div>
+    <div class="cell small-3">
+      <a href="#" class="button success">Cierre de Mes</a>
+    </div> {% endcomment %}
+  </div>
+
+  <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
+    <table class="hover">
+      <thead>
+        <th> N-Control <th>
+        <th>Apartamento</th>
+        <th>Monto</th>
+        <th>Fecha</th>
+        <th>Mes</th>
+        <th>Deuda</th>
+        <th>Acciones</th>
+      </thead>
+      <tbody>
+        {% for reporte in reporte %}
+            <tr>
+                <td> 000{{reporte.id}} <td>
+                <td>{{reporte.apartamento}}</td>
+                <td>{{reporte.monto}}</td>
+                <td>{{reporte.fecha}}</td>
+                <td>{{reporte.corte_mes}}</td> 
+                <td>{{reporte.deuda}} </td> 
+    
+                <td>
+                <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button">Recibo</i></a>
+                <a href="#" class="button">Referencia</a> 
+                {% comment %} <a href="#" class="button warning"><i class="fi-eye"></i></a> {% endcomment %}
+                </td>
+            </tr>
+            {%empty%}
+                  <h3 style = "color:red"> No existen resultados en estos momentos </h3>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock panel-content %} 

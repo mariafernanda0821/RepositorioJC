@@ -51,7 +51,7 @@ class Apartamento(TimeStampedModel):
         verbose_name_plural = "Apartamentos"
 
     def __str__(self):
-        return str(self.id)+ "-" + self.apartamento
+        return self.apartamento
 
     # def get_absolute_url(self):
     #     return reverse("Apartamento_detail", kwargs={"pk": self.pk})

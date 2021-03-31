@@ -184,7 +184,6 @@ class ReporteListView(DetailView):
         return context
 
 
-
 #VISTA PARA CREAR REPORTE
 class ReporteCreateView(View):
 
@@ -214,8 +213,7 @@ class ReporteCreateView(View):
 
             return HttpResponseRedirect(
                     reverse(
-                        "admin_app:listar_reporte",
-                        kwargs={'pk': x.id },
+                    'admin_app:listar_cierre_mes'
                         )
                     )
 
@@ -231,10 +229,10 @@ class ReporteVoucherPdf(View):
     #
     def get(self, request, *args, **kwargs):
         reporte = Reporte.objects.get(id=self.kwargs['pk'])
-        gastos=  Egreso.objects.filter(corte_mes=reporte.corte_mes)
+        gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes)
         apart =  reporte.apartamento
         propietario = apart.propietario
-        mes = Corte_mes.objects.get(id=self.kwargs['pk'])
+        mes = reporte.corte_mes
         data = {
             'reporte': reporte,
             'gastos': gastos ,
@@ -319,13 +317,13 @@ class CerrarMesUpdateView(View):
             # aqui verifico que no hallas errores
             if  total_egreso is not None:
                 instance.monto_egreso = total_egreso
-                print("entro a egreso", total_egreso)
-                print("==========================")
+                #print("entro a egreso", total_egreso)
+                #print("==========================")
 
             if total_ingreso is not None:
                 instance.monto_ingreso = total_ingreso
-                print("entro a ingreso", total_ingreso)
-                print("==========================")
+                #print("entro a ingreso", total_ingreso)
+                #print("==========================")
 
            
             instance.reserva = reserva
@@ -348,3 +346,37 @@ class CerrarMesUpdateView(View):
             )
 
 #---------********VISTA DE CIERRE MES *******--------------------
+
+
+#--------*********VISTA A LISTAR POR TORRES *******-------------
+
+class ReporteTorreA(DetailView):
+    model = Reporte
+    template_name = "administracion/reporte/reporteTorreA.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(ReporteTorreA, self).get_context_data(**kwargs)
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=1).order_by('id')
+        context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        return context
+    
+        
+class ReporteTorreB(DetailView):
+    model = Reporte
+    template_name = "administracion/reporte/reporteTorreB.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(ReporteTorreB, self).get_context_data(**kwargs)
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=2).order_by('apartamento')
+        context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        return context
+
+class ReporteAlquiler(DetailView):
+    model = Reporte
+    template_name = "administracion/reporte/reporte_alquiler.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super(ReporteAlquiler, self).get_context_data(**kwargs)
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=3).order_by('apartamento')
+        context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        return context

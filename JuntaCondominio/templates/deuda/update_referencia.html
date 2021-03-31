@@ -1,0 +1,56 @@
+{% extends 'deuda/base_deuda.html' %}
+{% load static %}
+{% block panel-content %}
+
+    <section class="grid-x grid-margin-x">
+        <article class="cell grid-x grid-margin-x">
+            <h1 class="cell"> Referencia de Pago</h1>
+        </article>
+        
+        <article class="cell grid-x grid-margin-x"> {% %}
+           <form action="" method="post"> {% csrf_token %}
+                <article class="cell grid-x grid-margin-x">
+                    <div class="cell medium-3" >
+                        <label>Tipo de Pago:</label>
+                        <div class="input-group">
+                            {{form.tipo_pago}}
+                        </div>
+                    </div>
+                    <div class="cell medium-3" >
+                        <label> Monto del Pago:</label>
+                        <div class="input-group">
+                            {{form.monto_pagar}}
+                        </div>
+                    </div>
+                    <div class="cell medium-3" >
+                        <label>Referencia:</label>
+                        <div class="input-group">
+                            {{form.referencia_pago}}
+                        </div>
+                    </div>
+                </article >
+
+                <article class="cell grid-x grid-margin-x">
+                    <div class="cell medium-3" >
+                        <label>Tipo de Pago:</label>
+                        <div class="input-group">
+                            {{form.descripcion}}
+                        </div>
+                    </div>
+                    <div class="cell medium-3" >
+                        <label> Pago:</label>
+                        <div class="input-group">
+                            {{form.pago_bool}}
+                        </div>
+                    </div>
+                </article>
+                <article class="cell grid-x grid-margin-x">
+                    <button type="submit">Aceptar</button>
+                </article>
+           </form>
+            
+        </article>
+        
+    </section>
+
+{% endblock panel-content %}

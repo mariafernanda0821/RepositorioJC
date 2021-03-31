@@ -36,11 +36,29 @@
                         <a href="{% url 'admin_app:detail_ingreso_mes' cierre.id %}"> Listar Ingreso </a>
                         </li>
                         <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:crear_reporte' cierre.id %}"> Generar Recibos </a>
+                        <a href="{% url 'admin_app:reporte_torreA' cierre.id %}"> Reporte Torre A </a>
                         </li>
+                        <li style="font-weight: bolder;">
+                        <a href="{% url 'admin_app:reporte_torreB' cierre.id %}"> Reporte Torre B </a>
+                        </li>
+                        <li style="font-weight: bolder;">
+                        <a href="{% url 'admin_app:reporte_alquiler' cierre.id %}"> Reporte Alquiler </a>
+                        </li>
+                        {% comment %} <li style="font-weight: bolder;">
+                          <a href="{% url 'admin_app:crear_reporte' cierre.id %}"> Generar Recibos </a>
+                        </li> {% endcomment %}
                       </ul>
                     </td>
-                    <td> <a href="{% url 'admin_app:update_mes' cierre.id %}" class="warning button" style="font-weight: bolder;"> Actualizar</a> </td>
+                    <td> 
+                    <ul style="list-style: none;">
+                      <li>
+                        <a href="{% url 'admin_app:update_mes' cierre.id %}" class="warning button" style="font-weight: bolder;"> Actualizar</a> 
+                      </li>
+                      <li>
+                        <a href="{% url 'admin_app:crear_reporte' cierre.id %}" class="warning button" style="font-weight: bolder;"> Generar Recibos </a>
+                      </li>
+                    </ul>
+                    </td>
                     <td> <a href="{% url 'admin_app:cerrar_mes' cierre.id %}" class="alert button" style="font-weight: bolder;"> Cerrar Mes</a></td>
                 </tr>
                 {%empty%}

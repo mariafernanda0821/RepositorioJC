@@ -37,6 +37,7 @@ DJANGO_APPS = [
 LOCAL_APPS = [
     'applications.administracion', 
     'applications.edificio', 
+    'applications.deuda', 
     'applications.usuario', 
 ]
 

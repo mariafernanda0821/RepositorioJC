@@ -1,8 +1,8 @@
-from model_utils.models import TimeStampedModel
+from model_utils.models import TimeStampedModel 
 from django.db import models
 
 from applications.edificio.models import Apartamento, Edificio
-from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager
+from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager 
 
 class Corte_mes(TimeStampedModel):
     MES_CHOICES =(
@@ -75,7 +75,8 @@ class Ingreso(TimeStampedModel):
 
 class Reporte(TimeStampedModel):
     
-    apartamento = models.ForeignKey(Apartamento, verbose_name="Apartamento", on_delete=models.CASCADE)
+    apartamento = models.ForeignKey(Apartamento, verbose_name="Apartamento",related_name="apart_reporte", on_delete=models.CASCADE)
+    #apartamento = models.OneToOneField(Apartamento, verbose_name="Apartamento", on_delete=models.CASCADE)
     monto = models.DecimalField("Monto a pagar ", max_digits=20, decimal_places=2, default=0)
     fecha = models.DateField("Fecha", auto_now=False, auto_now_add=False)
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", on_delete=models.CASCADE) 
@@ -88,7 +89,7 @@ class Reporte(TimeStampedModel):
         verbose_name_plural = "Reportes"
 
     def __str__(self):
-        return str(self.id) +"-"+ self.apartamento
+        return str(self.id)
         
 
     #def get_absolute_url(self):
