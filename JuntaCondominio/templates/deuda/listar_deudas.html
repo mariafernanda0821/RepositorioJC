@@ -1,0 +1,32 @@
+{% extends 'deuda/base_deuda.html' %}
+{% load static %}
+{% block panel-content %}
+
+<section class= "grid-container">
+    <article class = "cell grid-x grid-margin-x align-center ">
+
+    </article>
+
+    <article "cell grid-x grid-margin-x align-center ">
+        <table >
+                <thead>
+                    <th>ID</th>
+                    <th>Apartamento</th>
+                    <th>Deuda Total</th>
+                </thead>
+            {% for deuda in deudas %}    
+                <tbody>
+                    <td> {{deuda.id}} </td>
+                    <td> {{deuda.apartamento}} </td>
+                    <td> {{deuda.deuda_pagar}} </td>
+                </tbody>
+                {%empty%}
+                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
+            {% endfor %}
+            </table>
+    </article>
+</section>
+
+
+
+{% endblock panel-content %}

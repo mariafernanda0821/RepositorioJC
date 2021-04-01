@@ -170,7 +170,6 @@ class IngresoMesPdf( View):
 
 #---------**********FIN VISTA DE REPORTE**********--------- 
 
-
 #VISTA LISTA TODO LOS REPORTE POR MES
 class ReporteListView(DetailView):
     model = Corte_mes
@@ -197,8 +196,15 @@ class ReporteCreateView(View):
             for reporte in apart:
                 if Reporte.objects.filter(apartamento=reporte, corte_mes=x).exists():
                     continue
+                    # monto = (x.monto_egreso * reporte.alicuota/100)
+                    # total= monto + 0 
+                    # instance = Reporte.objects.filter(apartamento=reporte, corte_mes=x).first()
+                    # instance.monto = (x.monto_egreso * reporte.alicuota/100)
+                    # instance.deuda = 0
+                    # instance.total_pagar = total 
+                    # instance.save()
                 else:
-                    monto = (x.monto_egreso * reporte.alicuota)
+                    monto = (x.monto_egreso * reporte.alicuota/100)
                     total= monto + 0 
                     z = Reporte.objects.create(
                         apartamento = reporte,
@@ -351,32 +357,33 @@ class CerrarMesUpdateView(View):
 #--------*********VISTA A LISTAR POR TORRES *******-------------
 
 class ReporteTorreA(DetailView):
-    model = Reporte
+    model = Corte_mes
     template_name = "administracion/reporte/reporteTorreA.html"
     
     def get_context_data(self, **kwargs):
         context = super(ReporteTorreA, self).get_context_data(**kwargs)
-        context["reporte"] = Reporte.objects.filter(apartamento__torre=1).order_by('id')
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=1, corte_mes=self.kwargs["pk"]).order_by('id')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
         return context
     
         
 class ReporteTorreB(DetailView):
-    model = Reporte
+    model = Corte_mes
     template_name = "administracion/reporte/reporteTorreB.html"
-    
+    context_object_name = "reporte"
     def get_context_data(self, **kwargs):
         context = super(ReporteTorreB, self).get_context_data(**kwargs)
-        context["reporte"] = Reporte.objects.filter(apartamento__torre=2).order_by('apartamento')
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=2, corte_mes=self.kwargs["pk"]).order_by('apartamento')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
         return context
 
+
 class ReporteAlquiler(DetailView):
-    model = Reporte
+    model = Corte_mes
     template_name = "administracion/reporte/reporte_alquiler.html"
     
     def get_context_data(self, **kwargs):
         context = super(ReporteAlquiler, self).get_context_data(**kwargs)
-        context["reporte"] = Reporte.objects.filter(apartamento__torre=3).order_by('apartamento')
+        context["reporte"] = Reporte.objects.filter(apartamento__torre=3, corte_mes=self.kwargs["pk"]).order_by('apartamento')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
         return context

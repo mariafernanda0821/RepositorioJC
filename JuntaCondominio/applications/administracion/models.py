@@ -1,5 +1,8 @@
 from model_utils.models import TimeStampedModel 
 from django.db import models
+from django.db.models.signals import post_save, post_delete
+
+from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso
 
 from applications.edificio.models import Apartamento, Edificio
 from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager 
@@ -47,6 +50,7 @@ class Egreso(TimeStampedModel):
     def __str__(self):
         return str(self.id) + " " +  self.egreso 
 
+
     #def get_absolute_url(self):
     #   return reverse("Egreso_detail", kwargs={"pk": self.pk})
 
@@ -91,8 +95,14 @@ class Reporte(TimeStampedModel):
     def __str__(self):
         return str(self.id)
         
-
-    #def get_absolute_url(self):
-    #   return reverse("Reposte_detail", kwargs={"pk": self.pk})
-
 # Create your models here.
+
+
+
+post_save.connect(actualizar_gastos , sender=Egreso)
+
+post_save.connect(actualizar_ingreso , sender=Ingreso)
+
+post_delete.connect(delete_gastos , sender=Egreso)
+
+post_delete.connect(delete_ingreso , sender=Ingreso)

@@ -2,14 +2,35 @@
 {% load static %}
 {% block panel-content %}
 
-    <section class="grid-x grid-margin-x">
+    <section class="grid-container">
         <article class="cell grid-x grid-margin-x">
-            <h1 class="cell"> Referencia de Pago</h1>
+            <h2 class="cell"> Referencia de Pago {{mes.get_mes_display}}</h1>
         </article>
         
-        <article class="cell grid-x grid-margin-x"> {% %}
-           <form action="" method="post"> {% csrf_token %}
-                <article class="cell grid-x grid-margin-x">
+        <article class="cell grid-x grid-margin-x">
+            <table >
+                <thead>
+                    <th>Reporte</th>
+                    <th>Mes</th>
+                    <th>Apartamento</th>
+                    <th>Propietario</th>
+                    <th>Total a pagar</th>  
+
+                </thead>
+                <tbody>
+                    <td>{{reporte.id}}</td>
+                    <td>{{mes.get_mes_display}}</td>
+                    <td>{{apartamento.apartamento}}</td>
+                    <td>{{propietario.nombre}} {{propietario.apellido}}</td>
+                    <td>{{reporte.monto}}</td> 
+
+                </tbody>
+            </table>
+        </article>
+
+        <article class="cell grid-x grid-margin-x"> 
+           <form action="" method="POST" class="cell grid-x grid-margin-x grid-padding-x"> {% csrf_token %}
+                <article class="cell grid-x grid-margin-x  align-center">
                     <div class="cell medium-3" >
                         <label>Tipo de Pago:</label>
                         <div class="input-group">
@@ -30,9 +51,9 @@
                     </div>
                 </article >
 
-                <article class="cell grid-x grid-margin-x">
+                <article class="cell grid-x grid-margin-x align-center">
                     <div class="cell medium-3" >
-                        <label>Tipo de Pago:</label>
+                        <label>Anotacion:</label>
                         <div class="input-group">
                             {{form.descripcion}}
                         </div>
@@ -44,11 +65,11 @@
                         </div>
                     </div>
                 </article>
-                <article class="cell grid-x grid-margin-x">
-                    <button type="submit">Aceptar</button>
+                <article class="cell grid-x grid-margin-x align-center" >
+                    <button type="submit" class="success button cell small-4">Aceptar</button>
+                    <a href={% url 'admin_app:reporte_torreA' mes.id %} class="success button cell small-4"> Reportes Torre A </a>
                 </article>
-           </form>
-            
+           </form>   
         </article>
         
     </section>

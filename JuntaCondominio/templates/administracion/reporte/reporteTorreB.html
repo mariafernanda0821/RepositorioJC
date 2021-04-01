@@ -45,9 +45,7 @@
     
                 <td>
                 <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button">Recibo</a> 
-                <a href="#" class="button">Referencia</a> 
-
-                {% comment %} <a href="#" class="button warning"><i class="fi-eye"></i></a> {% endcomment %}
+                <a href="{% url 'deuda_app:crear_referencia' reporte.id %}" class="button">Referencia</a> 
                 </td>
             </tr>
             {%empty%}

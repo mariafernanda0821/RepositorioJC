@@ -70,12 +70,12 @@ urlpatterns = [
         name = "recibo_pdf",
     ),
     path(
-            'reporte-torreA/<pk>/',
+            'reporte-mes-torreA/<pk>/',
             views.ReporteTorreA.as_view(),
             name = "reporte_torreA",
     ),
     path(
-            'reporte-torreB/<pk>/',
+            'reporte-mes-torreB/<pk>/',
             views.ReporteTorreB.as_view(),
             name = "reporte_torreB",
     ),

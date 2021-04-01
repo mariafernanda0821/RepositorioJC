@@ -16,38 +16,81 @@ from django.views.generic.edit import (
     FormView
 )
 from .models import ReferenciaPago, RegistroDeudas
-from applications.administracion.models import Reporte
+from applications.administracion.models import Reporte, Apartamento
 from .forms import ReferenciaPagoForm 
 
-class OpcionesView(TemplateView):
+class ReferenciaView(TemplateView):
     template_name = "deuda/listar_referencia.html"
 
+#VISTA PARA CREAR LA REFERENCIA DE PAGO
 class CrearReferenciaPago(View):
     
     def get(self, request, *args, **kwargs):
         instance = Reporte.objects.get(id= self.kwargs["pk"])
-        
-        if not ReferenciaPago.objects.filter(reporte= instance).exists():
+        z = ReferenciaPago.objects.filter(reporte= instance)
+
+        if not z.exists():
             #debo crear la referencia de pago
             x = ReferenciaPago.objects.create(
                 reporte = instance,
             )
             x.save()
             return HttpResponseRedirect(
-                reverse("deuda_app:update_referencia")
+                reverse("deuda_app:update_referencia" , kwargs={'pk': x.id},)
             )
 
             
         return HttpResponseRedirect(
-            reverse("deuda_app:opciones")
+            reverse("deuda_app:update_referencia" , kwargs={'pk': z[0].id},)
 
         )
 
 
-
+#VISTA PARA ACTUALIZAR EL PAGO POR MES
 class ReferenciaPagoUpdateView(UpdateView):
-    template_name = "deuda/referencia_crear.html"
-    #model = ReferenciaPago
+    template_name = "deuda/update_referencia.html"
+    model = ReferenciaPago
     form_class = ReferenciaPagoForm
-    success_url= reverse_lazy("deuda_app:opciones")
+    success_url= reverse_lazy("deuda_app:referencia")
+
+    def get_context_data(self, **kwargs):
+        context = super(ReferenciaPagoUpdateView, self).get_context_data(**kwargs)
+        x=ReferenciaPago.objects.filter(id = self.kwargs["pk"]).first()
+        reporte = x.reporte
+        mes = reporte.corte_mes
+        apartamento = reporte.apartamento
+        propietario = apartamento.propietario
+        context["reporte"]= reporte
+        context["mes"] = mes
+        context["apartamento"] = apartamento
+        context["propietario"] = propietario
+        context["referencia"] = x
+        return context
     
+      #def form_valid(self, form):
+
+    
+class CrearDeudasTabla(View):
+    def get(self, request, *args, **kwargs):
+        apart = Apartamento.objects.all()
+
+        for  x in apart:
+            a = RegistroDeudas.objects.create(apartamento = x)
+            a.save()
+        
+        return HttpResponseRedirect(
+            reverse("deuda_app:listar_deudas")
+        )
+
+
+
+class RegistroDeudasListView(ListView):
+    model = RegistroDeudas
+    template_name = "deuda/listar_deudas.html"
+    context_object_name = "deudas"
+    queryset = RegistroDeudas.objects.all().order_by("apartamento")
+
+
+#VISTA CALCULA DEUDAS 
+class CalcularDeudas(View):
+    pass
