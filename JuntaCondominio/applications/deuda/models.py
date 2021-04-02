@@ -1,11 +1,31 @@
 from django.db import models
 from django.db.models.signals import post_save
 from model_utils.models import TimeStampedModel
-# Create your models here.
-from applications.administracion.models import Reporte 
+
+from applications.administracion.models import Reporte
 from applications.edificio.models import Apartamento
+#
+from .signals import calcular_deuda 
 
 from .managers import ReferenciaPagoManager, RegistroPagoManager
+
+
+class RegistroDeudas(TimeStampedModel):
+    
+    apartamento = models.OneToOneField("edificio.Apartamento", verbose_name="Apartamento", on_delete=models.CASCADE)
+    deuda_ocumulada = models.DecimalField("Deuda", max_digits=20, decimal_places=2, default=0)
+    deuda_pagar = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0)
+    objects = ReferenciaPagoManager()
+
+
+    class Meta:
+        verbose_name = "Registro Deuda"
+        verbose_name_plural = "Registro Deudas"
+
+    def __str__(self):
+        return str (self.id)
+
+
 
 class ReferenciaPago(TimeStampedModel):
     
@@ -20,8 +40,7 @@ class ReferenciaPago(TimeStampedModel):
     referencia_pago = models.CharField("Referencia de Pago", max_length=50, blank=True) 
     descripcion = models.CharField("Anotaciones", max_length=50 , blank=True) 
     pago_bool = models.BooleanField("Pago", default= False)
-    reporte = models.OneToOneField(Reporte, verbose_name="Reporte", on_delete=models.CASCADE)
-    #deuda = models.DecimalField("Deuda", max_digits=20, decimal_places=2, default=0)
+    reporte = models.OneToOneField("administracion.Reporte", verbose_name="Reporte", on_delete=models.CASCADE)
     objects = ReferenciaPagoManager()
 
     class Meta:
@@ -31,28 +50,9 @@ class ReferenciaPago(TimeStampedModel):
     def __str__(self):
         return str(self.id) 
 
-    # def get_absolute_url(self):
-    #     return reverse("ReferenciaPAgo_detail", kwargs={"pk": self.pk})
+
+
+
+
+post_save.connect(calcular_deuda, sender=ReferenciaPago) 
  
-
-
-
-class RegistroDeudas(TimeStampedModel):
-    
-    #reporte= models.OneToOneField(Reporte, verbose_name="Registro de Reportes", on_delete=models.CASCADE)
-    #referencia= models.OneToOneField(Referencia, verbose_name="Referencia de Pago", on_delete=models.CASCADE)
-    #deudas_total = models.DecimalField("Deuda Total", max_digits=20, decimal_places=2)
-    apartamento = models.OneToOneField(Apartamento, verbose_name="Apartamento", on_delete=models.CASCADE)
-    deuda_pagar = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0)
-    objects = ReferenciaPagoManager()
-
-
-    class Meta:
-        verbose_name = "Registro Deuda"
-        verbose_name_plural = "Registro Deudas"
-
-    def __str__(self):
-        return str (self.id)
-
-    # def get_absolute_url(self):
-    #     return reverse("RegistroDeudas_detail", kwargs={"pk": self.pk})

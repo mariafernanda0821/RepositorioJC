@@ -2,10 +2,16 @@ from model_utils.models import TimeStampedModel
 from django.db import models
 from django.db.models.signals import post_save, post_delete
 
-from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso
+# modelos terceros
+from applications.edificio.models import Apartamento
+from applications.deuda.models import ReferenciaPago, RegistroDeudas
+#senales
+from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso, calcular_deuda_reporte
 
-from applications.edificio.models import Apartamento, Edificio
+
 from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager 
+#signal
+
 
 class Corte_mes(TimeStampedModel):
     MES_CHOICES =(
@@ -51,10 +57,6 @@ class Egreso(TimeStampedModel):
         return str(self.id) + " " +  self.egreso 
 
 
-    #def get_absolute_url(self):
-    #   return reverse("Egreso_detail", kwargs={"pk": self.pk})
-
-
 class Ingreso(TimeStampedModel):
     INGRESO_CHOICES =(
         ("1", "Fijo"),
@@ -80,7 +82,6 @@ class Ingreso(TimeStampedModel):
 class Reporte(TimeStampedModel):
     
     apartamento = models.ForeignKey(Apartamento, verbose_name="Apartamento",related_name="apart_reporte", on_delete=models.CASCADE)
-    #apartamento = models.OneToOneField(Apartamento, verbose_name="Apartamento", on_delete=models.CASCADE)
     monto = models.DecimalField("Monto a pagar ", max_digits=20, decimal_places=2, default=0)
     fecha = models.DateField("Fecha", auto_now=False, auto_now_add=False)
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", on_delete=models.CASCADE) 
@@ -99,10 +100,12 @@ class Reporte(TimeStampedModel):
 
 
 
-post_save.connect(actualizar_gastos , sender=Egreso)
+post_save.connect(actualizar_gastos , sender=Egreso) 
 
 post_save.connect(actualizar_ingreso , sender=Ingreso)
 
 post_delete.connect(delete_gastos , sender=Egreso)
 
 post_delete.connect(delete_ingreso , sender=Ingreso)
+
+post_save.connect(calcular_deuda_reporte, sender=Reporte) 

@@ -25,7 +25,10 @@ from .forms import (
 
 #
 from .models import *
-from applications.edificio.models import *
+from applications.edificio.models import * 
+from applications.deuda.models import * 
+
+
 
 #VISTA PRINCIPAL
 
@@ -193,25 +196,27 @@ class ReporteCreateView(View):
         if x.cerrar_mes:
             #print("=====> Entro al if", x.cerrar_mes)
             apart= Apartamento.objects.all()
-            for reporte in apart:
-                if Reporte.objects.filter(apartamento=reporte, corte_mes=x).exists():
-                    continue
-                    # monto = (x.monto_egreso * reporte.alicuota/100)
-                    # total= monto + 0 
-                    # instance = Reporte.objects.filter(apartamento=reporte, corte_mes=x).first()
-                    # instance.monto = (x.monto_egreso * reporte.alicuota/100)
-                    # instance.deuda = 0
-                    # instance.total_pagar = total 
-                    # instance.save()
+            for apart in apart:
+                if Reporte.objects.filter(apartamento=apart, corte_mes=x).exists():
+                    #continue
+                    monto = (x.monto_egreso * apart.alicuota/100)
+                    deuda = RegistroDeudas.objects.filter(apartamento=apart).first()
+                    total= monto + 0 
+                    instance = Reporte.objects.filter(apartamento=apart, corte_mes=x).first()
+                    instance.monto = monto
+                    instance.deuda = deuda.deuda_pagar
+                    instance.total_pagar = total 
+                    instance.save()
                 else:
-                    monto = (x.monto_egreso * reporte.alicuota/100)
+                    monto = (x.monto_egreso * apart.alicuota/100)
+                    deuda = RegistroDeudas.objects.filter(apartamento=apart).first()
                     total= monto + 0 
                     z = Reporte.objects.create(
-                        apartamento = reporte,
+                        apartamento = apart,
                         monto = monto,
                         fecha = timezone.now(),
                         corte_mes = x,
-                        deuda = 0,
+                        deuda = deuda.deuda_pagar,
                         total_pagar = total,
                     ) 
                     z.save()
