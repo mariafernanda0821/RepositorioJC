@@ -1,0 +1,175 @@
+{% extends 'administracion/base_admin.html' %}
+{% load static %}
+
+{% block panel-content %}
+
+<section class = "grid-x-container">
+  <article class="cell">
+
+  </article>
+  
+  <article class="cell grid-x grid-margin-x grid-padding-y align-center">
+    <h1 class= "cell"> Informe General </h1>
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Reporte del Edificio</h4>
+        </div>
+          {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
+        <div class="card-section">
+          <h4>{{total_reporte}}</h4>
+        </div>
+      </div>
+    </article>
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Referencia del Edificio</h4>
+        </div>
+          {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
+        <div class="card-section">
+          <h4>{{total_referencia}}</h4>
+        </div>
+      </div>
+    </article>
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Deuda Edificio</h4>
+        </div>
+          {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
+        <div class="card-section">
+          <h4>{{total_deuda}}</h4>
+        </div>
+      </div>
+    </article>
+
+  </article>
+  
+  <!-- TORRE A-->
+  <article class="cell grid-x grid-margin-x grid-padding-y align-center">
+    
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Reporte Torre A</h4>
+        </div>
+        <div class="card-section">
+          <h4>{{total_reporteA}}</h4>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4> Deuda Torre A</h4>
+        </div>
+        <h4>{{deuda_torreA}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class="cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4> Referencia TorreA</h4>
+        </div>
+        <h4>{{total_referenciaA}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+    
+  </article>
+
+  <!-- TORRE b-->
+
+  <article class="cell grid-x grid-margin-x grid-padding-y align-center">
+    
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Reporte Torre B</h4>
+        </div>
+        <div class="card-section">
+          <h4>{{total_reporteB}}</h4>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4> Deuda Torre B</h4>
+        </div>
+        <h4>{{deuda_torreB}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class="cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Referencia Torre B</h4>
+        </div>
+        <h4>{{total_referenciaB}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+    
+  </article>
+
+  <!-- ALQUILERES-->
+
+  <article class="cell grid-x grid-margin-x grid-padding-y align-center">
+    
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Reporte Alquiler</h4>
+        </div>
+        <div class="card-section">
+          <h4>{{total_reporteAlq}}</h4>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4> Deuda Alquileres</h4>
+        </div>
+        <h4>{{deuda_alquiler}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+
+    <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class="cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Total a pagar</h4>
+        </div>
+        <h4>{{total_referenciaAlq}}</h4>
+        <div class="card-section">
+          <p></p>
+        </div>
+      </div>
+    </article>
+    
+  </article>
+
+</section>
+
+{% endblock panel-content %}
+

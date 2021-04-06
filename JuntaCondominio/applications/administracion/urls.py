@@ -11,7 +11,12 @@ urlpatterns = [
     ),
 
     path(
-        'opcion/',
+        'seleccion/',
+        views.Seleccion.as_view(),
+        name = "seleccion",
+    ),
+    path(
+        'opcion/<pk>/',
         views.OpcionesView.as_view(),
         name = "opciones",
     ),
@@ -54,7 +59,7 @@ urlpatterns = [
         name= "update_mes",
     ),
     path(
-        'listar-reporte/<pk>',
+        'listar-reporte/',
         views.ReporteListView.as_view(),
         name = 'listar_reporte',
     ),

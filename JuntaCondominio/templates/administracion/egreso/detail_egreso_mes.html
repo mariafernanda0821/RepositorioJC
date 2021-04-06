@@ -17,7 +17,7 @@
       <a href="{% url 'admin_app:recibo_egreso_mes' mes.id %}" class="warning button"> Generar Informe PDF</a>
     </div>
     <div class="cell small-3">
-      <a href="{% url 'admin_app:update_mes' mes.id %}" class="warning button"> Actualizar </a>
+      <a href="{% url 'admin_app:listar_cierre_mes'  %}" class="warning button"> Home Mes </a> 
     </div>
     </div>
   </div>
@@ -30,7 +30,8 @@
         <th>Egreso</th>
         <th>Monto</th>
         <th>Fecha</th>
-        <th>Acciones</th>
+        <th></th>
+        <th></th>
       </thead>
       <tbody>
         {% for gasto in gastos_mes %}
@@ -41,9 +42,13 @@
                 <td>{{gasto.monto}}</td>
                 <td>{{gasto.fecha}}</td> 
                 <td>
-                <a href="{% url 'admin_app:update_egres' gasto.id %}" class="button"><i class="fi-pencil"></i></a>
-                <a href="{% url 'admin_app:detallar_gasto' gasto.id%}" class="button warning"><i class="fi-eye"></i></a>
-                <a href="{% url 'admin_app:delete_egreso' gasto.id %}" class="alert button"><i class="fi-x"></i></a>
+                  <a href="{% url 'admin_app:update_egres' gasto.id %}" class="button"><i class="fi-pencil"></i></a>
+                </td>
+                <td>
+                  <!-- <p>{{gasto.corte_mes_id}}</p> -->
+                    <form action="{% url 'admin_app:delete_egreso' gasto.id %}" method="POST">{% csrf_token %}
+                      <button type="submit" class="button alert"><i class="fi-x"></i></button>
+                    </form>
                 </td>
             </tr>
             {%empty%}

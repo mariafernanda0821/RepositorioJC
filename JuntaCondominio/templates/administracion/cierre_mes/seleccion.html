@@ -1,0 +1,29 @@
+{% extends 'administracion/cierre_mes/base_cierre.html' %}
+{% load static %}
+{% block panel-content %}
+<section class="grid-x container">
+    <form action="" method="post" class="cell grid-x grid-margin-x grid-padding-y align-center" > {% csrf_token %}
+       <section class="cell grid-x grid-margin-x align-center">
+            <article class="cell medium-4">
+                <label> Mes:</label>
+                {{form.mes}}
+            </article>
+            <article class="cell medium-4">
+                <label> Opcion:</label>
+
+                {{form.opciones}}
+            </article>
+            <article class="cell medium-4">
+                <label> Torre:</label>
+                
+                {{form.torre}}
+            </article>
+        </section>
+        <button type="submit" class= "cell alert button"> Filtrar </button>
+    </form>
+    
+</section>
+
+
+{% endblock panel-content %}
+

@@ -12,6 +12,9 @@ urlpatterns = [
     path( 'actualizar-referencia/<pk>/', views.ReferenciaPagoUpdateView.as_view(), name = "update_referencia",), 
     path( 'listar-deudas/', views.RegistroDeudasListView.as_view(), name = "listar_deudas",), 
 
+    path( 'listar-referencias/', views.ReferenciaListView.as_view(), name = "listar_referencia",), 
+
+
 
 
 ]

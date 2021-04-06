@@ -56,9 +56,9 @@
                         </div>
                         <div class="cell medium-5">
                             {% if egreso %}
-                            <a href="{% url 'admin_app:detail_egreso_mes' egreso.corte_mes %}" class="success button" style="width: 200px;"> Listar </a>
+                            <a href="{% url 'admin_app:detail_egreso_mes' egreso.corte_mes_id %}" class="success button" style="width: 200px;"> Atras </a>
                             {% endif %}
-                            <!-- <p>{{egreso.corte_mes}}  ---{{egreso.id}} </p> -->  
+                           {% comment %}  <p>{{egreso.corte_mes_id}}  ---{{egreso.id}} </p>   {% endcomment %}
                         </div>
                        
                        

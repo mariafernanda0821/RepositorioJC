@@ -1,0 +1,62 @@
+{% extends 'edificio/base_edificio.html' %}
+{% block panel-content %}
+<section class= "grid-container">
+    <article class = "cell grid-x grid-margin-x align-center ">
+        <h2 style = "color: blue; text-align: center"> Referencia de Pago: </h2>
+    </article>
+    
+    <article class = "cell ">
+        <table>
+                <thead>
+                    <th> {{apart.id}}</th>
+                    <th> {{apart.apartamento}}</th>
+                    <th> {{apart.propietario.nombre}} {{apart.propietario.apellido}}</th> 
+                    <th> {{apart.get_torre_display}} </th> 
+                </thead>
+        </table>
+    </article>
+    <article class = "cell">
+        {% for referencia in referencia %} 
+            <table>
+                <thead>
+                    <th>ID</th>
+                    <th> Tipo de pago</th>
+                    <th> Monto</th> 
+                    <th> Reg Pago </th> 
+                    <th>Anatacion</th> 
+                    <th>reporte</th> 
+                </thead>
+                 
+                <tbody>
+                        <td> {{referencia.id}} </td>
+                        <td> {{referencia.get_tipo_pago_display}} </td>
+                        <td> {{referencia.monto_pagar}} </td> 
+                        <td> {{referencia.pago_bool}} </td> 
+                        <td> {{referencia.descripcion}} </td> 
+                        <td> {{referencia.reporte}} </td>
+                </tbody> 
+               <tbody>
+                    <td> Reporte: {{referencia.reporte.id}} </td> 
+                    <td> Mes: {{referencia.reporte.corte_mes.get_mes_display}} </td>
+                    <td> Monto a Pagar: {{referencia.reporte.monto}} </td> 
+                    <td> Deuda: {{referencia.reporte.deuda}} </td> 
+                    <td> Total a Pagar: {{referencia.reporte.total_pagar}} </td> 
+                    <td>
+                        <a href="{% url 'deuda_app:crear_referencia' referencia.reporte.id %}" class="alert button"> Referencia </a>    
+                    </td> 
+                </tbody>     
+        
+            </table>
+            {%empty%}
+                <h3 style = "color:red"> No existen referencia  registrada en estos momentos </h3> 
+        {% endfor %} 
+        <table>
+            {% if pago_total %} 
+                <td style="font-weight: bolder; text-align: center; font-size: 25px;"> Total Pagado:  {{pago_total}}</td>
+            {% endif %}
+        </table>
+    </article>
+</section>
+
+
+{% endblock panel-content %}

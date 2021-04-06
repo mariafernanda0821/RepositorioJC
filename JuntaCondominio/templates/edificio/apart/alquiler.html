@@ -1,0 +1,38 @@
+{% extends 'edificio/base_edificio.html' %}
+{% block panel-content %}
+<section class= "grid-container">
+    <article class = "cell grid-x grid-margin-x align-center ">
+
+    </article>
+
+    <article "cell grid-x grid-margin-x align-center ">
+        <table >
+                <thead>
+                    <th>ID</th>
+                    <th>Apartamento</th>
+                    <th>Propietario</th> 
+                    <th>Registro de Pago</th> 
+                    <th>Reportes</th> 
+
+                </thead>
+            {% for apart in apart %}    
+                <tbody>
+                    <td> {{apart.id}} </td>
+                    <td> {{apart.apartamento}} </td>
+                    <td> {{apart.propietario.nombre}} {{apart.propietario.apellido}}</td>
+                    <td> 
+                        <a href="{% url 'edificio_app:detail_apart' apart.id %}" class="warning button"> Referencias </a>    
+                    </td>
+                    <td> 
+                        <a href="{% url 'edificio_app:detail_reporte' apart.id %}" class="warning button"> Reporte </a>    
+                    </td>
+                </tbody>
+                {%empty%}
+                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
+            {% endfor %}
+            </table>
+    </article>
+</section>
+
+
+{% endblock panel-content %}

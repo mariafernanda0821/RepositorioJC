@@ -3,40 +3,21 @@
 
 {% block panel-content %}
 <div class="grid-x grid-margin-x">
-  <div class="cell grid-padding-x">  
-    <h3> Reporte  del mes: {{mes.get_mes_display}}  </h3>
-  </div>
-  <div class="cell grid-x grid-margin-x align-center">
-    
-   {% comment %}  <div class="cell small-3">
-      <a href="#" class="button success">Registrar</a>
-    </div>
-    <div class="cell small-3">
-      <a href="#" class="button success">Registro de PDF</a>
-    </div>
-    <div class="cell small-3">
-      <a href="#" class="button success">Cierre de Mes</a>
-    </div> {% endcomment %}
-  </div>
-
-
-  <div class="cell grid-x grid-margin-x">
-   {% comment %}  <div class="cell small-2">
-      <a href="#?order=name">
-        <span class="label warning">Por Nombre</span>
-      </a>
-    </div>
-    <div class="cell small-2">
-      <a href="#?order=date">
-        <span class="label secondary">Por Fecha</span>
-      </a>
-    </div>
-    <div class="cell small-2">
-      <a href="?order=stok">
-        <span class="label">Por Stok</span>
-      </a>
-    </div> {% endcomment %}
-  </div>
+ 
+  <h3 class="cell"> Reporte </h3>
+    <section class=" cell grid-x container">
+        <form action="" method="GET" class="cell grid-x grid-margin-x grid-padding-y align-center" >
+            <section class="cell grid-x grid-margin-x align-center">
+                <article class="cell medium-4">
+                    {{form.mes}}
+                </article>
+                <article class="cell medium-4">
+                    {{form.torre}}
+                </article>
+            </section>
+            <button type="submit" class= "cell alert button"> Filtrar </button>
+        </form>     
+    </section>
 
   <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
     <table class="hover">
@@ -53,7 +34,7 @@
         {% for reporte in reporte %}
             <tr>
                 <td> 000{{reporte.id}} <td>
-                <td>{{reporte.apartamento}}</td>
+                <td>{{reporte.apartamento}} - {{reporte.apartamento.get_torre_display}}</td>
                 <td>{{reporte.monto}}</td>
                 <td>{{reporte.fecha}}</td>
                 <td>{{reporte.corte_mes}}</td> 
@@ -64,6 +45,8 @@
                 {% comment %} <a href="#" class="button warning"><i class="fi-eye"></i></a> {% endcomment %}
                 </td>
             </tr>
+             {%empty%}
+                <h3 style = "color:red"> No existen resultados en estos momentos </h3>
         {% endfor %}
       </tbody>
     </table>

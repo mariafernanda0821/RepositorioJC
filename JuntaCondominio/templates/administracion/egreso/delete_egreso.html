@@ -3,13 +3,13 @@
 {% block panel-content %}
 <div class="grid-container">
     <div class="grid-x grid-margin-x">
-        <h1 class="cell"> Eliminar el gasto : {{ object.egreso }} </h1>
+      {% comment %}   <h1 class="cell"> Eliminar el gasto : {{ object.egreso }} </h1>
         <div class="cell">
             <form action="" method="POST"> {% csrf_token %}
                 <p> Confirme que desea eliminar este empleado </p>
                 <button type="submit" class="success button"> Confirmar </button>
             </form>
-        </div>
+        </div> {% endcomment %}
 
     </div>
 

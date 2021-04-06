@@ -2,6 +2,7 @@ import datetime
 from django import forms 
 
 from .models import Egreso , Corte_mes, Ingreso
+from applications.edificio.models import Apartamento
 
 
 class EgresoForm(forms.ModelForm):
@@ -166,10 +167,34 @@ class CierreMesForm(forms.ModelForm):
             return self.cleaned_data['mes']
 
 
-class MesForm(forms.Form):
+class  SeleccionForm(forms.Form):
+    OPCION_CHOICES = (
+        ("1", "Reporte"),
+        ("2", "Referencia"),
+    )
     mes = forms.ChoiceField(
         required=True,
         choices=Corte_mes.MES_CHOICES,
+        widget=forms.Select(
+            attrs = {
+                'class': 'input-group-field',
+            }
+        )
+    )
+
+    opciones = forms.ChoiceField(
+        required=True,
+        choices=OPCION_CHOICES,
+        widget=forms.Select(
+            attrs = {
+                'class': 'input-group-field',
+            }
+        )
+    )
+
+    torre = forms.ChoiceField(
+        required=True,
+        choices=Apartamento.TORRE_CHOICES,
         widget=forms.Select(
             attrs = {
                 'class': 'input-group-field',

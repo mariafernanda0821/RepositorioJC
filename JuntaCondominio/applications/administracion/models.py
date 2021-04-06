@@ -1,13 +1,15 @@
 from model_utils.models import TimeStampedModel 
 from django.db import models
 from django.db.models.signals import post_save, post_delete
+#from django.db.models import Q, Sum, F, FloatField, ExpressionWrapper 
 
 # modelos terceros
 from applications.edificio.models import Apartamento
-from applications.deuda.models import ReferenciaPago, RegistroDeudas
-#senales
-from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso, calcular_deuda_reporte
+#from applications.deuda.models import ReferenciaPago, RegistroDeudas 
 
+#senales
+from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso 
+#from applications.deuda.models import calcular_deuda
 
 from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager 
 #signal
@@ -87,7 +89,7 @@ class Reporte(TimeStampedModel):
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", on_delete=models.CASCADE) 
     deuda = models.DecimalField("Deuda Ocumulada", max_digits=20, decimal_places=2, default=0, blank=True)
     total_pagar=models.DecimalField("Total a pagar", max_digits=20, decimal_places=2, default=0)
-    objects = ReporteManager
+    objects = ReporteManager()
 
     class Meta:
         verbose_name = "Reporte"
@@ -108,4 +110,23 @@ post_delete.connect(delete_gastos , sender=Egreso)
 
 post_delete.connect(delete_ingreso , sender=Ingreso)
 
-post_save.connect(calcular_deuda_reporte, sender=Reporte) 
+
+
+
+
+
+
+# def calcular_deuda2(sender, instance, **kwargs):
+#     apart = instance.apartamento
+#     lista_pagos = ReferenciaPago.objects.filter(reporte__apartamento= apart).aggregate(total = Sum(F("monto_pagar"),output_field=FloatField()))
+#     lista_reporte = Reporte.objects.filter(apartamento= apart).aggregate(total = Sum(F("monto"),output_field=FloatField()))
+#     registro_deudas= RegistroDeudas.objects.filter(apartamento= apart).first()
+
+#     if lista_pagos["total"] is None:
+#         registro_deudas.deuda_pagar = lista_reporte["total"] 
+#         registro_deudas.save() 
+
+#     registro_deudas.deuda_pagar = lista_reporte["total"] - lista_pagos["total"]
+#     registro_deudas.save()
+
+# post_save.connect(calcular_deuda2, sender=Reporte) 
