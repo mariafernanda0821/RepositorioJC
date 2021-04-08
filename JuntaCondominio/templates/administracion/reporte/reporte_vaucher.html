@@ -12,7 +12,7 @@
             text-align: center;
             font-size: 14px;
             border-bottom: 1px grey solid; 
-            padding-top: 3px; 
+            padding-top: 3px;   
         }
        
         th{
@@ -33,6 +33,9 @@
             font-size: 13px;
             border-bottom: 2px gray solid;
             padding-bottom: 3px;
+        }
+        .gastos >td {
+          padding-letf: 3px;  
         }
     </style>
 </head>
@@ -113,21 +116,17 @@
         <div class="mini-bloque1" >
             <table class="tabla" >
               <thead class="encabezado">
-                <!-- <th> Cod</th> -->
-                <th>Tipo</th>
                 <th>Gastos</th>
                 <th>Monto</th>
-                <!-- <th>Fecha</th> -->
-
+                <th> Descripcion</th> 
               </thead >
               <tbody>
                 {% for gasto in gastos %}
-                    <tr>
-                        <!-- <td> {{gasto}} <td> -->
-                        <td>{{gasto.get_tipo_egreso_display}}</td>
-                        <td>{{gasto.egreso}}</td>
+                    <tr >
+                     <!--    <td>{{gasto.get_tipo_egreso_display}}</td> -->
+                        <td  style="text-indent:10px; text-align:letf;">{{gasto.egreso}}</td>
                         <td>{{gasto.monto}}</td> 
-                        <!-- <td>{{gasto.fecha}}</td>  -->
+                        <td style="text-indent:10px; text-align:letf;">{{gasto.descripcion}}</td> 
 
                     </tr>
                 {% endfor %}

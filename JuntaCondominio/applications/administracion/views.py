@@ -3,6 +3,9 @@ import datetime
 from datetime import timedelta
 from decimal import *
 # django
+#from django_weasyprint import *
+
+from django.core.mail import EmailMessage
 from django.utils import timezone
 from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse
@@ -39,7 +42,7 @@ class CierreMesListView(ListView):
 
     def get_queryset(self):
 
-        return Corte_mes.objects.all()
+        return Corte_mes.objects.all().order_by("mes")
 
 
 #VISTA DE OPCIONES PARA LISTAR O AGREGAR:
@@ -66,6 +69,7 @@ class OpcionesView(DetailView):
 
         return context
     
+
 #----------*****EGRESO*****----------------
 #VISTA AGREGAR UN INGRESO 
 class EgresoCreateView(CreateView):
@@ -99,15 +103,6 @@ class EgresoUpdateView(UpdateView):
     #     return reverse("admin_app:update_egres", args=(self.object.id,))
 
 
-#VISTA DETALLAR UN gasto
-class DetallarEgreso(DetailView):
-   # model = Egreso
-    template_name = "administracion/egreso/detallar_egreso.html"
-    context_object_name = "prueba"
-    
-    def get_queryset(self):
-       return Egreso.objects.filter(id=self.kwargs['pk'])
-    
 
 #VISTA PARA ELIMINAR UN GASTO
 class EgresoDeleteView(DeleteView):
@@ -124,14 +119,17 @@ class EgresoMesPdf(View):
     #
     def get(self, request, *args, **kwargs):
         mes = Corte_mes.objects.get(id=self.kwargs['pk'])
+        gastos= Egreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("id")
+        total = Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) #ESTOY PASANDO EL MES
+        #total1 = "{:,}".format(total).replace(',','.')
         data = {
             'mes': mes,
-            'gastos': Egreso.objects.filter(corte_mes= self.kwargs['pk']),
-            'total': Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) #ESTOY PASANDO EL MES 
+            'gastos': gastos,
+            'total':  "{:,}".format(total)
+            #"{:,}".format(total).replace(',','.')
         }
         pdf = render_to_pdf('administracion/egreso/recibo_mes.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
-
 
 #-----------****** FIN VISTA DE EGRESO ********-----------
 
@@ -168,7 +166,7 @@ class IngresoMesPdf( View):
         mes = Corte_mes.objects.get(id=self.kwargs['pk'])
         data = {
             'mes': mes,
-            'ingresos': Ingreso.objects.filter(corte_mes= self.kwargs['pk']),
+            'ingresos': Ingreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("id"),
             'total': Ingreso.objects.totalizar_ingreso_mes(self.kwargs["pk"])
         }
         pdf = render_to_pdf('administracion/ingreso/recibo_ingreso.html', data)
@@ -222,13 +220,15 @@ class ReporteCreateView(View):
                 else:
                     monto = (x.monto_egreso * apart.alicuota/100)
                     deuda = RegistroDeudas.objects.filter(apartamento=apart).first()
-                    total= monto + deuda.deuda_pagar
+                    #total= monto + deuda.deuda_pagar
+                    total= monto + deuda.deuda_ocumulada
+
                     z = Reporte.objects.create(
                         apartamento = apart,
                         monto = monto,
                         fecha = timezone.now(),
                         corte_mes = x,
-                        deuda = deuda.deuda_pagar,
+                        deuda = deuda.deuda_ocumulada,
                         total_pagar = total,
                     ) 
                     z.save()
@@ -246,31 +246,100 @@ class ReporteCreateView(View):
                     )
 
 
-#RECIBO POR MES
-class ReporteVoucherPdf(View):
-    #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES
-    #
-    def get(self, request, *args, **kwargs):
-        reporte = Reporte.objects.get(id=self.kwargs['pk'])
-        gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes)
-        apart =  reporte.apartamento
-        propietario = apart.propietario
-        mes = reporte.corte_mes
-        total= Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) 
-        data = {
+
+#funcion
+def reporte_vaucher_pdf(id_reporte):
+    reporte = Reporte.objects.get(id=id_reporte)
+    gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes)
+    apart =  reporte.apartamento
+    propietario = apart.propietario
+    mes = reporte.corte_mes
+    total= Egreso.objects.totalizar_gastos_mes(mes) 
+    reserva = Corte_mes.objects.total_reserva() 
+    data = {
             'reporte': reporte,
             'gastos': gastos ,
             'apart' : apart,
             'propietario': propietario,
             "mes": mes,
-            'total': Egreso.objects.totalizar_gastos_mes(reporte.corte_mes.id), #ESTOY PASANDO EL MES 
-            "reserva": Cierre_mes.objects.total_reserva() 
+            'total': "{:,}".format(total), #ESTOY PASANDO EL MES 
+            "reserva": reserva 
         }
 
-        pdf = render_to_pdf('administracion/reporte/reporte_vaucher.html', data)
-        return HttpResponse(pdf, content_type='application/pdf')
+    pdf = render_to_pdf('administracion/reporte/reporte_vaucher.html', data)
+    return pdf
+
+        
+
+
+#RECIBO POR MES
+class ReporteVoucherPdf(View):
+    #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES
+    
+    def get(self, request, *args, **kwargs):
+        #reporte_vaucher_pdf(self.kwargs['pk'])
+        # reporte = Reporte.objects.get(id=self.kwargs['pk'])
+        # gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes)
+        # apart =  reporte.apartamento
+        # propietario = apart.propietario
+        # mes = reporte.corte_mes
+        # total= Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) 
+        # data = {
+        #     'reporte': reporte,
+        #     'gastos': gastos ,
+        #     'apart' : apart,
+        #     'propietario': propietario,
+        #     "mes": mes,
+        #     'total': Egreso.objects.totalizar_gastos_mes(reporte.corte_mes.id), #ESTOY PASANDO EL MES 
+        #     #"reserva": Cierre_mes.objects.total_reserva() 
+        # }
+
+        # pdf = render_to_pdf('administracion/reporte/reporte_vaucher.html', data)
+        
+        return HttpResponse(reporte_vaucher_pdf(self.kwargs['pk']), content_type='application/pdf')
+
+
+class EnviarReportePDF(View):
+
+    def get(self, request, *args, **kwargs):
+        i=0
+        reportes = Reporte.objects.filter(corte_mes= self.kwargs['pk']).order_by("id")
+
+        if not reportes: 
+            return HttpResponseRedirect(reverse ("admin_app:opciones",kwargs={'pk': self.kwargs['pk']},))
+
+        for reporte in reportes:
+            i+=1
+            correo = reporte.apartamento.propietario.email
+            
+            print("", i)
+            #print("correo", correo)
+            if correo is  "":
+                print("correo", correo)
+                continue
+            else:
+                pdf = reporte_vaucher_pdf(reporte.id)
+                asunto = "Recibo " + '[' + reporte.apartamento.apartamento + ']'
+                mensaje = "Se adjunta el recibo del mes " 
+                #email_remitente = "mariaf0821@gmail.com"
+                email_remitente = "lastorresedifcio@gmail.com"
+
+                #send_mail(asunto, mensaje, email_remitente, mariaf0821@gmail.com)
+                email = EmailMessage(asunto, mensaje, email_remitente, [correo,])
+                email.attach("recibo", pdf.getvalue(), "application/pdf")
+                email.content_subtype = pdf  # Main content is now text/html
+                email.encoding = 'ISO-8859-1'
+                email.send()
+                print("se envio correo", correo)
+
+        return HttpResponseRedirect(reverse("admin_app:listar_cierre_mes"))
+
+
 
 #---------**********FIN VISTA DE REPORTE**********-------------- 
+
+
+
 
 
 #---------********VISTA DE CIERRE MES *******--------------------
@@ -363,56 +432,41 @@ class CerrarMesUpdateView(View):
 
 class ReporteTorreA(DetailView):
     model = Corte_mes
-    template_name = "administracion/reporte/reporteTorreA.html"
+    template_name = "administracion/reporte/reporteTorres.html"
     
     def get_context_data(self, **kwargs):
         context = super(ReporteTorreA, self).get_context_data(**kwargs)
         context["reporte"] = Reporte.objects.filter(apartamento__torre=1, corte_mes=self.kwargs["pk"]).order_by('id')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        context["torre"] = Apartamento.objects.filter(torre=1).first()
         return context
     
         
 class ReporteTorreB(DetailView):
     model = Corte_mes
-    template_name = "administracion/reporte/reporteTorreB.html"
+    template_name = "administracion/reporte/reporteTorres.html"
     #context_object_name = "reporte"
     def get_context_data(self, **kwargs):
         context = super(ReporteTorreB, self).get_context_data(**kwargs)
         context["reporte"] = Reporte.objects.filter(apartamento__torre=2, corte_mes=self.kwargs["pk"]).order_by('apartamento')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        context["torre"] = Apartamento.objects.filter(torre=2).first()
+
         return context
 
 
 class ReporteAlquiler(DetailView):
     model = Corte_mes
-    template_name = "administracion/reporte/reporte_alquiler.html"
+    template_name = "administracion/reporte/reporteTorres.html"
     
     def get_context_data(self, **kwargs):
         context = super(ReporteAlquiler, self).get_context_data(**kwargs)
         context["reporte"] = Reporte.objects.filter(apartamento__torre=3, corte_mes=self.kwargs["pk"]).order_by('apartamento')
         context["mes"] = Corte_mes.objects.get(id= self.kwargs["pk"])
+        context["torre"] = Apartamento.objects.filter(torre=3).first()
+
         return context
 
 #--------********* FIN VISTA A LISTAR POR TORRES *******------------- 
 
 
-
-        
-    
-    
-
-
-
-class Seleccion(FormView):
-    template_name = "administracion/cierre_mes/seleccion.html"
-    form_class = SeleccionForm
-    
-    # def form_valid(self, form):
-    #     print("===>", form.cleaned_data['mes']) 
-    #     print("===>", form.cleaned_data['opciones']) 
-    #     print("===>", form.cleaned_data['torre']) 
-    #     if form.cleaned_data['opciones'] == 1:
-        
-    #     else:
-    #     return []
-    

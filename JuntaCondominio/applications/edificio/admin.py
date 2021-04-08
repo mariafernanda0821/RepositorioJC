@@ -6,6 +6,8 @@ class PropietarioAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "nombre",
+        "apellido",
+        "email",
     )   
 
 admin.site.register(Propietario, PropietarioAdmin)

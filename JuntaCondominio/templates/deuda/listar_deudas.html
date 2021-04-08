@@ -10,14 +10,16 @@
     <article "cell grid-x grid-margin-x align-center ">
         <table >
                 <thead>
-                    <th>ID</th>
-                    <th>Apartamento</th>
+                    {% comment %} <th>ID</th> {% endcomment %}
+                    <th>Apartamento</th> 
+                    <th> Deuda Acumulada</th> 
                     <th>Deuda Total</th>
                 </thead>
             {% for deuda in deudas %}    
                 <tbody>
-                    <td> {{deuda.id}} </td>
+                    {% comment %} <td> {{deuda.id}} </td> {% endcomment %}
                     <td> {{deuda.apartamento}} </td>
+                    <td> {{deuda.deuda_ocumulada}} </td>
                     <td> {{deuda.deuda_pagar}} </td>
                 </tbody>
                 {%empty%}

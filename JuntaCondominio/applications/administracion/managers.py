@@ -53,7 +53,8 @@ class EgresoManager(models.Manager):
 class CierreMesManager(models.Manager):
    
    def total_reserva(self):
-       x = self.exclude(id__in=[1,2]).aggregate(total = Sum(F("reserva"),output_field=FloatField()))
+       
+       x = self.all().exclude(id__in=[1,2]).aggregate(total = Sum(F("reserva"),output_field=FloatField()))
 
        return x["total"]
 

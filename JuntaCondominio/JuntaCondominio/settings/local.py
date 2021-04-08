@@ -30,3 +30,12 @@ STATICFILES_DIRS = ['static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+#email settings
+EMAIL_USE_TLS = True
+EMAIL_HOST ='smtp.gmail.com'
+EMAIL_HOST_USER = 'lastorresedificio@gmail.com'
+DEFAULT_FROM_EMAIL = 'lastorresedificio@gmail.com'
+SERVER_EMAIL = 'lastorresedificio@gmail.com'
+EMAIL_HOST_PASSWORD ='02torres%%'
+EMAIL_PORT = 587

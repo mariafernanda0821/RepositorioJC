@@ -54,6 +54,9 @@
                         <li>
                           <a href="{% url 'admin_app:crear_reporte' cierre.id %}" class="warning button" style="font-weight: bolder;"> Generar Recibos </a>
                         </li>
+                        <li>
+                          <a href="{% url 'admin_app:enviar_pdf' cierre.id %}" class="warning button" style="font-weight: bolder;"> Enviar PDF </a>
+                        </li>
                       </ul>
                     </td>
                     <td> <a href="{% url 'admin_app:cerrar_mes' cierre.id %}" class="alert button" style="font-weight: bolder;"> Cerrar Mes</a></td>

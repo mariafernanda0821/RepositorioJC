@@ -16,8 +16,8 @@ from .managers import ReferenciaPagoManager, RegistroPagoManager
 class RegistroDeudas(TimeStampedModel):
     
     apartamento = models.OneToOneField("edificio.Apartamento", verbose_name="Apartamento", on_delete=models.CASCADE)
-    deuda_ocumulada = models.DecimalField("Deuda", max_digits=20, decimal_places=2, default=0)
-    deuda_pagar = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0, null=True)
+    deuda_ocumulada = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0)
+    deuda_pagar = models.DecimalField("Deuda Pagar", max_digits=20, decimal_places=2, default=0, null=True)
     objects = ReferenciaPagoManager()
 
 

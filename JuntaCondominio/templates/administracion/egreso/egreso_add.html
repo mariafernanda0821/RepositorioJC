@@ -1,10 +1,9 @@
 {% extends 'administracion/egreso/base_egreso.html'%}
 {% block panel-content %}
 <section class="grid-container" >
-    <div class="grid-x grid-margin-x align-center">
-        <h3 class="cell"> Agregar Egreso: </h3>
+    <h3 class="cell"> Agregar Egreso: </h3>
 
-        <form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x"> {% csrf_token %}
+            <form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x align-center"> {% csrf_token %}
                 <div class="cell grid-x grid-margin-x" >
                     <div class="cell medium-3" >
                         <label>Tipo de ingreso:</label>
@@ -13,21 +12,22 @@
                         </div>
                     </div>
         
-                    <div class="cell medium-5 ">
+                    <div class="cell medium-7 ">
                         <label>Egreso:</label>
                         <div class="input-group">
                             {{form.egreso}}
                         </div>
                     </div>
 
-                    <div class="cell medium-4">
+                    
+                </div>    
+                <div class="cell grid-x grid-margin-x ">
+                    <div class="cell medium-6">
                         <label>Monto:</label>
                         <div class="input-group">
                             {{form.monto}}
                         </div>
                     </div>
-                </div>    
-                <div class="cell grid-x grid-margin-x ">
                     <div class="small-3 cell">
                         <label>Fecha:</label>
                         <div class="input-group">
@@ -45,19 +45,21 @@
                             </p>
                         {% endfor %}
                     </div>
-                    <div class="small-6 cell">
+                    
+                </div>
+                <div>
+                <div class= "cell grid-x grid-margin-x">
+                    {% comment %} <div class="cell"> {% endcomment %}
                         <label>Descripcion:</label>
                         <div class="input-group">
                             {{form.descripcion}}
                         </div>
-                    </div>
+                    {% comment %} </div> {% endcomment %}
                 </div>
                 <div class="cell grid-x grid-margin-x align-center">
                     <button type="submit" class="success button cell small-6"> Agregar</button>  
                 </div> 
-        </form>
-    </div>
-
+             </form>
 </section>
 
           

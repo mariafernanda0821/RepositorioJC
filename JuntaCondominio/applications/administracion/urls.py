@@ -11,11 +11,6 @@ urlpatterns = [
     ),
 
     path(
-        'seleccion/',
-        views.Seleccion.as_view(),
-        name = "seleccion",
-    ),
-    path(
         'opcion/<pk>/',
         views.OpcionesView.as_view(),
         name = "opciones",
@@ -37,11 +32,6 @@ urlpatterns = [
         name = 'update_egres',
     ),
 
-    path(
-        'detallar-gasto/<pk>', #para detallar un gasto
-        views.DetallarEgreso.as_view(),
-        name = "detallar_gasto",
-    ),
     path(
         'delete-egreso/<pk>', #para eliminar un gasto
         views.EgresoDeleteView.as_view(),
@@ -75,19 +65,25 @@ urlpatterns = [
         name = "recibo_pdf",
     ),
     path(
-            'reporte-mes-torreA/<pk>/',
-            views.ReporteTorreA.as_view(),
-            name = "reporte_torreA",
+        'enviar-pdf/<pk>/',
+        views.EnviarReportePDF.as_view(),
+        name = "enviar_pdf",
+    ),
+
+    path(
+        'reporte-mes-torreA/<pk>/',
+        views.ReporteTorreA.as_view(),
+        name = "reporte_torreA",
     ),
     path(
-            'reporte-mes-torreB/<pk>/',
-            views.ReporteTorreB.as_view(),
-            name = "reporte_torreB",
+        'reporte-mes-torreB/<pk>/',
+        views.ReporteTorreB.as_view(),
+        name = "reporte_torreB",
     ),
     path(
-            'reporte-alquiler/<pk>/',
-            views.ReporteAlquiler.as_view(),
-            name = "reporte_alquiler",
+        'reporte-alquiler/<pk>/',
+        views.ReporteAlquiler.as_view(),
+        name = "reporte_alquiler",
     ),
 
 

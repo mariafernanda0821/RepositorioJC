@@ -19,7 +19,7 @@ class Propietario(TimeStampedModel):
     nombre = models.CharField("Nombre", max_length=20, blank=True) 
     apellido = models.CharField("Apellido", max_length=20, blank=True) 
     #telefono = models.PhoneNumberField("Telefono")
-    email = models.EmailField("Correo Electronico", max_length=254, blank=True)
+    email = models.EmailField("Correo Electronico", max_length=254, blank=True,)
 
     class Meta:
         verbose_name = "Propietario"
