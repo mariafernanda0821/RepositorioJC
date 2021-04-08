@@ -37,5 +37,5 @@ EMAIL_HOST ='smtp.gmail.com'
 EMAIL_HOST_USER = 'lastorresedificio@gmail.com'
 DEFAULT_FROM_EMAIL = 'lastorresedificio@gmail.com'
 SERVER_EMAIL = 'lastorresedificio@gmail.com'
-EMAIL_HOST_PASSWORD ='02torres%%'
+EMAIL_HOST_PASSWORD ="xxxx"
 EMAIL_PORT = 587
