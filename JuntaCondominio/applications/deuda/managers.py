@@ -43,7 +43,7 @@ class ReferenciaPagoManager(models.Manager):
 
     def buscar_referencia_mes(self, mes, torre):
        
-        x = self.filter(reporte__apartamento__torre = torre, reporte__corte_mes=mes, pago_bool=True).exclude(reporte__corte_mes__in=[1,2])
+        x = self.filter(reporte__apartamento__torre = torre, reporte__corte_mes=mes, pago_bool=True).exclude(reporte__corte_mes__in=[1,2]).order_by("reporte__apartamento")
         
         return x
 

@@ -15,6 +15,7 @@ from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteM
 #signal
 
 
+
 class Corte_mes(TimeStampedModel):
     MES_CHOICES =(
         ("1","Enero"), ("2","Febrero"), ("3","Marzo"), ("4","Abril"), ("5","Mayo"), ("6","Junio"), 
@@ -25,7 +26,7 @@ class Corte_mes(TimeStampedModel):
     fecha_fin = models.DateField("Fecha de Fin", auto_now=False, auto_now_add=False, blank=True) 
     monto_egreso = models.DecimalField("Monto total de egreso ", max_digits=20, decimal_places=2, default=0) 
     monto_ingreso = models.DecimalField("Monto total de ingreso ", max_digits=20, decimal_places=2, default=0) 
-    reserva= models.DecimalField("Reserva", max_digits=20, decimal_places=2, default=0)
+    reserva= models.DecimalField("Reserva", max_digits=20, decimal_places=2, default=0) 
     cerrar_mes=models.BooleanField("Cierre Mes", default=False)
     objects = CierreMesManager()
     
@@ -37,6 +38,34 @@ class Corte_mes(TimeStampedModel):
         return  str(self.id)+ " - "+ self.mes
 
 
+class CodigoAcceso(models.Model):
+    tipo1="0001-0010"
+    tipo2="0011-0020"
+    tipo3="0021-0030"
+    tipo4="0031-0040"
+    tipo5="0041-0050"
+
+    CHOICES_TIPO =(
+        (tipo1, "0001-0010"),
+        (tipo2, "0011-0020"),
+        (tipo3, "0021-0030"),
+        (tipo4, "0031-0040"),
+        (tipo5, "0041-0050"),
+    ) 
+
+    codigo = models.CharField("Codigo", max_length=4, unique=True)
+    nombre = models.CharField("Nombre", max_length=20, unique=True)
+    tipo = models.CharField("Tipo", max_length=9,choices=CHOICES_TIPO)
+
+    class Meta:
+        verbose_name = "Codigos Acceso"
+        verbose_name_plural = "Codigos Accesos"
+        ordering = ['codigo']
+
+    def __str__(self):
+        return self.codigo +'-'+ self.nombre 
+
+
 class Egreso(TimeStampedModel):
     EGRESO_CHOICES =(
         ("1", "Fijo"),
@@ -46,9 +75,12 @@ class Egreso(TimeStampedModel):
     tipo_egreso = models.CharField("Tipo de Egreso", max_length=3, choices=EGRESO_CHOICES) 
     egreso = models.CharField("Egreso", max_length=50)
     descripcion = models.TextField("Texto", blank=True)
-    monto = models.DecimalField("Monto", max_digits=20, decimal_places=2, default=0)
-    fecha = models.DateField("Fecha ", auto_now=False, auto_now_add=False)
+    monto = models.DecimalField("Monto a Pagar", max_digits=20, decimal_places=2, default=0,)
+    monto_dolar = models.DecimalField("Monto en Dolar", max_digits=20, decimal_places=2, default=0) 
+    precio_dolar = models.DecimalField("Precio del dolar", max_digits=20, decimal_places=2, default=0) 
+    fecha = models.DateField("Fecha ", auto_now=False, auto_now_add=False, blank=True)
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", related_name="egreso_mes",on_delete=models.CASCADE) 
+    #codigo = models.ForeignKey(CodigoAcceso, verbose_name="Codigo de Acceso", on_delete=models.CASCADE)
     objects = EgresoManager()
 
     class Meta:
@@ -87,7 +119,7 @@ class Reporte(TimeStampedModel):
     monto = models.DecimalField("Monto a pagar ", max_digits=20, decimal_places=2, default=0)
     fecha = models.DateField("Fecha", auto_now=False, auto_now_add=False)
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", on_delete=models.CASCADE) 
-    deuda = models.DecimalField("Deuda Ocumulada", max_digits=20, decimal_places=2, default=0, blank=True)
+    deuda = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0, blank=True)
     total_pagar=models.DecimalField("Total a pagar", max_digits=20, decimal_places=2, default=0)
     objects = ReporteManager()
 

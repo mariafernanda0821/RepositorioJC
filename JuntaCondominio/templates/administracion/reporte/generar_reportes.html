@@ -1,0 +1,57 @@
+{% extends 'administracion/reporte/base_reporte.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block panel-content %}
+<section class="container">
+  <article class="grix grid-margin-x grid-padding-x align-center">
+    <div class="cell grid-x grid-margin-x grid-padding-x">  
+      <h3 class="cell small-6"> Reporte  del mes de : {{mes.get_mes_display}} </h3> 
+      <h3 class="cell small-6">  {{torre.get_torre_display}} </h3> 
+      <br>
+    </div>
+
+    <div class="cell grid-x grid-margin-x grid-padding-x">
+      <a href="{% url 'admin_app:listar_cierre_mes' %}" class="button warning cell small-4"> Home </a>
+      <a href="#" class="button warning cell small-4"> PDF </a>
+      <a href="#" class="button warning cell small-4"> Enviar </a>
+    </div>
+
+    <div class="cell grid-x grid-margin-x align-center" style="margin-top: 2em;">
+      <table class="hover">
+        <thead>
+          <th> N-Control <th>
+          <th>Apartamento</th>
+          <th>Monto</th>
+          <th>Fecha</th>
+          <th>Mes</th>
+          <th>Deuda</th>
+          <th>Acciones</th>
+        </thead>
+        <tbody>
+          {% for reporte in reportes %}
+              <tr>
+                  <td> 000{{reporte.id}} <td>
+                  <td>{{reporte.apartamento}}</td>
+                  <td>{{reporte.monto | intcomma }}</td>
+                  <td>{{reporte.fecha}}</td>
+                  <td>{{reporte.corte_mes}}</td> 
+                  <td>{{reporte.deuda | intcomma }} </td> 
+      
+                  <td>
+                  <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button warning"> Recibo </a>
+                  <a href="{% url 'deuda_app:crear_referencia' reporte.id %}" class="button success"> Referencia </a> 
+                  <a href="{% url 'admin_app:enviar_individual_pdf' reporte.id %}" class="button alert"> Enviar </a>  
+                  </td>
+              </tr>
+              {%empty%}
+                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </article>
+    
+</section>
+
+{% endblock panel-content %} 

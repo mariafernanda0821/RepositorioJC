@@ -1,5 +1,6 @@
 {% extends 'administracion/reporte/base_reporte.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block panel-content %}
 <div class="grid-x grid-margin-x">
@@ -35,10 +36,10 @@
             <tr>
                 <td> 000{{reporte.id}} <td>
                 <td>{{reporte.apartamento}} - {{reporte.apartamento.get_torre_display}}</td>
-                <td>{{reporte.monto}}</td>
+                <td>{{reporte.monto | intcomma }}</td>
                 <td>{{reporte.fecha}}</td>
                 <td>{{reporte.corte_mes}}</td> 
-                <td>{{reporte.deuda}} </td> 
+                <td>{{reporte.deuda | intcomma }} </td> 
     
                 <td>
                 <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button">Recibo</i></a>

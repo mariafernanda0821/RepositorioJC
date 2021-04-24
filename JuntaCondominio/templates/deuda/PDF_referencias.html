@@ -1,0 +1,79 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PDF DE GASTOS</title>
+    <style type="text/css">
+      td {
+        vertical-align: center;
+        text-align: center;
+        font-size: 15px;
+        border-bottom: 1px grey solid;
+        padding-top: 8px;
+      }
+
+      th {
+        font-size: 16px;
+        text-align: center;
+        background-color: #616161;
+        vertical-align: center;
+        padding-top: 5px;
+
+      }
+
+      h1 {
+        font-weight: bolder;
+        text-align: center;
+        font-size: 20px;
+      }
+
+      p {
+        text-align: center;
+        font-size: 13px;
+        border-bottom: 2px gray solid;
+        padding-bottom: 3px;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+  
+    <div class="mini-bloque1">
+      <h1> Referencias {{ referencia.reporte.get_mes_display}}</h1>
+    </div>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th> N-Control</th>
+            <th> Apartamento </th>
+            <th> Mes </th>
+            <th> Recibo </th>
+            <th> Monto Pagado </th>
+            <th> Ref Banco </th>
+            <th> Decripcion </th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for referencia in referencias %}
+          <tr>
+            <td> {{referencia.id}}</td>
+            <td>{{referencia.reporte.apartamento}} - {{referencia.reporte.apartamento.get_torre_display}} </td>
+            <td>{{referencia.reporte.corte_mes}} {{referencia.pago_bool}} </td>
+            <td> {{ referencia.reporte}}</td>
+            <td>{{referencia.monto_pagar | intcomma}}</td>
+            <td>{{referencia.referencia_pago}}</td>
+            <td>{{referencia.descripcion}}</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+  </body>
+
+  </html>

@@ -3,6 +3,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Edificio(TimeStampedModel):
 
     edificio = models.CharField("Torres", max_length=10) 
@@ -33,10 +34,14 @@ class Propietario(TimeStampedModel):
 
 
 class Apartamento(TimeStampedModel):
+    TORREA="1"
+    TORREB="2"
+    ALQUILER = "3"
+
     TORRE_CHOICES = (
-        ('1', "Torre A") ,
-        ('2', "Torre B"),
-        ('3', "Alquiler")
+        (TORREA, "Torre A") ,
+        (TORREB, "Torre B"),
+        (ALQUILER, "Alquiler")
     )
 
     apartamento = models.CharField("Apartamento", unique= True, max_length=4)

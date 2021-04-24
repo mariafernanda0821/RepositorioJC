@@ -19,6 +19,8 @@
                     <td> {{apart.id}} </td>
                     <td> {{apart.apartamento}} </td>
                     <td> {{apart.propietario.nombre}} {{apart.propietario.apellido}}</td>
+                    <td> {{apart.propietario.email}} </td>
+
                     <td> 
                         <a href="{% url 'edificio_app:detail_apart' apart.id %}" class="warning button"> Referencias </a>    
                     </td>

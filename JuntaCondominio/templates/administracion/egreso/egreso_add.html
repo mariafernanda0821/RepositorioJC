@@ -1,66 +1,84 @@
 {% extends 'administracion/egreso/base_egreso.html'%}
 {% block panel-content %}
-<section class="grid-container" >
-    <h3 class="cell"> Agregar Egreso: </h3>
+<section class="grid-container">
+  <h3 class="cell"> Agregar Egreso: </h3>
+  <form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x align-center"> {% csrf_token %}
+    
+    <div class="cell grid-x grid-margin-x align-center ">
+      <div class="cell medium-5">
+        <label>Tipo de ingreso:</label>
+        <div class="input-group">
+          {{form.tipo_egreso}}
+        </div>
+      </div>
+      <div class="cell medium-7 ">
+        <label>Egreso:</label>
+        <div class="input-group">
+          {{form.egreso}}
+        </div>
+      </div>
+    </div>
 
-            <form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x align-center"> {% csrf_token %}
-                <div class="cell grid-x grid-margin-x" >
-                    <div class="cell medium-3" >
-                        <label>Tipo de ingreso:</label>
-                        <div class="input-group">
-                            {{form.tipo_egreso}}
-                        </div>
-                    </div>
-        
-                    <div class="cell medium-7 ">
-                        <label>Egreso:</label>
-                        <div class="input-group">
-                            {{form.egreso}}
-                        </div>
-                    </div>
+    <div class="cell grid-x grid-margin-x align-center">
+      <div class="cell medium-5">
+        <label>Monto:</label>
+        <div class="input-group">
+          {{form.monto}}
+        </div>
+      </div>
 
-                    
-                </div>    
-                <div class="cell grid-x grid-margin-x ">
-                    <div class="cell medium-6">
-                        <label>Monto:</label>
-                        <div class="input-group">
-                            {{form.monto}}
-                        </div>
-                    </div>
-                    <div class="small-3 cell">
-                        <label>Fecha:</label>
-                        <div class="input-group">
-                            {{form.fecha}}
-                        </div>
-                    </div>
-                    <div class="small-3 cell">
-                        <label>corte de mes:</label>
-                        <div class="input-group">
-                            {{form.corte_mes}}
-                        </div>
-                        {% for error in form.corte_mes.errors %}
-                            <p class="cell" style="color: red;">
-                            {{ error|escape }}
-                            </p>
-                        {% endfor %}
-                    </div>
-                    
-                </div>
-                <div>
-                <div class= "cell grid-x grid-margin-x">
-                    {% comment %} <div class="cell"> {% endcomment %}
-                        <label>Descripcion:</label>
-                        <div class="input-group">
-                            {{form.descripcion}}
-                        </div>
-                    {% comment %} </div> {% endcomment %}
-                </div>
-                <div class="cell grid-x grid-margin-x align-center">
-                    <button type="submit" class="success button cell small-6"> Agregar</button>  
-                </div> 
-             </form>
+      <div class="cell medium-2">
+        <label> Total en Dolar:</label>
+        <div class="input-group">
+          {{form.monto_dolar}}
+        </div>
+      </div>
+
+      <div class="cell medium-5 ">
+        <label> Precio del Dolar:</label>
+        <div class="input-group">
+          {{form.precio_dolar}}
+        </div>
+      </div>
+    </div>
+
+    <div class="cell grid-x grid-margin-x align-center ">
+
+      <div class="small-3 cell">
+        <label>Fecha:</label>
+        <div class="input-group">
+          {{form.fecha}}
+        </div>
+      </div>
+      <div class="small-3 cell">
+        <label>corte de mes:</label>
+        <div class="input-group">
+          {{form.corte_mes}}
+        </div>
+        {% for error in form.corte_mes.errors %}
+        <p class="cell" style="color: red;">
+          {{ error|escape }}
+        </p>
+        {% endfor %}
+      </div>
+
+    </div>
+
+
+    <div class="cell grid-x grid-margin-x align-center">
+      <div class="cell small-10">
+        <label>Descripcion:</label>
+        <div class="input-group">
+          {{form.descripcion}}
+        </div>
+      </div>
+    </div>
+
+    <div class="cell grid-x grid-margin-x align-center">
+      <button type="submit" class="success button cell small-6"> Agregar</button>
+    </div>
+  </form>
 </section>
 
-          
+
 {% endblock panel-content %}

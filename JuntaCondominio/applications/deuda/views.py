@@ -22,12 +22,15 @@ from .forms import ReferenciaPagoForm , SeleccionForm
 
 from django.db.models import Q, Sum, F, FloatField, ExpressionWrapper  
 from .signals import calcular_deuda
+from applications.utils import render_to_pdf 
 
-
+from django.core.mail import EmailMessage
+from .functions import referencias_listar_Pdf, comprobande_pagoPdf, deuda_pdf, enviar_correos
 
 
 class ReferenciaView(TemplateView):
     template_name = "deuda/listar_referencia.html"
+
 
 #VISTA PARA CREAR LA REFERENCIA DE PAGO
 class CrearReferenciaPago(View):
@@ -37,7 +40,6 @@ class CrearReferenciaPago(View):
         z = ReferenciaPago.objects.filter(reporte= instance)
 
         if not z.exists():
-            #debo crear la referencia de pago
             x = ReferenciaPago.objects.create(
                 reporte = instance,
             )
@@ -61,20 +63,13 @@ class ReferenciaPagoUpdateView(UpdateView):
     template_name = "deuda/update_referencia.html"
     model = ReferenciaPago
     form_class = ReferenciaPagoForm
-    success_url= reverse_lazy("deuda_app:referencia")
+    # = "prueba"
+    success_url= '.'
     
     def get_context_data(self, **kwargs):
         context = super(ReferenciaPagoUpdateView, self).get_context_data(**kwargs)
-        x=ReferenciaPago.objects.filter(id = self.kwargs["pk"]).first() 
-        reporte = x.reporte
-        mes = reporte.corte_mes
-        apartamento = reporte.apartamento
-        propietario = apartamento.propietario
-        context["reporte"]= reporte
-        context["mes"] = mes
-        context["apartamento"] = apartamento
-        context["propietario"] = propietario
-        context["referencia"] = x
+        x = ReferenciaPago.objects.filter(id = self.kwargs["pk"]).first() 
+        context["reporte"]= x.reporte
         return context
 
 
@@ -92,16 +87,12 @@ class CrearDeudasTabla(View):
         )
 
 
-
 class RegistroDeudasListView(ListView):
     model = RegistroDeudas
     template_name = "deuda/listar_deudas.html"
     context_object_name = "deudas"
     queryset = RegistroDeudas.objects.all().order_by("apartamento")
 
-
-
-#-------------******* VISTA DE REFERENCIA*******--------------------
 
 class ReferenciaListView(FormView):
    # filtar las referencias 
@@ -113,11 +104,73 @@ class ReferenciaListView(FormView):
         mes = self.request.GET.get("mes", '') 
         torre = self.request.GET.get("torre", '')  
         if mes == '' or torre == '':
-            context["referencia"] = []
+            context["referencias"] = []
             return context      
-        context["referencia"] = ReferenciaPago.objects.buscar_referencia_mes(mes, torre)
+        context["referencias"] = ReferenciaPago.objects.buscar_referencia_mes(mes, torre)
         context["mes"] = Corte_mes.objects.filter(id=mes).first() 
         return context
+
+
+class EnviarComprobantePDF(View):
+    #enviar el comprobante, se obtiene es el id de referencia 
+    def get(self, request, *args, **kwargs):
+        pdf = comprobande_pagoPdf(self.kwargs['pk'])
+        x = ReferenciaPago.objects.filter(id=self.kwargs['pk']).first()
+        correo = x.reporte.apartamento.propietario.email
+        apartamento =  x.reporte.apartamento.apartamento
+        titulo = "comprobante.pdf"
+        asunto = "Comprobante de pago del " + "[" + apartamento + "]"
+        mensaje = "Se adjunta el comprobante correspondiente a su pago del mes " 
+        enviar_correos(pdf, asunto, mensaje, correo,titulo)
+        print("se envio correo", correo)
+        print("mes", x.reporte.corte_mes.mes) 
+
+        return HttpResponse(comprobande_pagoPdf(self.kwargs['pk']), content_type='application/pdf')
+
+
+class ReferenciasPDF(View):
+    def get(self, request, *args, **kwargs):
+        
+        return HttpResponse(referencias_listar_Pdf(self.kwargs["pk"]), content_type='application/pdf')
+
+
+class EnviarReferenciasPDF(View):
+    #enviar el comprobante, se obtiene es el id de referencia 
+    def get(self, request, *args, **kwargs):
+       
+        pdf = referencias_listar_Pdf(self.kwargs["pk"])
+        asunto = "Rerencias"
+        mensaje = "Se adjunta referencias "
+        corre="mariadelsocorro2108@gmail.com"
+        titulo="referencias.pdf"
+        enviar_correos(pdf,asunto,mensaje, correo, titulo)
+
+        return HttpResponse(deuda_pdf(), content_type='application/pdf')
+
+
+class DeudasPDF(View):
+    def get(self, request, *args, **kwargs):
+        
+        return HttpResponse(deuda_pdf(), content_type='application/pdf')
+
+    
+class EnviarDeudaPDF(View):
+    #enviar el deudas
+    def get(self, request, *args, **kwargs):
+        pdf = deuda_pdf()
+        asunto = "Deuda"
+        mensaje = "Se adjunta deudas"
+        titulo="deuda.pdf"
+        correo="mariadelsocorro2108@gmail.com"
+        if enviar_correos(pdf,asunto,mensaje, correo, titulo):
+            print("=========> se envio el correo")
+            return HttpResponseRedirect(
+                reverse("deuda_app:listar_deudas")
+            )
+        return []
+
+
+
 
 
 #VISTA DE CUANTO DINERO LE ENTRO EN CADA MES 

@@ -1,3 +1,4 @@
+{% load humanize %}
 <!DOCTYPE  HTML>
 <html lang="en">
 <head>
@@ -16,7 +17,7 @@
         }
        
         th{
-            font-size: 14px;
+            font-size: 15px;
             text-align: center;
             background-color: #D2CECD;
             vertical-align: center;
@@ -90,10 +91,10 @@
                 </thead >
                 <tbody>
                         <tr>
-                            <td>{{apart.alicuota}}</td>
-                            <td>{{reporte.monto}}</td>
-                            <td>{{reporte.deuda}}</td>
-                            <td>{{reporte.total_pagar}}</td>
+                            <td>{{apart.alicuota}}%</td>
+                            <td>{{reporte.monto | intcomma}}</td>
+                            <td>{{reporte.deuda | intcomma}}</td>
+                            <td>{{reporte.total_pagar | intcomma}}</td>
                         </tr>
                 </tbody>
             </table>
@@ -106,13 +107,13 @@
                 </thead >
                 <tbody>
                         <tr>
-                            <td>{{mes.reserva}}</td>
-                            <td>{{reserva}}</td>
+                            <td>{{mes.reserva | intcomma}}</td>
+                            <td>{{reserva | intcomma}}</td>
                         </tr>
                 </tbody>
             </table>
         </div>
-        {% comment %} <h1> Descripcion de gastos </h1> {% endcomment %}
+
         <div class="mini-bloque1" >
             <table class="tabla" >
               <thead class="encabezado">
@@ -125,7 +126,7 @@
                     <tr >
                      <!--    <td>{{gasto.get_tipo_egreso_display}}</td> -->
                         <td  style="text-indent:10px; text-align:letf;">{{gasto.egreso}}</td>
-                        <td>{{gasto.monto}}</td> 
+                        <td>{{gasto.monto | intcomma}}</td> 
                         <td style="text-indent:10px; text-align:letf;">{{gasto.descripcion}}</td> 
 
                     </tr>
@@ -134,9 +135,11 @@
             </table>
             <table>
                 <th>Total de gastos</th>
-                <td> {{ total }}</td>
+                <td> {{ mes.monto_egreso | intcomma }}</td>
             </table>
         </div>
+        <h2> {{nota}} </h2>
+   
     </div>
 
 </body>

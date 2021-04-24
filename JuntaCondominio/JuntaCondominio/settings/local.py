@@ -34,8 +34,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST ='smtp.gmail.com'
-EMAIL_HOST_USER = 'lastorresedificio@gmail.com'
-DEFAULT_FROM_EMAIL = 'lastorresedificio@gmail.com'
-SERVER_EMAIL = 'lastorresedificio@gmail.com'
-EMAIL_HOST_PASSWORD ="xxxx"
+EMAIL_HOST_USER = 'sanjosecondominio21@gmail.com'
+DEFAULT_FROM_EMAIL = 'sanjosecondominio21@gmail.com'
+SERVER_EMAIL = 'sanjosecondominio21@gmail.com'
+EMAIL_HOST_PASSWORD ='tsjcon21*'
 EMAIL_PORT = 587
+

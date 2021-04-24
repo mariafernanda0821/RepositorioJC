@@ -72,4 +72,19 @@ class RegistroReporte(TemplateView):
 
 #---------*********VISTA DE Apart *********----------------------------
 
+
+#VISTA QUE GENERA INFORME DEL GASTO DEL MES
+class ApartamentoPDF(View):
+    #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se actualiza ante de generar el pdf
+    #
+    def get(self, request, *args, **kwargs):
+        apartamento = Apartamento.objects.all().order_by('id')
+        #propietario = apartamento
+        data = {
+            'apartamento': apartamento,
+        }
+        pdf = render_to_pdf('edificio/apart/apart_voucher.html', data)
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
 # Create your views here.

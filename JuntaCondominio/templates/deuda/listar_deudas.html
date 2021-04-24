@@ -1,10 +1,19 @@
 {% extends 'deuda/base_deuda.html' %}
 {% load static %}
+{% load humanize %}
 {% block panel-content %}
 
 <section class= "grid-container">
     <article class = "cell grid-x grid-margin-x align-center ">
-
+        <div class="cell small-3">
+            <a href="{% url 'deuda_app:deudas_pdf' %}" class="warning button"> PDF </a>
+        </div>
+        <div class="cell small-3">
+            <a href="{% url 'deuda_app:enviar_deudas_pdf' %}" class="warning button"> Enviar Correo</a>
+        </div>
+        <div class="cell small-3">
+            <a href="#" class="warning button"> Otros </a> 
+        </div>
     </article>
 
     <article "cell grid-x grid-margin-x align-center ">
@@ -19,8 +28,8 @@
                 <tbody>
                     {% comment %} <td> {{deuda.id}} </td> {% endcomment %}
                     <td> {{deuda.apartamento}} </td>
-                    <td> {{deuda.deuda_ocumulada}} </td>
-                    <td> {{deuda.deuda_pagar}} </td>
+                    <td> {{deuda.deuda_ocumulada | intcomma}} </td>
+                    <td> {{deuda.deuda_pagar | intcomma}} </td>
                 </tbody>
                 {%empty%}
                     <h3 style = "color:red"> No existen resultados en estos momentos </h3>

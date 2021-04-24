@@ -9,7 +9,10 @@ urlpatterns = [
     path("alquiler/", views.AlquilerView.as_view(), name = "alquilers"),  
 
     path("detail-apart/<pk>/",views.RegistroPagoApar.as_view(), name = "detail_apart"),  
-    path("detail-repote/<pk>/",views.RegistroReporte.as_view(), name = "detail_reporte"),  
+    path("detail-repote/<pk>/",views.RegistroReporte.as_view(), name = "detail_reporte"), 
+
+    path("apartamento-pdf/",views.ApartamentoPDF.as_view(), name = "apartamento_pdf"),  
+
 
     
 

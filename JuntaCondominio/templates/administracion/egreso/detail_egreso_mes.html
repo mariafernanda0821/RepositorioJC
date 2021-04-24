@@ -1,5 +1,6 @@
 {% extends 'administracion/egreso/base_egreso.html' %}
 {% load  static %}
+{% load humanize %}
 {% block panel-content  %}
 
 <div class="grid-x grid-margin-x">
@@ -39,7 +40,7 @@
                 <td> </td>
                 <td>{{gasto.get_tipo_egreso_display}}</td>
                 <td>{{gasto.egreso}}</td>
-                <td>{{gasto.monto}}</td>
+                <td>{{gasto.monto | intcomma}}</td>
                 <td>{{gasto.descripcion}}</td> 
                 <td>
                   <a href="{% url 'admin_app:update_egres' gasto.id %}" class="button"><i class="fi-pencil"></i></a>

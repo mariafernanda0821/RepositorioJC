@@ -1,6 +1,6 @@
 {% extends 'administracion/base_admin.html' %}
 {% load static %}
-
+{% load humanize %}
 {% block panel-content %}
 
 <section class = "grid-x-container">
@@ -18,7 +18,7 @@
         </div>
           {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
         <div class="card-section">
-          <h4>{{total_reporte}}</h4>
+          <h4>{{total_reporte | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -29,7 +29,7 @@
         </div>
           {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
         <div class="card-section">
-          <h4>{{total_referencia}}</h4>
+          <h4>{{total_referencia | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -40,7 +40,7 @@
         </div>
           {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
         <div class="card-section">
-          <h4>{{total_deuda}}</h4>
+          <h4>{{total_deuda | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -56,7 +56,7 @@
           <h4>  Reporte Torre A</h4>
         </div>
         <div class="card-section">
-          <h4>{{total_reporteA}}</h4>
+          <h4>{{total_reporteA | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -66,7 +66,7 @@
         <div class="card-divider">
           <h4> Deuda Torre A</h4>
         </div>
-        <h4>{{deuda_torreA}}</h4>
+        <h4>{{deuda_torreA | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>
@@ -78,7 +78,7 @@
         <div class="card-divider">
           <h4> Referencia TorreA</h4>
         </div>
-        <h4>{{total_referenciaA}}</h4>
+        <h4>{{total_referenciaA | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>
@@ -97,7 +97,7 @@
           <h4>  Reporte Torre B</h4>
         </div>
         <div class="card-section">
-          <h4>{{total_reporteB}}</h4>
+          <h4>{{total_reporteB | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -107,7 +107,7 @@
         <div class="card-divider">
           <h4> Deuda Torre B</h4>
         </div>
-        <h4>{{deuda_torreB}}</h4>
+        <h4>{{deuda_torreB | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>
@@ -119,7 +119,7 @@
         <div class="card-divider">
           <h4>  Referencia Torre B</h4>
         </div>
-        <h4>{{total_referenciaB}}</h4>
+        <h4>{{total_referenciaB | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>
@@ -138,7 +138,7 @@
           <h4>  Reporte Alquiler</h4>
         </div>
         <div class="card-section">
-          <h4>{{total_reporteAlq}}</h4>
+          <h4>{{total_reporteAlq | intcomma}}</h4>
         </div>
       </div>
     </article>
@@ -148,7 +148,7 @@
         <div class="card-divider">
           <h4> Deuda Alquileres</h4>
         </div>
-        <h4>{{deuda_alquiler}}</h4>
+        <h4>{{deuda_alquiler | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>
@@ -160,7 +160,7 @@
         <div class="card-divider">
           <h4>  Total a pagar</h4>
         </div>
-        <h4>{{total_referenciaAlq}}</h4>
+        <h4>{{total_referenciaAlq | intcomma}}</h4>
         <div class="card-section">
           <p></p>
         </div>

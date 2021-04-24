@@ -1,53 +1,69 @@
 {% extends 'deuda/base_deuda.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block panel-content %}
-<div class="grid-x grid-margin-x"> 
-    <h3 class="cell"> Referencia </h3>
-    <section class=" cell grid-x container">
-        <form action="" method="GET" class="cell grid-x grid-margin-x grid-padding-y align-center" >
-            <section class="cell grid-x grid-margin-x align-center">
-                <article class="cell medium-4">
-                    {{form.mes}}
-                </article>
-                <article class="cell medium-4">
-                    {{form.torre}}
-                </article>
-            </section>
-            <button type="submit" class= "cell alert button"> Filtrar </button>
-        </form>     
+<section class="container">
+  <article class="grid-x grid-margin-x">
+    <h3 class="cell"> Lista de  Referencias de {{mes.get_mes_display}} - {{torre}} {{mes}} </h3>
+    <section class="cell grid-x container">
+      <form action="" method="GET" class="cell grid-x grid-margin-x grid-padding-y align-center">
+        <section class="cell grid-x grid-margin-x align-center">
+          <article class="cell medium-4">
+            {{form.mes}}
+          </article>
+          <article class="cell medium-4">
+            {{form.torre}}
+          </article>
+        </section>
+        <button type="submit" class="cell alert button"> Filtrar </button>
+      </form>
     </section>
-
+    <section class="cell grid-x container">
+      <div class="cell grid-x grid-margin-x grid-padding-x">
+        <a href="{% url 'admin_app:listar_cierre_mes' %}" class="button warning cell small-4"> Home </a>
+        {% if mes.id %}
+          <a href="{% url 'deuda_app:referencias_pdf' mes.id %}" class="button warning cell small-4"> PDF </a>
+          <a href="#" class="button warning cell small-4"> Enviar </a>
+        {% endif %}
+      </div>
+    </section>
     <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
-            <table class="hover">
-            <thead>
-                <th> N-Control <th>
-                <th> Apartamento </th> 
-                <th> Mes </th>
-                <th> Monto </th>
-                <th> Decripcion </th>
-                <th> Referencia </th>
-            </thead>
-            <tbody>
-                {% for referencia in referencia %}
-                    <tr>
-                        <td> 000{{referencia.id}} <td>
-                        <td>{{referencia.reporte.apartamento}} - {{referencia.reporte.apartamento.get_torre_display}} </td>
-                        <td>{{referencia.reporte.corte_mes}}</td> 
-                        <td>{{referencia.monto_pagar}}</td>
-                        <td>{{referencia.descripcion}}</td>
-            
-                        <td>
-                        {% comment %} <a href="{% url 'admin_app:recibo_pdf' referencia.id %}" class="button"> Recibo </a> {% endcomment %}
-                        <a href="{% url 'deuda_app:crear_referencia' referencia.reporte.id %}" class="button"> Referencia </a> 
-                        </td>
-                    </tr>
-                    {%empty%}
-                        <h3 style = "color:red"> No existen resultados en estos momentos </h3>
-                {% endfor %}
-            </tbody>
-            </table>
+      <table class="hover">
+        <thead>
+          <th> N-Control</th>
+          <th> Apartamento </th>
+          <th> Mes </th>
+          <th> Recibo </th>
+          <th> Monto Pagado </th>
+          <th> Ref Banco </th>
+          <th> Decripcion </th>
+          <th> Referencia </th>
+        </thead>
+        <tbody>
+          {% for referencia in referencias %}
+          <tr>
+            <td> {{referencia.id}}</td>
+            <td>{{referencia.reporte.apartamento}} - {{referencia.reporte.apartamento.get_torre_display}} </td>
+            <td>{{referencia.reporte.corte_mes}} {{referencia.pago_bool}} </td>
+            <td> {{ referencia.reporte}}</td>
+            <td>{{referencia.monto_pagar | intcomma}}</td>
+            <td>{{referencia.referencia_pago}}</td>
+            <td>{{referencia.descripcion}}</td>
+            <td>
+              {% comment %} <a href="{% url 'admin_app:recibo_pdf' referencia.id %}" class="button"> Recibo </a>
+              {% endcomment %}
+              <a href="{% url 'deuda_app:update_referencia' referencia.id %}" class="button"> Referencia </a>
+            </td>
+          </tr>
+          {%empty%}
+          <h3 style="color:red"> No existen resultados en estos momentos </h3>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-</div>
+  </article>
 
-{% endblock panel-content %} 
+</section>
+
+{% endblock panel-content %}

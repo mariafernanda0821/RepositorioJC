@@ -1,5 +1,6 @@
 {% extends 'administracion/cierre_mes/base_cierre.html' %}
 {% load static %}
+{% load humanize %}
 {% block panel-content %}
 
 <section class="grid-x grid-margin-x">
@@ -24,9 +25,9 @@
                 <tr>
                     <td> {{cierre.id}}</td>
                     <td>{{cierre.get_mes_display}}</td>
-                    <td>{{cierre.monto_egreso}}</td> 
-                    <td>{{cierre.monto_ingreso}} </td> 
-                    <td> {{cierre.reserva}} </td>
+                    <td>{{cierre.monto_egreso | intcomma}}</td> 
+                    <td>{{cierre.monto_ingreso | intcomma}} </td> 
+                    <td> {{cierre.reserva | intcomma}} </td>
                     <td>
                       <ul style="list-style: none;">
                         <li style="font-weight: bolder;">
@@ -36,13 +37,15 @@
                           <a href="{% url 'admin_app:detail_ingreso_mes' cierre.id %}"> Listar Ingreso </a>
                         </li>
                         <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:reporte_torreA' cierre.id %}"> Reporte Torre A </a>
+                          {% comment %} <a href="{% url 'admin_app:reporte_torreA' cierre.id %}"> Reporte Torre A </a> {% endcomment %}
+                          <a href="{% url 'admin_app:generar_reportes' cierre.id 1 %}"> Reporte Torre A </a>
+
                         </li>
                         <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:reporte_torreB' cierre.id %}"> Reporte Torre B </a>
+                          <a href="{% url 'admin_app:generar_reportes' cierre.id 2 %}"> Reporte Torre B </a>
                         </li>
                         <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:reporte_alquiler' cierre.id %}"> Reporte Alquiler </a>
+                          <a href="{% url 'admin_app:generar_reportes' cierre.id 3 %}"> Reporte Alquiler </a>
                         </li>
                       </ul>
                     </td>

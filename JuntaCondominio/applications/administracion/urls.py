@@ -71,6 +71,12 @@ urlpatterns = [
     ),
 
     path(
+        'enviar-pdf-individual/<pk>/',
+        views.EnviarPDF.as_view(),
+        name = "enviar_individual_pdf",
+    ),
+
+    path(
         'reporte-mes-torreA/<pk>/',
         views.ReporteTorreA.as_view(),
         name = "reporte_torreA",
@@ -115,5 +121,9 @@ urlpatterns = [
         name="recibo_ingreso",
     ),
 
+    path('generar-reportes/<int:pk>/<int:torre>',
+    views.ReporteDetailView.as_view(),
+    name="generar_reportes",
+    )
 
 ]

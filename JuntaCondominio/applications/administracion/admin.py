@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Egreso, Ingreso, Reporte, Corte_mes
+from .models import Egreso, Ingreso, Reporte, Corte_mes, CodigoAcceso
 # Register your models here.
 class EgresoAdmin(admin.ModelAdmin):
     list_display = (
@@ -19,5 +19,13 @@ class Corte_mesAdmin(admin.ModelAdmin):
     )   
 
 admin.site.register(Corte_mes,Corte_mesAdmin)
+
+class CodigoAccesoAdmin(admin.ModelAdmin):
+    list_display = (
+
+       "id" ,"codigo","nombre",
+    )   
+
+admin.site.register(CodigoAcceso,CodigoAccesoAdmin)
 
 

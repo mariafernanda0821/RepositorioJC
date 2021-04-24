@@ -1,10 +1,11 @@
 {% extends 'deuda/base_deuda.html' %}
 {% load static %}
+{% load humanize %}
 {% block panel-content %}
 
     <section class="grid-container">
         <article class="cell grid-x grid-margin-x">
-            <h2 class="cell"> Referencia de Pago {{mes.get_mes_display}}</h1>
+            <h2 class="cell"> Referencia de Pago {{reporte.corte_mes.get_mes_display}}</h1>
         </article>
         
         <article class="cell grid-x grid-margin-x">
@@ -19,15 +20,14 @@
                 </thead>
                 <tbody>
                     <td>{{reporte.id}}</td>
-                    <td>{{mes.get_mes_display}}</td>
-                    <td>{{apartamento.apartamento}}</td>
-                    <td>{{propietario.nombre}} {{propietario.apellido}}</td>
-                    <td>{{reporte.monto}}</td> 
-
+                    <td>{{reporte.corte_mes.get_mes_display}}</td>
+                    <td>{{reporte.apartamento.apartamento}}</td>
+                    <td>{{reporte.apartamento.propietario.nombre}} {{reporte.apartamento.propietario.apellido}}</td>
+                    <td>{{reporte.total_pagar | intcomma}}</td> 
                 </tbody>
             </table>
         </article>
-
+    
         <article class="cell grid-x grid-margin-x"> 
            <form action="" method="POST" class="cell grid-x grid-margin-x grid-padding-x"> {% csrf_token %}
                 <article class="cell grid-x grid-margin-x  align-center">
@@ -67,8 +67,11 @@
                 </article>
                 <article class="cell grid-x grid-margin-x align-center" >
                     <button type="submit" class="success button cell small-4">Aceptar</button>
-                    <a href={% url 'admin_app:reporte_torreA' mes.id %} class="success button cell small-4"> Reportes Torre A </a>
+                    <a href={% url 'admin_app:generar_reportes' reporte.corte_mes.mes reporte.apartamento.torre %} class="success button cell small-4"> Atras </a>
+                    <a href={% url 'deuda_app:comprobante_pdf' object.id %} class="success button cell small-4"> Enviar Correo </a>
                 </article>
+                {% comment %} <p class="cell">referencia.id => {{referencia.id}} o object {{object.id}}</p>
+                <p class="cell"> mes => {{reporte.corte_mes.mes}} o torre {{reporte.apartamento.torre}}</p> {% endcomment %}
            </form>   
         </article>
         

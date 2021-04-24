@@ -1,72 +1,96 @@
 {% extends 'administracion/egreso/base_egreso.html' %}
 {% load static %}
 {% block panel-content %}
-<section class="grid-container" >
-    <div class="grid-x grid-margin-x grid-padding-x">
-        <div class="cell">
-            <h3> Agregar un Egreso: </h3>
-        </div>
-        <div class="cell"> 
-            <form action="" method="POST"> {% csrf_token %}
-                <div class="grid-x  grid-padding-x" >S
-                    <div class="cell medium-4" >
-                            <label>Tipo de ingreso:</label>
-                            <div class="input-group">
-                                <span class="input-group-label"><i class="fi-book"></i></span>
-                                {{form.tipo_egreso}}
-                            </div>
-                        </div>
-                        <div class="cell medium-5 ">
-                            <label>Egreso:</label>
-                            <div class="input-group">
-                                {{form.egreso}}
-                            </div>
-                        </div>
-                        <div class="cell medium-3">
-                            <label>Monto:</label>
-                            <div class="input-group">
-                                {{form.monto}}
-                            </div>
-                        </div>
-                    </div> 
-                    
-                    <div class="grid-x grid-padding-x">
-                        <div class="medium-2 cell">
-                            <label>Fecha:</label>
-                            <div class="input-group">
-                                {{form.fecha}}
-                            </div>
-                        </div>
-                        <div class="medium-2 cell">
-                            <label>corte de mes:</label>
-                            <div class="input-group">
-                                {{form.corte_mes}}
-                            </div>
-                        </div>
-                        <div class="medium-8 cell">
-                        <label>Descripcion:</label>
-                        <div class="input-group">
-                            {{form.descripcion}}
-                        </div>
-                    </div>
+<section class="grid-container">
+	<div class="grid-x grid-margin-x grid-padding-x">
+		<div class="cell">
+			<h3> Actualizar un Egreso: </h3>
+		</div>
+		<form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x align-center"> {% csrf_token %}
+			<div class="cell grid-x grid-margin-x align-center ">
+				<div class="cell medium-5">
+					<label>Tipo de ingreso:</label>
+					<div class="input-group">
+						{{form.tipo_egreso}}
+					</div>
+				</div>
+				<div class="cell medium-7 ">
+					<label>Egreso:</label>
+					<div class="input-group">
+						{{form.egreso}}
+					</div>
+				</div>
+			</div>
+	
+			<div class="cell grid-x grid-margin-x align-center">
+				<div class="cell medium-5">
+					<label>Monto:</label>
+					<div class="input-group">
+						{{form.monto}}
+					</div>
+				</div>
+	
+				<div class="cell medium-2">
+					<label> Total en Dolar:</label>
+					<div class="input-group">
+						{{form.monto_dolar}}
+					</div>
+				</div>
+	
+				<div class="cell medium-5 ">
+					<label> Precio del Dolar:</label>
+					<div class="input-group">
+						{{form.precio_dolar}}
+					</div>
+				</div>
+			</div>
+	
+			<div class="cell grid-x grid-margin-x align-center ">
+	
+				<div class="small-3 cell">
+					<label>Fecha:</label>
+					<div class="input-group">
+						{{form.fecha}}
+					</div>
+				</div>
+				<div class="small-3 cell">
+					<label>corte de mes:</label>
+					<div class="input-group">
+						{{form.corte_mes}}
+					</div>
+					{% for error in form.corte_mes.errors %}
+					<p class="cell" style="color: red;">
+						{{ error|escape }}
+					</p>
+					{% endfor %}
+				</div>
+	
+			</div>
+	
+			<div class="cell grid-x grid-margin-x align-center">
+				<div class="cell small-10">
+					<label>Descripcion:</label>
+					<div class="input-group">
+						{{form.descripcion}}
+					</div>
+				</div>
+			</div>
+	
 
-                    <div class="cell grid-x grid-margin-x">
-                        <div class="cell medium-5">
-                            <button type="submit" class="success button" style="width: 200px;"> Actualizar</button>  
-                        </div>
-                        <div class="cell medium-5">
-                            {% if egreso %}
-                            <a href="{% url 'admin_app:detail_egreso_mes' egreso.corte_mes_id %}" class="success button" style="width: 200px;"> Atras </a>
-                            {% endif %}
-                           {% comment %}  <p>{{egreso.corte_mes_id}}  ---{{egreso.id}} </p>   {% endcomment %}
-                        </div>
-                       
-                       
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+			<div class="cell grid-x grid-margin-x">
+				<div class="cell medium-5">
+					<button type="submit" class="success button" style="width: 200px;"> Actualizar</button>
+				</div>
+				<div class="cell medium-5">
+					{% if egreso %}
+					<a href="{% url 'admin_app:detail_egreso_mes' egreso.corte_mes_id %}" class="success button"
+						style="width: 200px;"> Atras </a>
+					{% endif %}
+					{% comment %} <p>{{egreso.corte_mes_id}} ---{{egreso.id}} </p> {% endcomment %}
+				</div>
+			</div>
+		</form>
+	</div>
 
 </section>
 

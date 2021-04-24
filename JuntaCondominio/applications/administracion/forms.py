@@ -14,8 +14,10 @@ class EgresoForm(forms.ModelForm):
             "egreso",
             "descripcion",
             "monto",
+            "monto_dolar",
+            "precio_dolar",
             "fecha",
-            "corte_mes"
+            "corte_mes",
         )
 
         widgets = {
@@ -42,6 +44,21 @@ class EgresoForm(forms.ModelForm):
                     'class': 'input-group-field',
                 }
             ),
+            
+            'monto_dolar': forms.NumberInput(
+                attrs = {
+                    'placeholder': 'monto en dolares',
+                    'class': 'input-group-field',
+                }
+            ),
+
+            'precio_dolar': forms.NumberInput(
+                attrs = {
+                    'placeholder': 'Precio en dolares',
+                    'class': 'input-group-field',
+                }
+            ),
+
             'fecha': forms.DateInput(
                 format='%Y-%m-%d',
                 attrs = {
