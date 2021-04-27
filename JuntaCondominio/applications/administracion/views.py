@@ -31,19 +31,41 @@ from applications.deuda.models import *
 
 from .functions import (
     reporte_vaucher_pdf, reporte_alquiler_pdf, enviar_correos,crear_codigo,
-    reportes_general_pdf, 
+    reportes_general_pdf, update_corte_mes
     )
 
 from applications.usuario.mixins import AdminPermisoMixin, UsuarioPermisoMixin
 #VISTA PRINCIPAL
 
+
+class AgregarMesNota(View):
+    def post(self, request, *args, **kwargs):
+        nota=self.request.POST.get("nota")
+        mes=self.request.POST.get("mes")
+        nota_bool = update_corte_mes(
+            self = self,
+            mes= self.request.POST.get("mes"),
+            nota= self.request.POST.get("nota"),
+        )
+        if not nota_bool:
+            return HttpResponse("Hubo un error en agregar nota, ya que el mes no existe")
+        
+        #print("nota", nota_bool)
+        return HttpResponseRedirect(
+                reverse(
+                    'admin_app:listar_cierre_mes'
+                    )
+                )
+
+   
+
 class CierreMesListView(UsuarioPermisoMixin,ListView):
     template_name = "administracion/cierre_mes/listar_cierre_mes.html"
     context_object_name = "cierre_mes"
-
     def get_queryset(self):
 
         return Corte_mes.objects.all().exclude(id__in=[1,2]).order_by("mes")
+    
 
 
 #VISTA DE OPCIONES PARA LISTAR O AGREGAR:
@@ -68,6 +90,8 @@ class OpcionesView(UsuarioPermisoMixin,DetailView):
         context["total_referenciaB"] = ReferenciaPago.objects.total_referencia_por_mesB(self.kwargs['pk'])
         context["total_referenciaAlq"] = ReferenciaPago.objects.total_referencia_por_mes_alquiler(self.kwargs['pk'])
 
+        context["mes"] = Corte_mes.objects.get(id=self.kwargs['pk'])
+
         return context
     
 
@@ -84,11 +108,8 @@ class CodigoAcceso(AdminPermisoMixin,View):
             nombre= self.request.POST.get("codigo_nombre"),
         )
         if not codigo:
-            return HttpResponseRedirect(
-                reverse(
-                    'admin_app:listar_cierre_mes'
-                )
-            )
+            return HttpResponse("Hubo un error en agregar codigo de acceso")
+        
         return HttpResponseRedirect(
                 reverse(
                     'admin_app:egreso-add'
@@ -301,7 +322,7 @@ class ReporteCreateView(AdminPermisoMixin,View):
 class ReporteVoucherPdf(UsuarioPermisoMixin,View):
     #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES individual
     def get(self, request, *args, **kwargs):
-        reporte = Reporte.objects.get(id=self.kwargs['pk']).order_by("id")
+        reporte = Reporte.objects.get(id=self.kwargs['pk'])
         if reporte.apartamento.torre == '3':
 
             return HttpResponse(reporte_alquiler_pdf(self.kwargs['pk']), content_type='application/pdf')
@@ -345,7 +366,8 @@ class EnviarReportePDF(AdminPermisoMixin,View):
                 enviar_correos(pdf,asunto,mensaje, correo, titulo)
                 print("se envio correo", correo) 
                 
-        return HttpResponseRedirect(reverse("admin_app:listar_cierre_mes"))
+        #return HttpResponseRedirect(reverse("admin_app:listar_cierre_mes"))
+        return HttpResponse("Se envio  todo los correos adecuadamente")
 
 
 #enviar de manera independiente
@@ -360,7 +382,8 @@ class EnviarPDF(UsuarioPermisoMixin,View):
         enviar_correos(pdf, asunto, mensaje, correo, titulo)
         print("se envio correo", correo)
       
-        return HttpResponse(reporte_vaucher_pdf(self.kwargs['pk']), content_type='application/pdf')
+        #return HttpResponse(reporte_vaucher_pdf(self.kwargs['pk']), content_type='application/pdf')
+        return HttpResponse("Se envio el correo electronico")
 
 
 # class EnviarReporteGeneralPDF(UsuarioPermisoMixin,View):
@@ -387,6 +410,9 @@ class CierreMesCreateView(AdminPermisoMixin, CreateView):
     template_name = "administracion/cierre_mes/crear_mes.html"
     form_class = CierreMesForm
     success_url = reverse_lazy("admin_app:listar_cierre_mes")
+
+
+
 
 
 #VISTA ACTUALIZAR TODO EL MES
@@ -422,14 +448,15 @@ class CerrarMesUpdateView(AdminPermisoMixin,View):
     #ultima actualizancion de mes 
     def get(self, request, *args, **kwargs):
         instance = Corte_mes.objects.get(id = self.kwargs["pk"])
-       
+
         if not instance.cerrar_mes:
             
             total_egreso = Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"])
             total_ingreso = Ingreso.objects.totalizar_ingreso_mes(self.kwargs["pk"])
             instance.reserva = total_egreso*0.1
             #print("reserva=====>", instance.reserva)
-            x = Egreso.objects.crear_egreso(instance)
+            codigo = CodigoAcceso.objects.get(id=28)
+            x = Egreso.objects.crear_egreso(instance, codigo)
 
             total_egreso = Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"])
             # aqui verifico que no hallas errores

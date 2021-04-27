@@ -11,9 +11,9 @@ ALLOWED_HOSTS = []
 DATABASES = {
         'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'JC06',
-        'USER': 'postgres',
-        'PASSWORD': '123456789',
+        'NAME': get_secret('DB_NAME'),
+        'USER': get_secret('USER'),
+        'PASSWORD': get_secret('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -34,9 +34,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 #email settings
 EMAIL_USE_TLS = True
 EMAIL_HOST ='smtp.gmail.com'
-EMAIL_HOST_USER = 'sanjosecondominio21@gmail.com'
-DEFAULT_FROM_EMAIL = 'sanjosecondominio21@gmail.com'
-SERVER_EMAIL = 'sanjosecondominio21@gmail.com'
-EMAIL_HOST_PASSWORD =
+EMAIL_HOST_USER = get_secret('CORREO')
+DEFAULT_FROM_EMAIL = get_secret('CORREO')
+SERVER_EMAIL = get_secret('CORREO')
+EMAIL_HOST_PASSWORD =get_secret('CLAVE_EMAIL')
 EMAIL_PORT = 587
 

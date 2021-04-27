@@ -4,74 +4,116 @@
 {% block panel-content %}
 
 <section class="grid-x grid-margin-x">
-   <div class="cell">
-        <h2 class="align-center"> Administracion Residencia las Torres de  San Jose </h2>
-   </div>
+  <div class="cell">
+    <h2 class="align-center"> Administracion Residencia las Torres de San Jose </h2>
+  </div>
 
-      <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
-        <table class="hover">
-          <thead>
-            <th>Id </th>
-            <th>Mes</th>
-            <th>Total de Egreso</th>
-            <th>Total de Ingreso</th>  
-            <th>Reserva </th>  
-            <th>Acciones</th> 
-            <th>Actualizar</th>  
-            <th>Cerrar Mes </th>
-          </thead>
-          <tbody>
-            {% for cierre in cierre_mes %}
-                <tr>
-                    <td> {{cierre.id}}</td>
-                    <td>{{cierre.get_mes_display}}</td>
-                    <td>{{cierre.monto_egreso | intcomma}}</td> 
-                    <td>{{cierre.monto_ingreso | intcomma}} </td> 
-                    <td> {{cierre.reserva | intcomma}} </td>
-                    <td>
-                      <ul style="list-style: none;">
-                        <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:detail_egreso_mes' cierre.id %}"> Listar Egreso </a>
-                        </li>
-                        <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:detail_ingreso_mes' cierre.id %}"> Listar Ingreso </a>
-                        </li>
-                        <li style="font-weight: bolder;">
-                          {% comment %} <a href="{% url 'admin_app:reporte_torreA' cierre.id %}"> Reporte Torre A </a> {% endcomment %}
-                          <a href="{% url 'admin_app:generar_reportes' cierre.id 1 %}"> Reporte Torre A </a>
-
-                        </li>
-                        <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:generar_reportes' cierre.id 2 %}"> Reporte Torre B </a>
-                        </li>
-                        <li style="font-weight: bolder;">
-                          <a href="{% url 'admin_app:generar_reportes' cierre.id 3 %}"> Reporte Alquiler </a>
-                        </li>
-                      </ul>
-                    </td>
-                    <td> 
-                      <ul style="list-style: none;">
-                        <li>
-                          <a href="{% url 'admin_app:update_mes' cierre.id %}" class="warning button" style="font-weight: bolder;"> Actualizar</a> 
-                        </li>
-                        <li>
-                          <a href="{% url 'admin_app:crear_reporte' cierre.id %}" class="warning button" style="font-weight: bolder;"> Generar Recibos </a>
-                        </li>
-                        <li>
-                          <a href="{% url 'admin_app:enviar_pdf' cierre.id %}" class="warning button" style="font-weight: bolder;"> Enviar PDF </a>
-                        </li>
-                      </ul>
-                    </td>
-                    <td> <a href="{% url 'admin_app:cerrar_mes' cierre.id %}" class="alert button" style="font-weight: bolder;"> Cerrar Mes</a></td>
-                </tr>
-                {%empty%}
-                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
-            {% endfor %}
-          </tbody>
-        </table>
+  <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
+    <table class="hover">
+      <thead>
+        <th>Id </th>
+        <th>Mes</th>
+        <th>Total de Egreso</th>
+        <th>Total de Ingreso</th>
+        <th>Reserva </th>
+        <th>Acciones</th>
+        <th>Actualizar</th>
+        <th>Cerrar Mes </th>
+      </thead>
+      <tbody>
+        {% for cierre in cierre_mes %}
+        <tr>
+          <td> {{cierre.id}}</td>
+          <td>{{cierre.get_mes_display}}</td>
+          <td>{{cierre.monto_egreso | intcomma}}</td>
+          <td>{{cierre.monto_ingreso | intcomma}} </td>
+          <td> {{cierre.reserva | intcomma}} </td>
+          <td>
+            <ul style="list-style: none;">
+              <li style="font-weight: bolder;">
+                <a href="{% url 'admin_app:detail_egreso_mes' cierre.id %}"> Listar Egreso </a>
+              </li>
+              <li style="font-weight: bolder;">
+                <a href="{% url 'admin_app:detail_ingreso_mes' cierre.id %}"> Listar Ingreso </a>
+              </li>
+              <li style="font-weight: bolder;">
+                <a href="{% url 'admin_app:generar_reportes' cierre.id 1 %}"> Reporte Torre A </a>
+              </li>
+              <li style="font-weight: bolder;">
+                <a href="{% url 'admin_app:generar_reportes' cierre.id 2 %}"> Reporte Torre B </a>
+              </li>
+              <li style="font-weight: bolder;">
+                <a href="{% url 'admin_app:generar_reportes' cierre.id 3 %}"> Reporte Alquiler </a>
+              </li>
+              <li style="font-weight: bolder;">
+                <a href="#" data-open="exampleModal1"> Agregar Anotacion </a>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <ul style="list-style: none;">
+              <li>
+                <a href="{% url 'admin_app:update_mes' cierre.id %}" class="warning button"
+                  style="font-weight: bolder;"> Actualizar</a>
+              </li>
+              <li>
+                <a href="{% url 'admin_app:crear_reporte' cierre.id %}" class="warning button"
+                  style="font-weight: bolder;"> Generar Recibos </a>
+              </li>
+              <li>
+                <a href="{% url 'admin_app:enviar_pdf' cierre.id %}" class="warning button"
+                  style="font-weight: bolder;"> Enviar PDF </a>
+              </li>
+            </ul>
+          </td>
+          <td> <a href="{% url 'admin_app:cerrar_mes' cierre.id %}" class="alert button" style="font-weight: bolder;">
+              Cerrar Mes</a></td>
+        </tr>
+        {%empty%}
+        <h3 style="color:red"> No existen resultados en estos momentos </h3>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <article class="reveal grid-x grid-margin-x" id="exampleModal1" data-reveal>
+    <h3> Agregar Anotacion</h3>
+    <form class="grix grid-margin-x" action="{% url 'admin_app:agregar_nota'%}" method="POST"> {% csrf_token %}
+      <div class="cell grid-x grid-margin-x align-center">
+        <div class="cell medium-6">
+          <label> Mes:</label>
+          <div class="input-group">
+            <select id="mes" name="mes">
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
+          </div>
+        </div>
+        <div class="cell medium-12">
+          <label> Codigo:</label>
+          <div class="input-group">
+            <textarea id="nota" name="nota" rows="5" cols="70"></textarea> 
+          </div>
+        </div>
       </div>
-    </div>
-    
+      <div class="cell grid-x grid-margin-x align-center">
+        <button class="success button" type="submit"> Agregar </button>
+      </div>
+    </form>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </article> 
+
 
 </section>
 

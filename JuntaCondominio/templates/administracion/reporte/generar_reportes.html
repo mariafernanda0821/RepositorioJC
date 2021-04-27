@@ -38,9 +38,9 @@
                   <td>{{reporte.deuda | intcomma }} </td> 
                   <td>{{reporte.total_pagar | intcomma }} </td>
                   <td>
-                  <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button warning"> Recibo </a>
+                  <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button warning" target="_blank"> Recibo </a>
                   <a href="{% url 'deuda_app:crear_referencia' reporte.id %}" class="button success"> Referencia </a> 
-                  <a href="{% url 'admin_app:enviar_individual_pdf' reporte.id %}" class="button alert"> Enviar </a>  
+                  <a href="{% url 'admin_app:enviar_individual_pdf' reporte.id %}" class="button alert" target="_blank"> Enviar </a>  
                   </td>
               </tr>
             {%empty%}

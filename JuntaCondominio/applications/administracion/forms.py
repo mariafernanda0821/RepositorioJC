@@ -185,7 +185,7 @@ class CierreMesForm(forms.ModelForm):
     
     class Meta:
         model = Corte_mes
-        fields = ("mes","fecha_inicio", "fecha_fin")
+        fields = ("mes","fecha_inicio", "fecha_fin", "nota")
 
         widgets = {
             'fecha_inicio': forms.DateInput(
@@ -206,7 +206,13 @@ class CierreMesForm(forms.ModelForm):
                     attrs = {
                         'class': 'input-group-field',
                     }
-                )
+                ),
+            'nota': forms.Textarea(
+                attrs = {
+                    'placeholder': 'Anotacion',
+                    'class': 'input-group-field',
+                }
+            ),
         }
 
     def clean_mes(self):

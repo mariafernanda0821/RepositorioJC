@@ -9,7 +9,11 @@ urlpatterns = [
         views.CierreMesListView.as_view(),
         name = "listar_cierre_mes",
     ),
-
+    path(
+        'agregar-anotacion/',
+        views.AgregarMesNota.as_view(),
+        name="agregar_nota",
+    ),
     path(
         'opcion/<pk>/',
         views.OpcionesView.as_view(),
@@ -109,11 +113,13 @@ urlpatterns = [
         views.CerrarMesUpdateView.as_view(),
         name= "cerrar_mes",
     ),
+    
     path(
         'crear-mes/',
         views.CierreMesCreateView.as_view(),
         name= "crear_mes",
     ),
+
     #URL DE INGRESOS
     path(
         'ingreso-add/',

@@ -31,6 +31,7 @@ class Corte_mes(TimeStampedModel):
     monto_ingreso = models.DecimalField("Monto total de ingreso ", max_digits=20, decimal_places=2, default=0) 
     reserva= models.DecimalField("Reserva", max_digits=20, decimal_places=2, default=0) 
     cerrar_mes=models.BooleanField("Cierre Mes", default=False)
+    nota = models.TextField("Anotacion", blank=True)
     objects = CierreMesManager()
     
     class Meta:

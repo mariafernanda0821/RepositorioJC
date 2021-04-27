@@ -26,7 +26,6 @@ def reporte_vaucher_pdf(id_reporte):
             'propietario': propietario,
             "mes": mes,
             "reserva":reserva,
-            "nota":"A la Taza del dia BCV 2.363.858,21"
         }
     if mes.id == 3:
         
@@ -56,7 +55,6 @@ def reporte_alquiler_pdf(id_reporte):
             #'total': total, #ESTOY PASANDO EL MES 
             "reserva":reserva,
             #"control":control,
-            "nota":"A la Taza del dia BCV 2.363.858,21"
         }
 
     pdf = render_to_pdf('administracion/reporte/reciboAlquiler.html', data)
@@ -68,9 +66,9 @@ def reportes_general_pdf(id_mes, id_torre):
     mes = Corte_mes.objects.get(id=id_mes)
     torre = Apartamento.objects.filter(torre=id_torre).first()
     data = {
-            'reportes': reportes,
-            'mes': mes,
-            'torre':torre,
+        'reportes': reportes,
+        'mes': mes,
+        'torre':torre,
         }
 
     pdf = render_to_pdf('administracion/reporte/reporte_globalPDF.html', data)
@@ -96,4 +94,11 @@ def crear_codigo(self, **params):
     codigo.save()
     return True
 
-
+def update_corte_mes(self, **params):
+    verificar = Corte_mes.objects.filter(mes=params["mes"]).exists()
+   
+    if verificar:
+        instance = Corte_mes.objects.filter(mes=params["mes"]).first()
+        instance.nota=params["nota"]
+        instance.save()
+    return verificar

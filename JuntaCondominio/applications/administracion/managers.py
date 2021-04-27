@@ -37,11 +37,12 @@ class EgresoManager(models.Manager):
        # print("=====", resultado)
         return resultado
     #?date_start=2021-01-01&date_end=2021-01-24
-    def crear_egreso(self, instance):
+    def crear_egreso(self, instance, codigo):
+        
         x = self.create(
             tipo_egreso= "1",
-           # codigo= 
-            egreso="Reserva",
+            codigo= codigo,
+            egreso="10%",
             descripcion= "Reserva del 10%",
             monto = instance.reserva,
             fecha = timezone.now(),

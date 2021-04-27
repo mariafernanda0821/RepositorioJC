@@ -9,7 +9,7 @@
   </article>
   
   <article class="cell grid-x grid-margin-x grid-padding-y align-center">
-    <h1 class= "cell"> Informe General </h1>
+    <h1 class= "cell"> Informe General del mes {{mes.get_mes_display}} </h1>
     <article class="cell grid-x grid-margin-x align-center medium-4" >
       
       <div class=" cell card" style="width: 300px;">
@@ -25,22 +25,22 @@
     <article class="cell grid-x grid-margin-x align-center medium-4" >
       <div class=" cell card" style="width: 300px;">
         <div class="card-divider">
-          <h4>  Referencia del Edificio</h4>
-        </div>
-          {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
-        <div class="card-section">
-          <h4>{{total_referencia | intcomma}}</h4>
-        </div>
-      </div>
-    </article>
-    <article class="cell grid-x grid-margin-x align-center medium-4" >
-      <div class=" cell card" style="width: 300px;">
-        <div class="card-divider">
           <h4>  Deuda Edificio</h4>
         </div>
           {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
         <div class="card-section">
           <h4>{{total_deuda | intcomma}}</h4>
+        </div>
+      </div>
+    </article>
+        <article class="cell grid-x grid-margin-x align-center medium-4" >
+      <div class=" cell card" style="width: 300px;">
+        <div class="card-divider">
+          <h4>  Referencia del Edificio</h4>
+        </div>
+          {% comment %} <h1>{{total_reporte}}</h1> {% endcomment %}
+        <div class="card-section">
+          <h4>{{total_referencia | intcomma}}</h4>
         </div>
       </div>
     </article>

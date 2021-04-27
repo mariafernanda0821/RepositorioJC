@@ -6,10 +6,10 @@
 <section class="grid-container">
   <article class="cell grid-x grid-margin-x align-center">
     <div class="cell small-3">
-      <a href="{% url 'deuda_app:deudas_pdf' %}" class="warning button"> PDF </a>
+      <a href="{% url 'deuda_app:deudas_pdf' %}" class="warning button"target="_blank"> PDF </a>
     </div>
     <div class="cell small-3">
-      <a href="{% url 'deuda_app:enviar_deudas_pdf' %}" class="warning button"> Enviar Correo</a>
+      <a href="{% url 'deuda_app:enviar_deudas_pdf' %}" class="warning button" target="_blank"> Enviar Correo</a>
     </div>
     <div class="cell small-3">
       <a href="#" class="warning button"> Otros </a>
@@ -46,10 +46,11 @@
     <td>{{total_deudas |intcomma}}</td>
   </tbody>
 </table>
-  <p> La deuda Acumulada se refiere a la deuda inicial de cada Apartamento </p>
-  
-  <p> La deuda del TOTAL es la que se toma encuenta</p>
   </article>
+  <p>
+      La deuda Acumulada se refiere a la deuda inicial de cada Apartamento. <br/>
+      La deuda Total se refiere a la deuda actual que tiene el apartamento.
+  </p>
 </section>
 
 

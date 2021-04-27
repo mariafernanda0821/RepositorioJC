@@ -72,7 +72,7 @@
                 <article class="cell grid-x grid-margin-x align-center" >
                     <button type="submit" class="success button cell small-4">Aceptar</button>
                     <a href={% url 'admin_app:generar_reportes' reporte.corte_mes.mes reporte.apartamento.torre %} class="success button cell small-4"> Atras </a>
-                    <a href={% url 'deuda_app:comprobante_pdf' object.id %} class="success button cell small-4"> Enviar Correo </a>
+                    <a href={% url 'deuda_app:comprobante_pdf' object.id %} class="success button cell small-4" target="_blank"> Enviar Correo </a>
                 </article>
                 {% comment %} <p class="cell">referencia.id => {{referencia.id}} o object {{object.id}}</p>
                 <p class="cell"> mes => {{reporte.corte_mes.mes}} o torre {{reporte.apartamento.torre}}</p> {% endcomment %}
