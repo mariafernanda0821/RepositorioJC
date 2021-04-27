@@ -48,5 +48,11 @@ class ReferenciaPagoManager(models.Manager):
         return x
 
 
-class RegistroPagoManager(models.Manager):
-    pass
+class RegistroDeudaManager(models.Manager):
+    def deuda_acumulada(self):
+        x = self.all().aggregate(total = Sum(F("deuda_ocumulada"),output_field=FloatField()))
+        return x["total"]
+
+    def deuda_total(self):
+        x = self.all().aggregate(total = Sum(F("deuda_pagar"),output_field=FloatField()))
+        return x["total"]

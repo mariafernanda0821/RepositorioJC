@@ -21,7 +21,7 @@ urlpatterns = [
     re_path('', include("applications.administracion.urls")), 
     re_path('', include("applications.deuda.urls")),
     re_path('', include("applications.edificio.urls")), 
-  #  re_path('', include("applications.usuario.urls")), 
+    re_path('', include("applications.usuario.urls")), 
 
 
 

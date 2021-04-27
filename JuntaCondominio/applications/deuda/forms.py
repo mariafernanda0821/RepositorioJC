@@ -24,6 +24,7 @@ class ReferenciaPagoForm(forms.ModelForm):
 
 class  SeleccionForm(forms.Form):
 
+
     mes = forms.ChoiceField(
         required=True,
         choices=Corte_mes.MES_CHOICES, 
@@ -52,3 +53,4 @@ class  SeleccionForm(forms.Form):
 
         
         #return queryset
+

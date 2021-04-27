@@ -1,76 +1,98 @@
 {% load humanize %}
-<!DOCTYPE  HTML>
+<!DOCTYPE HTML>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <link href="css/app.css" rel="stylesheet" type="text/css" MEDIA="screen, print"> -->
-    <title>Recibo</title>
-    <style type="text/css">
-        td {
-            vertical-align: center ; 
-            text-align: center;
-            font-size: 14px;
-            border-bottom: 1px grey solid; 
-            padding-top: 3px;   
-        }
-       
-        th{
-            font-size: 14px;
-            text-align: center;
-            background-color: #D2CECD;
-            vertical-align: center;
-            padding-top: 5px;
 
-        }
-        h1{
-            font-weight: bolder;
-            text-align: center;
-            font-size: 18px;
-        }
-        p{
-            text-align: center;
-            font-size: 13px;
-            border-bottom: 2px gray solid;
-            padding-bottom: 3px;
-        }
-        .gastos >td {
-          padding-letf: 3px;  
-        }
-    </style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <link href="css/app.css" rel="stylesheet" type="text/css" MEDIA="screen, print"> -->
+  <title>Recibo</title>
+  <style type="text/css">
+    td {
+      vertical-align: center;
+      text-align: center;
+      font-size: 14px;
+      border-bottom: 1px grey solid;
+      padding-top: 3px;
+    }
+
+    th {
+      font-size: 14px;
+      text-align: center;
+      background-color: #D2CECD;
+      vertical-align: center;
+      padding-top: 5px;
+
+    }
+
+    h1 {
+      font-weight: bolder;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 13px;
+      border-bottom: 2px gray solid;
+      padding-bottom: 3px;
+    }
+
+    .gastos>td {
+      padding-letf: 3px;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class= "mini-bloque1">
-            <div class= "mini-bloque2"></div>
-                <p>
-                    <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San Jose</span>
-                    <br>Avenida Fuerzas Armadas, Esq. San Jose a San Luis 
-                    Parroquia San Jose, Edificio Torres de San Jose. <br>
-                    Rif: J-30793298-8 - NIL 298677-1 <br>
-                    <span style="font-weight: bolder; "> En el Registro Nacional de Empresas Bajo el N-.7 - Tomo 49, de fecha 12/06/2009.</span>               
-                </p>
-            </div>
-        </div> 
-        <div class="mini-bloque1" >
-            <table class="tabla" >
-                <thead class="encabezado">
-                    <th> Apartamento </th>
-                    <th> Deuda Acumulada( Hasta Febrero) </th>
-                    <th>  Deuda por Pagar(Presente)</th>
-                </thead >
-                <tbody>
-                    {% for deuda in deudas %}
-                    <tr>
-                        <td> {{deuda.apartamento}} </td>
-                        <td> {{deuda.deuda_ocumulada | intcomma}} </td>
-                        <td> {{deuda.deuda_pagar | intcomma}} </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+  <div>
+    <div>
+      <div>
+        <p>
+          <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San
+            Jose</span>
+          <br>Avenida Fuerzas Armadas, Esq. San Jose a San Luis
+          Parroquia San Jose, Edificio Torres de San Jose. <br>
+          Rif: J-30793298-8 - NIL 298677-1 <br>
+          <span style="font-weight: bolder; "> En el Registro Nacional de Empresas Bajo el N-.7 - Tomo 49, de fecha
+            12/06/2009.</span>
+        </p>
+      </div>
     </div>
+    <div>
+      <table>
+        <thead>
+          <th> Apartamento </th>
+          <th> Deuda Acumulada( Hasta Febrero) </th>
+          <th> Deuda por Pagar(Presente)</th>
+        </thead>
+        <tbody>
+          {% for deuda in deudas %}
+          <tr>
+            <td> {{deuda.apartamento}} </td>
+            <td> {{deuda.deuda_ocumulada | intcomma}} </td>
+            <td> {{deuda.deuda_pagar | intcomma}} </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <table>
+        <thead>
+          <th>Deuda Acumulada</th>
+          <th>Deuda Total</th>
+          <th>Deuda Totalizada </th>
+        </thead>
+        <tbody>
+          <td>{{total_acumulada |intcomma}}</td>
+          <td>{{total_deudas |intcomma}}</td>
+          <td>{{total |intcomma}}</td>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </body>

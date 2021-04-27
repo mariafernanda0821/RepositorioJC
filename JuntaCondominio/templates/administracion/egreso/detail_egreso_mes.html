@@ -3,61 +3,74 @@
 {% load humanize %}
 {% block panel-content  %}
 
-<div class="grid-x grid-margin-x">
-  <div class="cell grid-x grid-margin-x align-center grid-padding-x">
-    <div class="cell grid-x grid-margin-x ">  
-      <h3 class="cell small-6 align-center"> Gasto del mes: {{mes.get_mes_display}} </h3>
-      <p class="cell small-6 align-right ">{{fecha}} </p>
+<section class="grid-container">
+  <article class="grid-x grid-margin-x grid-padding-y align-center">
+    <div class="cell grid-x grid-margin-x align-center">
+      <div class="cell grid-x grid-margin-x">
+        <h3 class="cell small-6 align-center"> Gasto del mes: {{mes.get_mes_display}} </h3>
+        <p class="cell small-6 align-right ">{{fecha}} </p>
+      </div>
     </div>
-  </div>
-  <div class="cell grid-x grid-margin-x align-center">
-    <div class="cell small-3">
-      <a href="{% url 'admin_app:egreso-add' %}" class="warning button"> Agregar un Egreso</a>
+    <div class="cell grid-x grid-margin-x align-center">
+      <div class="cell small-3">
+        <a href="{% url 'admin_app:egreso-add' %}" class="warning button"> Agregar un Egreso</a>
+      </div>
+      <div class="cell small-3">
+        <a href="{% url 'admin_app:recibo_egreso_mes' mes.id %}" class="warning button"> Generar Informe PDF</a>
+      </div>
+      <div class="cell small-3">
+        <a href="#" class="warning button"> Enviar PDF </a>
+      </div>
+      <div class="cell small-3">
+        <a href="{% url 'admin_app:update_mes' mes.id  %}" class="warning button"> Home Mes </a>
+      </div>
+      
     </div>
-    <div class="cell small-3">
-      <a href="{% url 'admin_app:recibo_egreso_mes' mes.id %}" class="warning button"> Generar Informe PDF</a>
     </div>
-    <div class="cell small-3">
-      <a href="{% url 'admin_app:listar_cierre_mes'  %}" class="warning button"> Home Mes </a> 
+  </article>
+  <article class="grid-container">
+    <div class="grid-x grid-margin-x align-center">
+      <table class="hover">
+        <thead>
+          <!-- <th> N </th> -->
+          <th> Codigo </th>
+          <th> Egreso </th>
+          <th> Detallar </th>
+          <th> Monto BS. </th>
+          <th> Monto $. </th>
+          <th> Precio del $. </th>
+          <th> Descripcion </th>
+          <th></th>
+          <th></th>
+        </thead>
+        <tbody>
+          {% for gasto in gastos_mes %}
+          <tr>
+           <!--  <td>{{index}} </td> -->
+            <td>{{gasto.codigo.codigo}}</td>
+            <td>{{gasto.codigo.nombre}}</td>
+            <td>{{gasto.egreso}}</td>
+            <td>{{gasto.monto | intcomma}}</td>
+            <td>{{gasto.monto_dolar | intcomma}}</td>
+            <td>{{gasto.precio_dolar | intcomma}}</td>
+            <td>{{gasto.descripcion}}</td>
+            <td>
+              <a href="{% url 'admin_app:update_egres' gasto.id %}" class="button"><i class="fi-pencil"></i></a>
+            </td>
+            <td>
+              <!-- <p>{{gasto.corte_mes_id}}</p> -->
+              <form action="{% url 'admin_app:delete_egreso' gasto.id %}" method="POST">{% csrf_token %}
+                <button type="submit" class="button alert"><i class="fi-x"></i></button>
+              </form>
+            </td>
+          </tr>
+          {%empty%}
+          <h3 style="color:red"> No existen resultados en estos momentos </h3>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    </div>
-  </div>
-
-  <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
-    <table class="hover">
-      <thead>
-        <th> N</th>
-        <th>Tipo</th>
-        <th>Egreso</th>
-        <th>Monto</th>
-        <th>Descripcion</th>
-        <th></th>
-        <th></th>
-      </thead>
-      <tbody>
-        {% for gasto in gastos_mes %}
-            <tr>
-                <td> </td>
-                <td>{{gasto.get_tipo_egreso_display}}</td>
-                <td>{{gasto.egreso}}</td>
-                <td>{{gasto.monto | intcomma}}</td>
-                <td>{{gasto.descripcion}}</td> 
-                <td>
-                  <a href="{% url 'admin_app:update_egres' gasto.id %}" class="button"><i class="fi-pencil"></i></a>
-                </td>
-                <td>
-                  <!-- <p>{{gasto.corte_mes_id}}</p> -->
-                    <form action="{% url 'admin_app:delete_egreso' gasto.id %}" method="POST">{% csrf_token %}
-                      <button type="submit" class="button alert"><i class="fi-x"></i></button>
-                    </form>
-                </td>
-            </tr>
-            {%empty%}
-                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
+  </article>
+</section>
 
 {% endblock panel-content  %}

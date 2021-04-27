@@ -41,14 +41,14 @@
                   </li>
                   
                   <li class="activeli"> 
-                    <a href="{% url 'edificio_app:apart_torreA' %}" style="color: white;"> Listar Apar Torre A </a>
+                    <a href="{% url 'edificio_app:apart_torres' 1 %}" style="color: white;"> Listar Apar Torre A </a>
                   </li>
                   
                   <li class="activeli"> 
-                    <a href="{% url 'edificio_app:apart_torreB' %}" style="color: white;"> Listar Apar Torre B</a>
+                    <a href="{% url 'edificio_app:apart_torres' 2 %}" style="color: white;"> Listar Apar Torre B</a>
                   </li>
                   <li class="activeli"> 
-                    <a href="{% url 'edificio_app:alquilers' %}" style="color: white;"> Listar Alquiler </a>
+                    <a href="{% url 'edificio_app:apart_torres' 3 %}" style="color: white;"> Listar Alquiler </a>
                   </li>
                   <li class="activeli"> 
                     <a href="{% url 'deuda_app:listar_referencia' %}" style="color: white;"> Buscar Referencia </a>
@@ -69,8 +69,12 @@
                   <li class="activeli"> 
                     <a href="#" style="color: white;">Propietario</a>
                   </li>
+                  
                   <li class="activeli">
                     <a href="#" style="color: white;">Apartamentos</a>
+                  </li>
+                  <li class="activeli"> 
+                    <a href="{% url 'users_app:user-lista'%}" style="color: white;">Usuario</a>
                   </li>
                 </ul>
               </li>
@@ -87,7 +91,7 @@
               <h4 style="color: white;">Sesion de: {{ user.full_name }}</h4>
             </div>
             <div class="top-bar-right">
-              <a href="#">
+              <a href="{% url 'users_app:user-logout' %}">
                 <span class="label warning">Salir</span>
               </a>
             </div>

@@ -3,39 +3,53 @@
 {% load humanize %}
 {% block panel-content %}
 
-<section class= "grid-container">
-    <article class = "cell grid-x grid-margin-x align-center ">
-        <div class="cell small-3">
-            <a href="{% url 'deuda_app:deudas_pdf' %}" class="warning button"> PDF </a>
-        </div>
-        <div class="cell small-3">
-            <a href="{% url 'deuda_app:enviar_deudas_pdf' %}" class="warning button"> Enviar Correo</a>
-        </div>
-        <div class="cell small-3">
-            <a href="#" class="warning button"> Otros </a> 
-        </div>
-    </article>
-
-    <article "cell grid-x grid-margin-x align-center ">
-        <table >
-                <thead>
-                    {% comment %} <th>ID</th> {% endcomment %}
-                    <th>Apartamento</th> 
-                    <th> Deuda Acumulada</th> 
-                    <th>Deuda Total</th>
-                </thead>
-            {% for deuda in deudas %}    
-                <tbody>
-                    {% comment %} <td> {{deuda.id}} </td> {% endcomment %}
-                    <td> {{deuda.apartamento}} </td>
-                    <td> {{deuda.deuda_ocumulada | intcomma}} </td>
-                    <td> {{deuda.deuda_pagar | intcomma}} </td>
-                </tbody>
-                {%empty%}
-                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
-            {% endfor %}
-            </table>
-    </article>
+<section class="grid-container">
+  <article class="cell grid-x grid-margin-x align-center">
+    <div class="cell small-3">
+      <a href="{% url 'deuda_app:deudas_pdf' %}" class="warning button"> PDF </a>
+    </div>
+    <div class="cell small-3">
+      <a href="{% url 'deuda_app:enviar_deudas_pdf' %}" class="warning button"> Enviar Correo</a>
+    </div>
+    <div class="cell small-3">
+      <a href="#" class="warning button"> Otros </a>
+    </div>
+  </article>
+  <article class="cell grid-x grid-margin-x align-center">
+    <table>
+      <thead>
+        {% comment %} <th>ID</th> {% endcomment %}
+        <th>Apartamento</th>
+        <th> Deuda Acumulada</th>
+        <th>Deuda Total</th>
+      </thead>
+      {% for deuda in deudas %}
+      <tbody>
+        {% comment %} <td> {{deuda.id}} </td> {% endcomment %}
+        <td> {{deuda.apartamento}} </td>
+        <td> {{deuda.deuda_ocumulada | intcomma}} </td>
+        <td> {{deuda.deuda_pagar | intcomma}} </td>
+      </tbody>
+      {%empty%}
+      <h3 style="color:red"> No existen resultados en estos momentos </h3>
+      {% endfor %}
+    </table>
+  </article>
+  <article class="cell grid-x grid-margin-x align-center">
+<table>
+  <thead>
+    <th>Deuda Acumulada(Inicial)</th>
+    <th>Deuda Total</th>
+  </thead>
+  <tbody>
+    <td>{{total_acumulada |intcomma}}</td>
+    <td>{{total_deudas |intcomma}}</td>
+  </tbody>
+</table>
+  <p> La deuda Acumulada se refiere a la deuda inicial de cada Apartamento </p>
+  
+  <p> La deuda del TOTAL es la que se toma encuenta</p>
+  </article>
 </section>
 
 

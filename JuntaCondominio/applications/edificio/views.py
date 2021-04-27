@@ -23,35 +23,21 @@ from applications.utils import render_to_pdf
 from .models import *
 from applications.edificio.models import * 
 from applications.deuda.models import * 
+from applications.usuario.mixins import AdminPermisoMixin, UsuarioPermisoMixin
 
 #---------*********VISTA DE Apart *********----------------------------
 
-class AparTorreAView(TemplateView):
-    template_name = "edificio/apart/torreA.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["apart"] = Apartamento.objects.filter(torre = 1).order_by("id")
-        return context
+class AparTorresView(UsuarioPermisoMixin,ListView):
+    template_name = "edificio/apart/torres.html"
+    context_object_name = "aparts"
+    
+    def get_queryset(self):
+        queryset = Apartamento.objects.filter(torre =self.kwargs["torre"]).order_by("id")
+        return queryset
+    
     
 
-class AparTorreBView(TemplateView):
-    template_name = "edificio/apart/torreB.html"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["apart"] = Apartamento.objects.filter(torre = 2).order_by("id")
-        return context
-
-
-class AlquilerView(TemplateView):
-    template_name = "edificio/apart/alquiler.html"
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["apart"] = Apartamento.objects.filter(torre = 3).order_by("id")
-        return context
-
-
-class RegistroPagoApar(TemplateView):
+class RegistroPagoApar(UsuarioPermisoMixin,TemplateView):
     template_name = "edificio/apart/detail_apart.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,7 +47,7 @@ class RegistroPagoApar(TemplateView):
         return context
     
 
-class RegistroReporte(TemplateView):
+class RegistroReporte(UsuarioPermisoMixin,TemplateView):
     template_name = "edificio/apart/detail_reporte.html"
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -74,7 +60,7 @@ class RegistroReporte(TemplateView):
 
 
 #VISTA QUE GENERA INFORME DEL GASTO DEL MES
-class ApartamentoPDF(View):
+class ApartamentoPDF(UsuarioPermisoMixin,View):
     #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se actualiza ante de generar el pdf
     #
     def get(self, request, *args, **kwargs):
@@ -86,5 +72,20 @@ class ApartamentoPDF(View):
         pdf = render_to_pdf('edificio/apart/apart_voucher.html', data)
         return HttpResponse(pdf, content_type='application/pdf')
 
+
+class AparTorreBView(UsuarioPermisoMixin,TemplateView):
+    template_name = "edificio/apart/torreB.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["apart"] = Apartamento.objects.filter(torre = "2").order_by("id")
+        return context
+
+
+class AlquilerView(UsuarioPermisoMixin,TemplateView):
+    template_name = "edificio/apart/alquiler.html"
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["apart"] = Apartamento.objects.filter(torre = "3").order_by("id")
+        return context
 
 # Create your views here.

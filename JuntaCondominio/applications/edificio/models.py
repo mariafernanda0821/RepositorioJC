@@ -46,7 +46,7 @@ class Apartamento(TimeStampedModel):
 
     apartamento = models.CharField("Apartamento", unique= True, max_length=4)
     piso = models.PositiveIntegerField("Piso")
-    torre = models.CharField("Torres", choices=TORRE_CHOICES, max_length=1 )
+    torre = models.CharField("Torres", choices=TORRE_CHOICES, max_length=4)
     esquina = models.CharField("Esquina",max_length=10,blank=True)
     alicuota = models.DecimalField("Alicuota", max_digits=5, decimal_places=4)
     propietario =  models.ForeignKey(Propietario, verbose_name="Propietario",related_name="propietario_apart", on_delete=models.CASCADE)

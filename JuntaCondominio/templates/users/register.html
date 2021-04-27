@@ -20,18 +20,6 @@
         </p>
       {% endfor %}
     </div>
-    <div class="cell medium-12">
-      <label>Usuario:</label>
-      <div class="input-group">
-        <span class="input-group-label"><i class="fi-mail"></i></span>
-        {{ form.usuario }}
-      </div>
-      {% for error in form.usuario.errors %}
-        <p class="cell" style="color: red;">
-          {{ error|escape }}
-        </p>
-      {% endfor %}
-    </div>
     <div class="cell medium-6">
       <label>Nombre:</label>
       <div class="input-group">

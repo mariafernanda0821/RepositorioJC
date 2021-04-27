@@ -22,18 +22,22 @@ from applications.utils import render_to_pdf
 
 #formulario
 from .forms import (
-    EgresoForm, SeleccionForm, IngresoForm, CierreMesForm,
+    EgresoForm, SeleccionForm, IngresoForm, CierreMesForm, CodigoAccesoForm, CodigoAcceso2Form
     )
 #
 from .models import *
 from applications.edificio.models import * 
 from applications.deuda.models import * 
 
-from .functions import  reporte_vaucher_pdf, reporte_alquiler_pdf, enviar_correos
+from .functions import (
+    reporte_vaucher_pdf, reporte_alquiler_pdf, enviar_correos,crear_codigo,
+    reportes_general_pdf, 
+    )
 
+from applications.usuario.mixins import AdminPermisoMixin, UsuarioPermisoMixin
 #VISTA PRINCIPAL
 
-class CierreMesListView(ListView):
+class CierreMesListView(UsuarioPermisoMixin,ListView):
     template_name = "administracion/cierre_mes/listar_cierre_mes.html"
     context_object_name = "cierre_mes"
 
@@ -43,7 +47,7 @@ class CierreMesListView(ListView):
 
 
 #VISTA DE OPCIONES PARA LISTAR O AGREGAR:
-class OpcionesView(DetailView):
+class OpcionesView(UsuarioPermisoMixin,DetailView):
     template_name = "administracion/cierre_mes/opcion.html"
     model = Corte_mes
     
@@ -67,26 +71,52 @@ class OpcionesView(DetailView):
         return context
     
 
+
+class CodigoAcceso(AdminPermisoMixin,View):
+ 
+    def post(self, request, *args, **kwargs):
+        #print("guarde")
+        #print("=====>",self.request.POST.get("codigo_acceso"))
+        #print("=====>",self.request.POST.get("codigo_nombre"))
+        codigo = crear_codigo(
+            self = self,
+            codigo= self.request.POST.get("codigo_acceso"),
+            nombre= self.request.POST.get("codigo_nombre"),
+        )
+        if not codigo:
+            return HttpResponseRedirect(
+                reverse(
+                    'admin_app:listar_cierre_mes'
+                )
+            )
+        return HttpResponseRedirect(
+                reverse(
+                    'admin_app:egreso-add'
+                )
+            )
+
+
 #----------*****EGRESO*****----------------
 #VISTA AGREGAR UN INGRESO 
-class EgresoCreateView(CreateView):
+class EgresoCreateView(AdminPermisoMixin,CreateView):
     template_name = "administracion/egreso/egreso_add.html"
     form_class = EgresoForm
     success_url=  '.'
 
-    # def form_valid(self, form):
-    #     montoDolar = form.cleaned_data["monto_dolar"] 
-    #     precioDolar = form.cleaned_data["precio_dolar"] 
-        
-    #     egreso = Egreso(
-    #         precio_dolar = montoDolar * precioDolar
-    #     )
-    #     egreso.save()
-    #     return super(EgresoCreateView, self).form_valid(form)
+    def form_valid(self, form):
+        egreso = form.save(commit = False)
+        montoDolar = form.cleaned_data["monto_dolar"] 
+        precioDolar = form.cleaned_data["precio_dolar"] 
+        if montoDolar !=0 and precioDolar !=0: 
+            egreso.monto = montoDolar * precioDolar
+            egreso.save()
+
+        #egreso.save()    
+        return super(EgresoCreateView, self).form_valid(form)
         
 
 #VISTA DETALLA LOS EGRESO POR MES
-class EgresoMesDetailView(DetailView):
+class EgresoMesDetailView(UsuarioPermisoMixin,DetailView):
     template_name = "administracion/egreso/detail_egreso_mes.html"
     model = Corte_mes
     
@@ -96,35 +126,50 @@ class EgresoMesDetailView(DetailView):
         context['monto_total']= Egreso.objects.totalizar_gastos_mes(self.kwargs['pk'])
         context["mes"] = Corte_mes.objects.get(id= self.kwargs['pk'])
         context["gastos_mes"] = Egreso.objects.buscar_gasto_por_mes(self.kwargs['pk'])
-        #print("====>", self.kwargs['pk'])
+        
         return context
 
 
 #VISTA PARA MODIFIAR UN GASTO
-class EgresoUpdateView(UpdateView):
+class EgresoUpdateView(AdminPermisoMixin,UpdateView):
     template_name = "administracion/egreso/update_egreso.html"
     model = Egreso
     form_class = EgresoForm
     success_url = "."
+    def form_valid(self, form):
+        egreso = form.save(commit = False)
+        montoDolar = form.cleaned_data["monto_dolar"] 
+        precioDolar = form.cleaned_data["precio_dolar"] 
+        #print("=====>", montoDolar )
+       # print("=====>",precioDolar )
+
+        if montoDolar !=0 and precioDolar !=0: 
+            egreso.monto = montoDolar * precioDolar
+            egreso.save()
+        
+        #egreso.save()
+        return super(EgresoUpdateView, self).form_valid(form)
+        
+
     # def get_success_url(self):
     #     return reverse("admin_app:update_egres", args=(self.object.id,))
 
 
 
 #VISTA PARA ELIMINAR UN GASTO
-class EgresoDeleteView(DeleteView):
+class EgresoDeleteView(AdminPermisoMixin,DeleteView):
     model = Egreso
-    success_url = "/"
+    success_url = reverse_lazy("admin_app:listar_cierre_mes")
 
 
 
 #VISTA QUE GENERA INFORME DEL GASTO DEL MES
-class EgresoMesPdf(View):
-    #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se actualiza ante de generar el pdf
+class EgresoMesPdf(UsuarioPermisoMixin,View):
+    #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se debe actualiza ante de generar el pdf
     #
     def get(self, request, *args, **kwargs):
         mes = Corte_mes.objects.get(id=self.kwargs['pk'])
-        gastos= Egreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("id")
+        gastos= Egreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("codigo__codigo")
         total = Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) #ESTOY PASANDO EL MES
         data = {
             'mes': mes,
@@ -140,14 +185,14 @@ class EgresoMesPdf(View):
 #----------***** Vista de Ingreso*******--------------
 
 #VISTA AGREGAR UN INGRESO 
-class IngresoCreateView(CreateView):
+class IngresoCreateView(AdminPermisoMixin,CreateView):
     template_name = "administracion/ingreso/ingreso_add.html"
     form_class = IngresoForm
     success_url=  '.'
 
 
 #VISTA DETALLA LOS INGRESO POR MES
-class IngresoMesDetailView(DetailView):
+class IngresoMesDetailView(UsuarioPermisoMixin,DetailView):
     template_name = "administracion/ingreso/detail_ingreso_mes.html"
     model = Corte_mes
     
@@ -162,7 +207,7 @@ class IngresoMesDetailView(DetailView):
 
 
 #VISTA QUE GENERA INFORME DEL INGRESO DEL MES
-class IngresoMesPdf( View):
+class IngresoMesPdf(UsuarioPermisoMixin,View):
     #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se actualiza ante de generar el pdf
     #
     def get(self, request, *args, **kwargs):
@@ -178,11 +223,12 @@ class IngresoMesPdf( View):
 
 #-----------****** FIN VISTA DE INGRESO ********-----------
 
+
 #---------**********FIN VISTA DE REPORTE**********--------- 
 
 #VISTA LISTA TODO LOS REPORTE POR MES
-class ReporteListView(FormView):
-    template_name = "administracion/reporte/reporte.html"
+class ReporteListView(UsuarioPermisoMixin,FormView):
+    template_name = "administracion/reporte/reporte_filter.html"
     form_class = SeleccionForm
     #context_object_name = "reporte"
 
@@ -200,7 +246,7 @@ class ReporteListView(FormView):
 
     
 #VISTA PARA CREAR REPORTE
-class ReporteCreateView(View):
+class ReporteCreateView(AdminPermisoMixin,View):
 
     def get(self, request, *args, **kwargs):
         
@@ -214,25 +260,26 @@ class ReporteCreateView(View):
                     continue
                     # monto = (x.monto_egreso * apart.alicuota/100)
                     # deuda = RegistroDeudas.objects.filter(apartamento=apart).first()
-                    # #total= monto + deuda.deuda_pagar + deuda.deuda_ocumulada 
-                    # total= monto + deuda.deuda_ocumulada
+                    # monto_deuda = deuda.deuda_pagar 
+                    # total= monto + deuda.deuda_pagar
                     # instance = Reporte.objects.filter(apartamento=apart, corte_mes=x).first()
                     # instance.monto = monto
-                    # instance.deuda = deuda.deuda_ocumulada
+                    # instance.deuda = deuda.deuda_pagar
                     # instance.total_pagar = total 
                     # instance.save()
                 else:
                     monto = (x.monto_egreso * apart.alicuota/100)
                     deuda = RegistroDeudas.objects.filter(apartamento=apart).first()
-                    total= monto + deuda.deuda_pagar + deuda.deuda_ocumulada
+                    #monto_deuda = deuda.deuda_pagar 
+                    total= monto + deuda.deuda_pagar
                     #total= monto + deuda.deuda_ocumulada
 
-                    z = Reporte.objects.create(
+                    z = Reporte(
                         apartamento = apart,
                         monto = monto,
                         fecha = timezone.now(),
                         corte_mes = x,
-                        deuda = deuda.deuda_ocumulada,
+                        deuda = deuda.deuda_pagar ,
                         total_pagar = total,
                     ) 
                     z.save()
@@ -250,18 +297,30 @@ class ReporteCreateView(View):
                     )
 
 
-
 #RECIBO POR MES FORMATO PDF
-class ReporteVoucherPdf(View):
+class ReporteVoucherPdf(UsuarioPermisoMixin,View):
     #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES individual
     def get(self, request, *args, **kwargs):
-        torre = Reporte.objects.filter(id=self.kwargs['pk']).first()
-        if torre.apartamento.torre == '3':
+        reporte = Reporte.objects.get(id=self.kwargs['pk']).order_by("id")
+        if reporte.apartamento.torre == '3':
+
             return HttpResponse(reporte_alquiler_pdf(self.kwargs['pk']), content_type='application/pdf')
+
         return HttpResponse(reporte_vaucher_pdf(self.kwargs['pk']), content_type='application/pdf')
 
 
-class EnviarReportePDF(View):
+# reportes general se debe enviar a los administradores
+class ReporteGeneralPdf(UsuarioPermisoMixin,View):
+    #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES individual
+    def get(self, request, *args, **kwargs):
+        #reportes_pdf(id_mes, id_torre)
+        pdf = reportes_general_pdf(self.kwargs['pk'],self.kwargs['torre'])
+        
+        return HttpResponse(pdf, content_type='application/pdf')
+
+
+
+class EnviarReportePDF(AdminPermisoMixin,View):
 
     def get(self, request, *args, **kwargs):
         i=0
@@ -290,7 +349,7 @@ class EnviarReportePDF(View):
 
 
 #enviar de manera independiente
-class EnviarPDF(View):
+class EnviarPDF(UsuarioPermisoMixin,View):
     def get(self, request, *args, **kwargs):
         pdf = reporte_vaucher_pdf(self.kwargs['pk'])
         x = Reporte.objects.filter(id=self.kwargs['pk']).first()
@@ -304,12 +363,26 @@ class EnviarPDF(View):
         return HttpResponse(reporte_vaucher_pdf(self.kwargs['pk']), content_type='application/pdf')
 
 
+# class EnviarReporteGeneralPDF(UsuarioPermisoMixin,View):
+#     def get(self, request, *args, **kwargs):
+#         pdf = 
+#         x = 
+#         correo = 
+#         asunto = "Reportes General" 
+#         mensaje = "Se adjunta el Reportes General del mes " 
+#         titulo = "reportes.pdf"
+#         enviar_correos(pdf, asunto, mensaje, correo, titulo)
+#         print("se envio correo", correo)
+      
+#         return HttpResponse(, content_type='application/pdf')
+
+
 #---------**********FIN VISTA DE REPORTE**********-------------- 
 
 #---------********VISTA DE CIERRE MES *******--------------------
 
 #VISTA CREAR CORTE_MES 
-class CierreMesCreateView(CreateView):
+class CierreMesCreateView(AdminPermisoMixin, CreateView):
    # model = Corte_mes
     template_name = "administracion/cierre_mes/crear_mes.html"
     form_class = CierreMesForm
@@ -317,7 +390,7 @@ class CierreMesCreateView(CreateView):
 
 
 #VISTA ACTUALIZAR TODO EL MES
-class CierreMesUpdateView(View):
+class CierreMesUpdateView(UsuarioPermisoMixin,View):
     #actualizar los gastos e ingresos del cierre del mes correspondiente
     def get(self, request, *args, **kwargs):
         
@@ -327,12 +400,16 @@ class CierreMesUpdateView(View):
         
         if  total_egreso is not None:
             instance.monto_egreso = total_egreso
-                
+        else:
+            instance.monto_egreso = 0
+
         if total_ingreso is not None:
             instance.monto_ingreso = total_ingreso
-               
+        else:  
+            instance.monto_ingreso = 0
+
         instance.save()
-            
+        #print("====>", total_egreso)   
         return HttpResponseRedirect(
             reverse(
                     'admin_app:listar_cierre_mes'
@@ -341,7 +418,7 @@ class CierreMesUpdateView(View):
         
 
 #VISTA CERRAR EL MES COMPLETO 
-class CerrarMesUpdateView(View):
+class CerrarMesUpdateView(AdminPermisoMixin,View):
     #ultima actualizancion de mes 
     def get(self, request, *args, **kwargs):
         instance = Corte_mes.objects.get(id = self.kwargs["pk"])
@@ -358,10 +435,14 @@ class CerrarMesUpdateView(View):
             # aqui verifico que no hallas errores
             if  total_egreso is not None:
                 instance.monto_egreso = total_egreso
+            else:
+                instance.monto_egreso = 0
 
             if total_ingreso is not None:
                 instance.monto_ingreso = total_ingreso
-                
+            else:  
+                instance.monto_ingreso = 0
+
             instance.cerrar_mes = True
             instance.save()
 
@@ -380,12 +461,13 @@ class CerrarMesUpdateView(View):
                 )
             )
 
+
 #---------********VISTA DE CIERRE MES *******--------------------
 
 
 #--------*********VISTA A LISTAR POR TORRES *******------------- 
 
-class ReporteDetailView(ListView):
+class ReporteDetailView(UsuarioPermisoMixin,ListView):
     model = Corte_mes
     template_name = "administracion/reporte/generar_reportes.html"
 

@@ -15,6 +15,8 @@
                     <th>Mes</th>
                     <th>Apartamento</th>
                     <th>Propietario</th>
+                    <th>Monto</th>
+                    <th>deuda</th>
                     <th>Total a pagar</th>  
 
                 </thead>
@@ -23,6 +25,8 @@
                     <td>{{reporte.corte_mes.get_mes_display}}</td>
                     <td>{{reporte.apartamento.apartamento}}</td>
                     <td>{{reporte.apartamento.propietario.nombre}} {{reporte.apartamento.propietario.apellido}}</td>
+                    <td>{{reporte.monto | intcomma}}</td>
+                    <td>{{reporte.deuda | intcomma}}</td>
                     <td>{{reporte.total_pagar | intcomma}}</td> 
                 </tbody>
             </table>
@@ -52,7 +56,7 @@
                 </article >
 
                 <article class="cell grid-x grid-margin-x align-center">
-                    <div class="cell medium-3" >
+                    <div class="cell medium-8" >
                         <label>Anotacion:</label>
                         <div class="input-group">
                             {{form.descripcion}}

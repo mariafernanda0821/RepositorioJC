@@ -14,7 +14,7 @@ from applications.deuda.models import *
 #funcion
 def reporte_vaucher_pdf(id_reporte):
     reporte = Reporte.objects.get(id=id_reporte)
-    gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes).order_by('id')
+    gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes).order_by('codigo__codigo')
     apart =  reporte.apartamento
     propietario = apart.propietario
     mes = reporte.corte_mes
@@ -28,8 +28,14 @@ def reporte_vaucher_pdf(id_reporte):
             "reserva":reserva,
             "nota":"A la Taza del dia BCV 2.363.858,21"
         }
+    if mes.id == 3:
+        
+        pdf = render_to_pdf('administracion/reporte/reporte_vaucher.html', data)
+    
+        return pdf
 
-    pdf = render_to_pdf('administracion/reporte/reporte_vaucher.html', data)
+    pdf = render_to_pdf('administracion/reporte/reporte_pdf.html', data)
+    
     return pdf
 
 
@@ -55,7 +61,21 @@ def reporte_alquiler_pdf(id_reporte):
 
     pdf = render_to_pdf('administracion/reporte/reciboAlquiler.html', data)
     return pdf
-        
+
+
+def reportes_general_pdf(id_mes, id_torre):
+    reportes = Reporte.objects.filter(corte_mes__id=id_mes, apartamento__torre=id_torre).order_by("apartamento")
+    mes = Corte_mes.objects.get(id=id_mes)
+    torre = Apartamento.objects.filter(torre=id_torre).first()
+    data = {
+            'reportes': reportes,
+            'mes': mes,
+            'torre':torre,
+        }
+
+    pdf = render_to_pdf('administracion/reporte/reporte_globalPDF.html', data)
+    return pdf 
+
 
 def enviar_correos(pdf, asunto, mensaje, correo, titulo):
     
@@ -66,3 +86,14 @@ def enviar_correos(pdf, asunto, mensaje, correo, titulo):
     email.encoding = 'ISO-8859-1'
     email.send()
     
+
+def crear_codigo(self, **params):
+   
+    codigo = CodigoAcceso.objects.create(
+        codigo= params["codigo"],
+        nombre= params["nombre"],
+    )
+    codigo.save()
+    return True
+
+

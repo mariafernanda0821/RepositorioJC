@@ -7,33 +7,52 @@ from .managers import UserManager
 class User(AbstractBaseUser, PermissionsMixin):
     # TIPO DE USUARIOS
     ADMINISTRADOR = '0'
-    NORMAL = '1'
-    
+    USUARIO = '1'
+    OTROS= '2'
+    # GENEROS
+    VARON = 'M'
+    MUJER = 'F'
+    #
     OCUPATION_CHOICES = [
         (ADMINISTRADOR, 'Administrador'),
-        (NORMAL, 'Normal'),
+        (USUARIO, 'Usuario'),
+        (OTROS, 'Otros'),
+    ]
+
+    GENDER_CHOICES = [
+        (VARON, 'Masculino'),
+        (MUJER, 'Femenino'),
     ]
 
     email = models.EmailField(unique=True)
-    usuario = models.CharField('Usuario', unique=True, max_length= 20)
-    full_name = models.CharField('Nombres Completo', max_length=100)
+    full_name = models.CharField('Nombres', max_length=100)
     ocupation = models.CharField(
         max_length=1, 
         choices=OCUPATION_CHOICES, 
         blank=True
     )
-    
+    genero = models.CharField(
+        max_length=1, 
+        choices=GENDER_CHOICES, 
+        blank=True
+    )
+    date_birth = models.DateField(
+        'Fecha de nacimiento', 
+        blank=True,
+        null=True
+    )
+    #
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
 
-    USERNAME_FIELD = 'usuario'
+    USERNAME_FIELD = 'email'
 
     REQUIRED_FIELDS = ['full_name']
 
     objects = UserManager()
 
     def get_short_name(self):
-        return self.usuario
+        return self.email
     
     def get_full_name(self):
         return self.full_name

@@ -59,6 +59,8 @@
             <table class="tabla" >
               <thead class="encabezado">
                 {% comment %} <th> Cod</th>  {% endcomment %}
+                <th> Codigo </th>
+                <th> Nombre </th>
                 <th>Gastos</th>
                 <th>Monto</th>
                 <th>Descripcion</th>
@@ -66,11 +68,11 @@
               <tbody>
                 {% for gasto in gastos %}
                     <tr>
-                       {% comment %}  <td> {{gasto}}<td>  {% endcomment %}
-                        <td  style="text-indent:10px; text-align:letf;">{{gasto.egreso}}</td>
-                        <td> 
-                        {{gasto.monto | intcomma}}</td> 
-                        <td style="text-indent:10px; text-align:letf;">{{gasto.descripcion}}</td> 
+                       <td>{{gasto.codigo.codigo}}</td>
+                        <td>{{gasto.codigo.nombre}}</td>
+                        <td >{{gasto.egreso}}</td>
+                        <td> {{gasto.monto | intcomma}}</td> 
+                        <td>{{gasto.descripcion}}</td> 
                     </tr>
                 {% endfor %}
               </tbody>

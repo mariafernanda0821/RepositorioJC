@@ -40,7 +40,8 @@ class EgresoManager(models.Manager):
     def crear_egreso(self, instance):
         x = self.create(
             tipo_egreso= "1",
-            egreso=" Reserva 10% ",
+           # codigo= 
+            egreso="Reserva",
             descripcion= "Reserva del 10%",
             monto = instance.reserva,
             fecha = timezone.now(),
@@ -50,6 +51,7 @@ class EgresoManager(models.Manager):
         #print("====> se creo el ingreso===>")
         return x 
 
+    
 class CierreMesManager(models.Manager):
    
    def total_reserva(self):

@@ -4,7 +4,7 @@ from . import views
 
 app_name = "edificio_app"
 urlpatterns = [
-    path("apart-torreA/", views.AparTorreAView.as_view(), name = "apart_torreA"), 
+    path("apart-torres/<torre>/", views.AparTorresView.as_view(), name = "apart_torres"), 
     path("apart-torreB/", views.AparTorreBView.as_view(), name = "apart_torreB"), 
     path("alquiler/", views.AlquilerView.as_view(), name = "alquilers"),  
 

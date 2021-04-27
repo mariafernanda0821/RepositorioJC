@@ -26,14 +26,14 @@ from applications.utils import render_to_pdf
 
 from django.core.mail import EmailMessage
 from .functions import referencias_listar_Pdf, comprobande_pagoPdf, deuda_pdf, enviar_correos
-
+from applications.usuario.mixins import AdminPermisoMixin, UsuarioPermisoMixin
 
 class ReferenciaView(TemplateView):
     template_name = "deuda/listar_referencia.html"
 
 
 #VISTA PARA CREAR LA REFERENCIA DE PAGO
-class CrearReferenciaPago(View):
+class CrearReferenciaPago(AdminPermisoMixin,View):
     
     def get(self, request, *args, **kwargs):
         instance = Reporte.objects.get(id= self.kwargs["pk"]) 
@@ -59,7 +59,7 @@ class CrearReferenciaPago(View):
 
 
 #VISTA PARA ACTUALIZAR EL PAGO POR MES
-class ReferenciaPagoUpdateView(UpdateView):
+class ReferenciaPagoUpdateView(AdminPermisoMixin,UpdateView):
     template_name = "deuda/update_referencia.html"
     model = ReferenciaPago
     form_class = ReferenciaPagoForm
@@ -76,25 +76,34 @@ class ReferenciaPagoUpdateView(UpdateView):
 class CrearDeudasTabla(View):
     def get(self, request, *args, **kwargs):
         apart = Apartamento.objects.all()
-
         for  x in apart:
-            a = RegistroDeudas.objects.create(apartamento = x)
-            #a.deuda_pagar = 0.00
-            a.save()
+            a = RegistroDeudas.objects.get(apartamento = x)
+            #a.save()
         
         return HttpResponseRedirect(
             reverse("deuda_app:listar_deudas")
         )
 
 
-class RegistroDeudasListView(ListView):
+class RegistroDeudasListView(UsuarioPermisoMixin,ListView):
     model = RegistroDeudas
     template_name = "deuda/listar_deudas.html"
     context_object_name = "deudas"
-    queryset = RegistroDeudas.objects.all().order_by("apartamento")
+    #queryset = RegistroDeudas.objects.all().order_by("apartamento")
+   
+    def get_queryset(self):
+        queryset = RegistroDeudas.objects.all().order_by("apartamento")
+        return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["total_acumulada"] = RegistroDeudas.objects.deuda_acumulada()
+        context["total_deudas"] = RegistroDeudas.objects.deuda_total()
+        return context
+    
+    
 
-class ReferenciaListView(FormView):
+class ReferenciaListView(UsuarioPermisoMixin,FormView):
    # filtar las referencias 
     template_name = "deuda/referencias.html"
     form_class = SeleccionForm
@@ -111,7 +120,7 @@ class ReferenciaListView(FormView):
         return context
 
 
-class EnviarComprobantePDF(View):
+class EnviarComprobantePDF(UsuarioPermisoMixin,View):
     #enviar el comprobante, se obtiene es el id de referencia 
     def get(self, request, *args, **kwargs):
         pdf = comprobande_pagoPdf(self.kwargs['pk'])
@@ -128,13 +137,13 @@ class EnviarComprobantePDF(View):
         return HttpResponse(comprobande_pagoPdf(self.kwargs['pk']), content_type='application/pdf')
 
 
-class ReferenciasPDF(View):
+class ReferenciasPDF(UsuarioPermisoMixin,View):
     def get(self, request, *args, **kwargs):
         
         return HttpResponse(referencias_listar_Pdf(self.kwargs["pk"]), content_type='application/pdf')
 
 
-class EnviarReferenciasPDF(View):
+class EnviarReferenciasPDF(UsuarioPermisoMixin,View):
     #enviar el comprobante, se obtiene es el id de referencia 
     def get(self, request, *args, **kwargs):
        
@@ -148,13 +157,13 @@ class EnviarReferenciasPDF(View):
         return HttpResponse(deuda_pdf(), content_type='application/pdf')
 
 
-class DeudasPDF(View):
+class DeudasPDF(UsuarioPermisoMixin,View):
     def get(self, request, *args, **kwargs):
         
         return HttpResponse(deuda_pdf(), content_type='application/pdf')
 
     
-class EnviarDeudaPDF(View):
+class EnviarDeudaPDF(UsuarioPermisoMixin,View):
     #enviar el deudas
     def get(self, request, *args, **kwargs):
         pdf = deuda_pdf()
@@ -168,7 +177,6 @@ class EnviarDeudaPDF(View):
                 reverse("deuda_app:listar_deudas")
             )
         return []
-
 
 
 

@@ -8,7 +8,10 @@ from applications.edificio.models import Apartamento
 #from applications.deuda.models import ReferenciaPago, RegistroDeudas 
 
 #senales
-from .signals import actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso 
+from .signals import (
+    actualizar_gastos, actualizar_ingreso, delete_gastos, delete_ingreso,
+    
+    ) 
 #from applications.deuda.models import calcular_deuda
 
 from .managers import EgresoManager, CierreMesManager , IngresoManager, ReporteManager 
@@ -38,6 +41,7 @@ class Corte_mes(TimeStampedModel):
         return  str(self.id)+ " - "+ self.mes
 
 
+
 class CodigoAcceso(models.Model):
     tipo1="0001-0010"
     tipo2="0011-0020"
@@ -54,16 +58,16 @@ class CodigoAcceso(models.Model):
     ) 
 
     codigo = models.CharField("Codigo", max_length=4, unique=True)
-    nombre = models.CharField("Nombre", max_length=20, unique=True)
-    tipo = models.CharField("Tipo", max_length=9,choices=CHOICES_TIPO)
+    nombre = models.CharField("Nombre", max_length=50, unique=True)
+    tipo = models.CharField("Tipo", max_length=9,choices=CHOICES_TIPO, blank=True)
 
     class Meta:
-        verbose_name = "Codigos Acceso"
-        verbose_name_plural = "Codigos Accesos"
+        verbose_name = "Codigos de Egresa"
+        verbose_name_plural = "Codigos Egreso"
         ordering = ['codigo']
 
     def __str__(self):
-        return self.codigo +'-'+ self.nombre 
+        return self.codigo +' - '+ self.nombre 
 
 
 class Egreso(TimeStampedModel):
@@ -72,15 +76,16 @@ class Egreso(TimeStampedModel):
         ("2", "Comunes"),
         ("3", "Otros Gastos"),
     )
-    tipo_egreso = models.CharField("Tipo de Egreso", max_length=3, choices=EGRESO_CHOICES) 
-    egreso = models.CharField("Egreso", max_length=50)
-    descripcion = models.TextField("Texto", blank=True)
+    tipo_egreso = models.CharField("Tipo de Egreso", max_length=3, choices=EGRESO_CHOICES, blank=True) 
+    codigo = models.ForeignKey(CodigoAcceso, verbose_name="Codigo de Egreso", on_delete=models.CASCADE)
+    egreso = models.CharField("Egreso", max_length=50, blank=True)
     monto = models.DecimalField("Monto a Pagar", max_digits=20, decimal_places=2, default=0,)
     monto_dolar = models.DecimalField("Monto en Dolar", max_digits=20, decimal_places=2, default=0) 
     precio_dolar = models.DecimalField("Precio del dolar", max_digits=20, decimal_places=2, default=0) 
     fecha = models.DateField("Fecha ", auto_now=False, auto_now_add=False, blank=True)
     corte_mes= models.ForeignKey(Corte_mes, verbose_name="Administracion del Mes ", related_name="egreso_mes",on_delete=models.CASCADE) 
-    #codigo = models.ForeignKey(CodigoAcceso, verbose_name="Codigo de Acceso", on_delete=models.CASCADE)
+    descripcion = models.TextField("Descripcion", blank=True)
+
     objects = EgresoManager()
 
     class Meta:
@@ -141,8 +146,6 @@ post_save.connect(actualizar_ingreso , sender=Ingreso)
 post_delete.connect(delete_gastos , sender=Egreso)
 
 post_delete.connect(delete_ingreso , sender=Ingreso)
-
-
 
 
 

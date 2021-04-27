@@ -37,6 +37,6 @@ EMAIL_HOST ='smtp.gmail.com'
 EMAIL_HOST_USER = 'sanjosecondominio21@gmail.com'
 DEFAULT_FROM_EMAIL = 'sanjosecondominio21@gmail.com'
 SERVER_EMAIL = 'sanjosecondominio21@gmail.com'
-EMAIL_HOST_PASSWORD ='tsjcon21*'
+EMAIL_HOST_PASSWORD =
 EMAIL_PORT = 587
 

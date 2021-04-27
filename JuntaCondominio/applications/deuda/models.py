@@ -10,7 +10,7 @@ from applications.administracion.models import Reporte
 #
 #from .signals import calcular_deuda 
 
-from .managers import ReferenciaPagoManager, RegistroPagoManager
+from .managers import ReferenciaPagoManager, RegistroDeudaManager
 
 
 class RegistroDeudas(TimeStampedModel):
@@ -18,7 +18,8 @@ class RegistroDeudas(TimeStampedModel):
     apartamento = models.OneToOneField("edificio.Apartamento", verbose_name="Apartamento", on_delete=models.CASCADE)
     deuda_ocumulada = models.DecimalField("Deuda Acumulada", max_digits=20, decimal_places=2, default=0)
     deuda_pagar = models.DecimalField("Deuda Pagar", max_digits=20, decimal_places=2, default=0, null=True)
-    objects = ReferenciaPagoManager()
+    #deuda_total = models.DecimalField("Deuda Total", max_digits=20, decimal_places=2, default=0, null=True)
+    objects = RegistroDeudaManager()
 
 
     class Meta:
@@ -42,7 +43,8 @@ class ReferenciaPago(TimeStampedModel):
     tipo_pago= models.CharField("Tipo de pago", choices=PAGO_CHOICES, max_length=50 , blank=True)
     monto_pagar = models.DecimalField("Monto de Pago", max_digits=20, decimal_places=2,default=0)
     referencia_pago = models.CharField("Referencia de Pago", max_length=50, blank=True) 
-    descripcion = models.CharField("Anotaciones", max_length=50 , blank=True) 
+    descripcion = models.TextField("Descripcion", blank=True)
+   # descripcion = models.CharField("Anotaciones", max_length=50 , blank=True) 
     pago_bool = models.BooleanField("Pago", default= False)
     reporte = models.OneToOneField("administracion.Reporte", verbose_name="Reporte", on_delete=models.CASCADE)
     objects = ReferenciaPagoManager()
@@ -66,23 +68,30 @@ def calcular_deuda(sender, instance, **kwargs):
         
     if sender == Reporte:
         apart = instance.apartamento
-    
+
+    if sender == RegistroDeudas:
+        apart = instance.apartamento
+
     lista_pagos = ReferenciaPago.objects.filter(reporte__apartamento= apart).exclude(reporte__corte_mes__in=[1,2]).aggregate(total = Sum(F("monto_pagar"),output_field=FloatField()))
     lista_reporte = Reporte.objects.filter(apartamento= apart).exclude(corte_mes__in=[1,2]).aggregate(total = Sum(F("monto"),output_field=FloatField()))
     registro_deudas= RegistroDeudas.objects.filter(apartamento= apart).first()
    
-    print("====> lista de pago:",lista_pagos["total"])
-    print("====> lista de reporte:",lista_reporte["total"])
+    #print("====> lista de pago:",lista_pagos["total"])
+    #print("====> lista de reporte:",lista_reporte["total"])
   
     if lista_pagos["total"] is None:
-        print("entre") 
-        registro_deudas.deuda_pagar =  decimal.Decimal(lista_reporte["total"])
+       # print("entre") 
+        registro_deudas.deuda_pagar = decimal.Decimal(registro_deudas.deuda_ocumulada) + decimal.Decimal(lista_reporte["total"])
         registro_deudas.save() 
+       
     else:
-        registro_deudas.deuda_pagar = decimal.Decimal(lista_reporte["total"]) - decimal.Decimal(lista_pagos["total"])
+        registro_deudas.deuda_pagar =decimal.Decimal(registro_deudas.deuda_ocumulada) + decimal.Decimal(lista_reporte["total"]) - decimal.Decimal(lista_pagos["total"])
         registro_deudas.save()
+         
 
 post_save.connect(calcular_deuda, sender = ReferenciaPago)  
 post_save.connect(calcular_deuda, sender = Reporte)  
+  
+
 
  

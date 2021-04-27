@@ -1,83 +1,130 @@
 {% extends 'administracion/egreso/base_egreso.html'%}
 {% block panel-content %}
 <section class="grid-container">
-  <h3 class="cell"> Agregar Egreso: </h3>
-  <form action="" method="POST" class=" cell grid-x grid-margin-x grid-padding-x align-center"> {% csrf_token %}
-    
-    <div class="cell grid-x grid-margin-x align-center ">
-      <div class="cell medium-5">
-        <label>Tipo de ingreso:</label>
-        <div class="input-group">
-          {{form.tipo_egreso}}
-        </div>
-      </div>
-      <div class="cell medium-7 ">
-        <label>Egreso:</label>
-        <div class="input-group">
-          {{form.egreso}}
-        </div>
-      </div>
+  <article class="cell grid-x">
+    <div class="cell small-6"> <h3> Agregar Egreso </h3> </div>
+    <div class="cell small-6"> 
+      {% comment %} <a  href="{% url 'admin_app:codigo_egreso_add'%}" class="button" data-open="exampleModal1"> Agregar Codigo </a> {% endcomment %}
+      <a  href="#" class="success button" data-open="exampleModal1"> Agregar Codigo </a>
     </div>
-
-    <div class="cell grid-x grid-margin-x align-center">
-      <div class="cell medium-5">
-        <label>Monto:</label>
-        <div class="input-group">
-          {{form.monto}}
+  </article>
+  
+  <article class="cell grid-x grid-margin-x grid-padding-x align-center">
+    <form action="" method="POST" class="cell"> {% csrf_token %}
+      <div class="cell grid-x grid-margin-x align-center">
+        <div class="cell medium-4">
+          <label>Tipo de ingreso:</label>
+          <div class="input-group">
+            {{form.tipo_egreso}}
+          </div>
+        </div>
+        <div class="cell medium-4">
+          <label> Codigo de Egreso:</label>
+          <div class="input-group">
+            {{form.codigo}}
+          </div>
+        </div>
+        <div class="cell medium-4">
+          <label>Egreso:</label>
+          <div class="input-group">
+            {{form.egreso}}
+          </div>
         </div>
       </div>
-
-      <div class="cell medium-2">
-        <label> Total en Dolar:</label>
-        <div class="input-group">
-          {{form.monto_dolar}}
+  
+      <div class="cell grid-x grid-margin-x align-center">
+        <div class="cell medium-5">
+          <label>Monto:</label>
+          <div class="input-group">
+            {{form.monto}}
+          </div>
+        </div>
+  
+        <div class="cell medium-2">
+          <label> Total en Dolar:</label>
+          <div class="input-group">
+            {{form.monto_dolar}}
+          </div>
+        </div>
+  
+        <div class="cell medium-5 ">
+          <label> Precio del Dolar:</label>
+          <div class="input-group">
+            {{form.precio_dolar}}
+          </div>
         </div>
       </div>
-
-      <div class="cell medium-5 ">
-        <label> Precio del Dolar:</label>
-        <div class="input-group">
-          {{form.precio_dolar}}
+  
+      <div class="cell grid-x grid-margin-x align-center ">
+  
+        <div class="small-3 cell">
+          <label>Fecha:</label>
+          <div class="input-group">
+            {{form.fecha}}
+          </div>
+        </div>
+        <div class="small-3 cell">
+          <label>corte de mes:</label>
+          <div class="input-group">
+            {{form.corte_mes}}
+          </div>
+          {% for error in form.corte_mes.errors %}
+          <p class="cell" style="color: red;">
+            {{ error|escape }}
+          </p>
+          {% endfor %}
+        </div>
+  
+      </div>
+  
+  
+      <div class="cell grid-x grid-margin-x align-center">
+        <div class="cell small-10">
+          <label>Descripcion:</label>
+          <div class="input-group">
+            {{form.descripcion}}
+          </div>
         </div>
       </div>
-    </div>
-
-    <div class="cell grid-x grid-margin-x align-center ">
-
-      <div class="small-3 cell">
-        <label>Fecha:</label>
-        <div class="input-group">
-          {{form.fecha}}
-        </div>
+  
+      <div class="cell grid-x grid-margin-x align-center">
+        <button type="submit" class="success button cell small-6"> Agregar</button>
       </div>
-      <div class="small-3 cell">
-        <label>corte de mes:</label>
-        <div class="input-group">
-          {{form.corte_mes}}
+    </form>
+  </article>
+  
+  <article class="reveal grid-x grid-margin-x" id="exampleModal1" data-reveal>
+      <h1> Agregar Codigo</h1>
+      <form class="grix grid-margin-x" action="{% url 'admin_app:codigo_egreso_add'%}" method="POST"> {% csrf_token %}
+        <div class="cell grid-x grid-margin-x align-center">
+          <div class="cell medium-4">
+            <label> Codigo:</label>
+            <div class="input-group">
+              <input type="text" name="codigo_acceso" id="codigo_acceso" size="40">
+            </div>
+          </div>
+          <div class="cell medium-8">
+            <label> Nombre:</label>
+            <div class="input-group">
+              <input type="text" name="codigo_nombre" id="codigo_nombre" size="40">
+
+            </div>
+          </div>
         </div>
-        {% for error in form.corte_mes.errors %}
-        <p class="cell" style="color: red;">
-          {{ error|escape }}
-        </p>
-        {% endfor %}
-      </div>
-
-    </div>
-
-
-    <div class="cell grid-x grid-margin-x align-center">
-      <div class="cell small-10">
-        <label>Descripcion:</label>
-        <div class="input-group">
-          {{form.descripcion}}
+        <div class="cell grid-x grid-margin-x align-center">
+          <button class="success button" type="submit"> Agregar </button>
         </div>
-      </div>
-    </div>
+        <div class="cell grid-x grid-margin-x align-center">
+          {% for error in form.errors %}
+            <p style="color:red;">{{ error |escape}} </p>
+          {% endfor %}
+        </div>
+      </form>
+      <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+      </button>
+  </article>
 
-    <div class="cell grid-x grid-margin-x align-center">
-      <button type="submit" class="success button cell small-6"> Agregar</button>
-    </div>
-  </form>
 </section>
 
 

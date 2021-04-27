@@ -3,46 +3,45 @@
 {% load humanize %}
 
 {% block panel-content %}
-<div class="grid-x grid-margin-x">
-  <div class="cell grid-x grid-margin-x grid-padding-x">  
+<section class="grid-x grid-margin-x">
+  <article class="cell grid-x grid-margin-x grid-padding-x">  
     <h3 class="cell small-6 align-dows"> Reporte  del mes: {{mes.get_mes_display}} </h3> 
     <h3 class="cell small-6 align-right">  {{torre.get_torre_display}} </h3> 
 
-  </div>
+  </article>
 
-  <div class="cell grid-x grid-margin-x" style="margin-top: 2em;">
-    <table class="hover">
-      <thead>
-        <th> N-Control <th>
-        <th>Apartamento</th>
-        <th>Monto</th>
-        <th>Fecha</th>
-        <th>Mes</th>
-        <th>Deuda</th>
-        <th>Acciones</th>
-      </thead>
-      <tbody>
-        {% for reporte in reporte %}
-            <tr>
-                <td> 000{{reporte.id}} <td>
-                <td>{{reporte.apartamento}}</td>
-                <td>{{reporte.monto | intcomma }}</td>
-                <td>{{reporte.fecha}}</td>
-                <td>{{reporte.corte_mes}}</td> 
-                <td>{{reporte.deuda | intcomma }} </td> 
-    
-                <td>
-                <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button warning"> Recibo </a>
-                <a href="{% url 'deuda_app:crear_referencia' reporte.id %}" class="button success"> Referencia </a> 
-                <a href="{% url 'admin_app:enviar_individual_pdf' reporte.id %}" class="button alert"> Enviar </a>  
-                </td>
-            </tr>
-            {%empty%}
-                  <h3 style = "color:red"> No existen resultados en estos momentos </h3>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-</div>
+  <article class="cell grid-x grid-margin-x align-center" style="margin-top: 2em;">
+      <table class="hover">
+        <thead>
+          <th> N-Control <th>
+          <th> Apartamento </th>
+          <th> Mes </th>
+          <th> Monto </th> 
+          <th> Deuda </th>
+          <th> Total a Pagar </th>
+          <th> Acciones </th>
+        </thead>
+        <tbody>
+          {% for reporte in reportes %}
+              <tr>
+                  <td> {{reporte.id}} <td>
+                  <td>{{reporte.apartamento}}</td>
+                  <td>{{reporte.corte_mes.get_mes_display}}</td>
+                  <td>{{reporte.monto | intcomma }}</td> 
+                  <td>{{reporte.deuda | intcomma }} </td> 
+                  <td>{{reporte.total_pagar | intcomma }} </td>
+                  <td>
+                  <a href="{% url 'admin_app:recibo_pdf' reporte.id %}" class="button warning"> Recibo </a>
+                  <a href="{% url 'deuda_app:crear_referencia' reporte.id %}" class="button success"> Referencia </a> 
+                  <a href="{% url 'admin_app:enviar_individual_pdf' reporte.id %}" class="button alert"> Enviar </a>  
+                  </td>
+              </tr>
+              {%empty%}
+                    <h3 style = "color:red"> No existen resultados en estos momentos </h3>
+          {% endfor %}
+        </tbody>
+      </table>
+    </article>
+</section>
 
 {% endblock panel-content %} 

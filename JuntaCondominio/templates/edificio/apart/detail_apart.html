@@ -1,8 +1,9 @@
 {% extends 'edificio/base_edificio.html' %}
+{% load humanize %}
 {% block panel-content %}
 <section class= "grid-container">
     <article class = "cell grid-x grid-margin-x align-center ">
-        <h2 style = "color: blue; text-align: center"> Referencia de Pago: </h2>
+        <h2 style = "color: blue; text-align: center"> Referencias de Pago: </h2>
     </article>
     
     <article class = "cell ">
@@ -30,7 +31,7 @@
                 <tbody>
                         <td> {{referencia.id}} </td>
                         <td> {{referencia.get_tipo_pago_display}} </td>
-                        <td> {{referencia.monto_pagar}} </td> 
+                        <td> {{referencia.monto_pagar | intcomma}} </td> 
                         <td> {{referencia.pago_bool}} </td> 
                         <td> {{referencia.descripcion}} </td> 
                         <td> {{referencia.reporte}} </td>
@@ -38,9 +39,9 @@
                <tbody>
                     <td> Reporte: {{referencia.reporte.id}} </td> 
                     <td> Mes: {{referencia.reporte.corte_mes.get_mes_display}} </td>
-                    <td> Monto a Pagar: {{referencia.reporte.monto}} </td> 
-                    <td> Deuda: {{referencia.reporte.deuda}} </td> 
-                    <td> Total a Pagar: {{referencia.reporte.total_pagar}} </td> 
+                    <td> Monto a Pagar: {{referencia.reporte.monto |intcomma}} </td> 
+                    <td> Deuda: {{referencia.reporte.deuda |intcomma}} </td> 
+                    <td> Total a Pagar: {{referencia.reporte.total_pagar | intcomma}} </td> 
                     <td>
                         <a href="{% url 'deuda_app:crear_referencia' referencia.reporte.id %}" class="alert button"> Referencia </a>    
                     </td> 
@@ -52,7 +53,7 @@
         {% endfor %} 
         <table>
             {% if pago_total %} 
-                <td style="font-weight: bolder; text-align: center; font-size: 25px;"> Total Pagado:  {{pago_total}}</td>
+                <td style="font-weight: bolder; text-align: center; font-size: 25px;"> Total Pagado:  {{pago_total | intcomma}}</td>
             {% endif %}
         </table>
     </article>

@@ -39,7 +39,7 @@ LOCAL_APPS = [
     'applications.administracion', 
     'applications.edificio', 
     'applications.deuda', 
-    #'applications.usuario', 
+    'applications.usuario', 
 ]
 
 THIRD_PARTY_APPS = []
@@ -105,7 +105,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-#AUTH_USER_MODEL = 'usuario.User'
+AUTH_USER_MODEL = 'usuario.User'
 #AUTH_USER_MODEL = 'users.User'
 
 LANGUAGE_CODE = 'es-us'

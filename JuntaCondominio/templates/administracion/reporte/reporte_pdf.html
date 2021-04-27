@@ -1,0 +1,154 @@
+{% load humanize %}
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- <link href="css/app.css" rel="stylesheet" type="text/css" MEDIA="screen, print"> -->
+  <title>Recibo</title>
+  <style type="text/css">
+    td {
+      vertical-align: center;
+      text-align: center;
+      font-size: 14px;
+      border-bottom: 1px grey solid;
+      padding-top: 3px;
+    }
+
+    th {
+      font-size: 15px;
+      text-align: center;
+      background-color: #D2CECD;
+      vertical-align: center;
+      padding-top: 5px;
+
+    }
+
+    h1 {
+      font-weight: bolder;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 13px;
+      border-bottom: 2px gray solid;
+      padding-bottom: 3px;
+    }
+  </style>
+</head>
+
+<body>
+  <section>
+    <article>
+      <div>
+        <p>
+          <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San
+            Jose</span>
+          <br>Avenida Fuerzas Armadas, Esq. San Jose a San Luis
+          Parroquia San Jose, Edificio Torres de San Jose. <br>
+          Rif: J-30793298-8 - NIL 298677-1 <br>
+          <span style="font-weight: bolder;"> En el Registro Nacional de Empresas Bajo el N-.7 - Tomo 49, de fecha
+            12/06/2009.</span>
+        </p>
+      </div>
+    </article>
+    <article>
+      <h1>Recibo de Condominio {{ Mes}}</h1>
+      <table>
+        <td style="font-weight: bolder; font-size:16px;"> N-Control {{reporte.id}}</td>
+        <td style="font-weight: bolder; font-size:16px;"> {{reporte.fecha}} </td>
+      </table>
+    </article>
+    <article>
+      <table>
+        <thead>
+          <th>Torre</th>
+          <th>Aprt</th>
+          <th>Piso</th>
+          <th>Propietario</th>
+          <th>Mes</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{apart.get_torre_display}}</td>
+            <td>{{reporte.apartamento}}</td>
+            <td>{{apart.piso}}</td>
+            <td>{{propietario.nombre}} {{propietario.apellido}}</td>
+            <td>{{mes.get_mes_display}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+    <article>
+      <table>
+        <thead>
+          <th>Alicuota</th>
+          <th>Mensualidad</th>
+          <th>Deuda Acumulada</th>
+          <th>Total de Pagar</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{apart.alicuota}}%</td>
+            <td>{{reporte.monto | intcomma}}</td>
+            <td>{{reporte.deuda | intcomma}}</td>
+            <td>{{reporte.total_pagar | intcomma}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+    <article>
+      <table>
+        <thead>
+          <th>Reserva del mes</th>
+          <th>Reserva Acumulada</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{mes.reserva | intcomma}}</td>
+            <td>{{reserva | intcomma}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </article>
+
+    <article>
+      <table class="hover">
+        <thead>
+          <th> Codigo </th>
+          <th> Egreso </th>
+          <th> Detallar </th>
+          <th> Monto BS. </th>
+          <th> Monto $. </th>
+          <th> Precio del $. </th>
+          <th> Descripcion </th>
+        </thead>
+        <tbody>
+          {% for gasto in gastos %}
+          <tr>
+            <td>{{gasto.codigo.codigo}}</td>
+            <td>{{gasto.codigo.nombre}}</td>
+            <td>{{gasto.egreso}}</td>
+            <td>{{gasto.monto | intcomma}}</td>
+            <td>{{gasto.monto_dolar | intcomma}}</td>
+            <td>{{gasto.precio_dolar | intcomma}}</td>
+            <td>{{gasto.descripcion}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <table>
+        <th>Total de gastos</th>
+        <td> {{ mes.monto_egreso | intcomma }}</td>
+      </table>
+    </article>
+    <h2> {{nota}} </h2>
+  </section>
+
+</body>
+
+</html>

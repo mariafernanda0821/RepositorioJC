@@ -1,0 +1,84 @@
+{% load humanize %}
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Recibo</title>
+    <style type="text/css">
+      td {
+        vertical-align: center;
+        text-align: center;
+        font-size: 14px;
+        border-bottom: 1px grey solid;
+        padding-top: 3px;
+      }
+
+      th {
+        font-size: 15px;
+        text-align: center;
+        background-color: #D2CECD;
+        vertical-align: center;
+        padding-top: 5px;
+
+      }
+
+      h1 {
+        font-weight: bolder;
+        text-align: center;
+        font-size: 18px;
+      }
+
+      p {
+        text-align: center;
+        font-size: 13px;
+        border-bottom: 2px gray solid;
+        padding-bottom: 3px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <section>
+      <article>
+        <div>
+          <p>
+            <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">Junta de Condominio Torres de San
+              Jose</span>
+          </p>
+          <p>
+            <span style="font-weight: bolder; font-size: 22px;padding-bottom:3px ;">
+            Reportes {{mes.get_mes_display}} - {{torre.get_torre_display}}
+              </span>
+          </p>
+        </div>
+      </article>
+    
+      <article>
+        <table>
+            <thead>
+              <th> N-Control </th>
+              <th> Apartamento </th>
+              <th> Monto </th> 
+              {% comment %} <th> Deuda </th>
+              <th> Total a Pagar </th> {% endcomment %}
+            </thead>
+            <tbody>
+                {% for reporte in reportes %}
+                    <tr>
+                      <td> {{reporte.id}} <td>
+                      <td>{{reporte.apartamento}}</td>
+                      <td>{{reporte.monto | intcomma }}</td> 
+                      {% comment %} <td>{{reporte.deuda | intcomma }} </td> 
+                      <td>{{reporte.total_pagar | intcomma }} </td> {% endcomment %}
+                    <tr>
+                {% endfor %}
+            </tbody>
+          </table>
+      </article>
+    </section>
+
+  </body>
+
+</html>

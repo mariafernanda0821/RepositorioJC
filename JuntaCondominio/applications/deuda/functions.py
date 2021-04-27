@@ -10,7 +10,7 @@ from applications.deuda.models import *
 
 
 def referencias_listar_Pdf(id_mes):
-    referencias = ReferenciaPago.objects.filter(reporte__corte_mes = id_mes, pago_bool=True)
+    referencias = ReferenciaPago.objects.filter(reporte__corte_mes = id_mes, pago_bool=True).order_by('reporte__apartamento__apartamento')
     data = {
         'referencias': referencias,
     }
@@ -37,8 +37,14 @@ def comprobande_pagoPdf(id_referencia):
 
 def deuda_pdf():
     deudas = RegistroDeudas.objects.all().order_by("apartamento")
+    total_acumulada = RegistroDeudas.objects.deuda_acumulada()
+    total_deudas = RegistroDeudas.objects.deuda_total()
+    total = total_acumulada + total_deudas
     data = {
-        'deudas': deudas
+        'deudas': deudas,
+        'total_acumulada':total_acumulada,
+        'total_deudas':total_deudas,
+        'total': total,
         }
     pdf = render_to_pdf('deuda/deudas_pdf.html', data)
     return pdf

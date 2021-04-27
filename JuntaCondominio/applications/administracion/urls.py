@@ -5,7 +5,7 @@ from . import views
 app_name = "admin_app"
 urlpatterns = [
     path(
-        '',
+        'corte-mes/',
         views.CierreMesListView.as_view(),
         name = "listar_cierre_mes",
     ),
@@ -14,6 +14,11 @@ urlpatterns = [
         'opcion/<pk>/',
         views.OpcionesView.as_view(),
         name = "opciones",
+    ),
+    path(
+        'codigo-egreso-add/', 
+        views.CodigoAcceso.as_view(), 
+        name="codigo_egreso_add",
     ),
     path(
         'egreso-add/', 
@@ -52,6 +57,11 @@ urlpatterns = [
         'listar-reporte/',
         views.ReporteListView.as_view(),
         name = 'listar_reporte',
+    ),
+    path(
+        'enviar-reporte-general/<pk>/<torre>/',
+        views.ReporteGeneralPdf.as_view(),
+        name = "reporte_general_pdf",
     ),
 
     path(
@@ -104,7 +114,7 @@ urlpatterns = [
         views.CierreMesCreateView.as_view(),
         name= "crear_mes",
     ),
-#URL DE INGRESOS
+    #URL DE INGRESOS
     path(
         'ingreso-add/',
         views.IngresoCreateView.as_view(),
@@ -121,7 +131,7 @@ urlpatterns = [
         name="recibo_ingreso",
     ),
 
-    path('generar-reportes/<int:pk>/<int:torre>',
+    path('generar-reportes/<int:pk>/<torre>/',
     views.ReporteDetailView.as_view(),
     name="generar_reportes",
     )

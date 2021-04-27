@@ -2,41 +2,41 @@
 {% load static %}
 {% block panel-content %}
 
-    <section class="grid-container">
-        <section class="grid-x grid-margin-x">
-            <h2 class="cell align-center"> Agregar Mes:</h2>   
-            
-            <article class="cell">
-                <form class="cell grid-x grid-margin-x"action="" method="POST"> {% csrf_token %}
-                    <div class="cell medium-4">
-                        <label >Fecha de Inicio:</label>
-                        {{form.fecha_inicio}}
-                    </div>
-                    <div class="cell medium-4">
-                        <label >Fecha de final:</label>
-                        {{form.fecha_fin}}
-                    </div>
-                    <div class="cell medium-4">
-                        <label > Mes:</label>
-                        {{form.mes}}
-                    </div>
-                    <div class="cell">
-                        <button type="submit" class="alert button ">Agregar</button>
-                    </div>
-                    <div class="cell align-center">
-                        {% for error in form.mes.errors %}
-                            <h3 class="cell" style="color: red;">
-                            {{ error|escape }}
-                            </h3>
-                        {% endfor %}
-                    </div>
-                </form>
+<section class="grid-container">
+  <section class="grid-x grid-margin-x">
+    <h2 class="cell align-center"> Agregar Mes:</h2>
 
-            </article>
+    <article class="cell">
+      <form class="cell grid-x grid-margin-x" action="" method="POST"> {% csrf_token %}
+        <div class="cell medium-4">
+          <label>Fecha de Inicio:</label>
+          {{form.fecha_inicio}}
+        </div>
+        <div class="cell medium-4">
+          <label>Fecha de final:</label>
+          {{form.fecha_fin}}
+        </div>
+        <div class="cell medium-4">
+          <label> Mes:</label>
+          {{form.mes}}
+        </div>
+        <div class="cell">
+          <button type="submit" class="alert button ">Agregar</button>
+        </div>
+        <div class="cell align-center">
+          {% for error in form.mes.errors %}
+          <h3 class="cell" style="color: red;">
+            {{ error|escape }}
+          </h3>
+          {% endfor %}
+        </div>
+      </form>
 
-        </section>
-        
+    </article>
 
-    </section>
+  </section>
+
+
+</section>
 
 {% endblock panel-content %}

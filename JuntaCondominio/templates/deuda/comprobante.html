@@ -12,7 +12,7 @@
         vertical-align: center;
         text-align: center;
         font-size: 15px;
-        border-bottom: 1px grey solid;
+        --border-bottom: 1px grey solid;
         padding-top: 8px;
       }
 
@@ -65,7 +65,7 @@
       <pre style="font-size:15px;">
       <span style="font-size:20px;font-weight: bolder; "> Hemos Recibido De: </span>  
         {{apart.propietario.nombre}} {{apart.propietario.apellido}}, el pago correspondiente
-        al recibo 00{{reporte.id}} del mes de {{ mes.get_mes_display}}, apartamento {{apart.apartamento}}.   
+        al recibo {{reporte.id}} del mes de {{ mes.get_mes_display}}, apartamento {{apart.apartamento}}.   
         </pre> 
     </div>
     <div>
@@ -74,6 +74,11 @@
         <td> Referencia: {{ referencia.referencia_pago}}</td>  
         <td> Monto a pagar: {{ reporte.total_pagar | intcomma}}</td> 
         <td> Monto Pagado: {{ referencia.monto_pagar | intcomma}}</td>
+      </table>
+    </div>
+    <div style="padding:3px; margin-top:80px">
+      <table> 
+        <td> Anotacion: {{ referencia.descripcion }}</td>
       </table>
     </div>
 

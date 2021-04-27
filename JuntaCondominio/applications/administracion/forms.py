@@ -1,16 +1,16 @@
 import datetime
 from django import forms 
-
-from .models import Egreso , Corte_mes, Ingreso
+from django.db import IntegrityError
+from .models import Egreso , Corte_mes, Ingreso, CodigoAcceso
 from applications.edificio.models import Apartamento
 
 
 class EgresoForm(forms.ModelForm):
-    
     class Meta:
         model = Egreso
         fields = (
             "tipo_egreso",
+            "codigo",
             "egreso",
             "descripcion",
             "monto",
@@ -26,6 +26,12 @@ class EgresoForm(forms.ModelForm):
                     'class': 'input-group-field',
                 }
             ),
+            'codigo': forms.Select(
+                #choices=Corte_mes.MES_CHOICES,
+                attrs = {
+                    'class': 'input-group-field',
+                 }
+             ),
             'egreso': forms.TextInput(
                 attrs = {
                     'placeholder': 'Egreso',
@@ -77,16 +83,42 @@ class EgresoForm(forms.ModelForm):
     #los formularios me traen las instance
     def clean_corte_mes(self):
         x = self.cleaned_data['corte_mes']
-        #print("self.cleaned_data['corte_mes']=====valor>",x.cerrar_mes  )
+        #print("self.cleaned_data['corte_mes']=====valor>",self.cleaned_data)
         #print("self.cleaned_data['corte_mes']=====valor>",x  )
         #print("self.cleaned_data['corte_mes']=====valor>",x.id  )
-
-       # x =Corte_mes.objects.get(mes= self.cleaned_data['corte_mes'])
-        #print ("=====>", )
+        # x =Corte_mes.objects.get(mes= self.cleaned_data['corte_mes'])
+        #print ("=====>",)
         if x.cerrar_mes:
             raise forms.ValidationError("Error.Mes cerrado")
         else:
             return x
+
+    
+    # def clean_codigo_acceso(self):
+    #     print("entrar")
+    #     try:
+    #         CodigoAcceso.objects.get(
+    #             nombre=self.cleaned_data['codigo_acceso']
+    #             )
+    #         #if not self.instance.pk:
+    #          #   raise forms.ValidationError("Notificación Ya Existe")
+    #     except CodigoAcceso.DoesNotExist:
+    #         pass
+    #     except IntegrityError:
+    #             raise forms.ValidationError("Codigo de Acceso Ya Existe")
+    #     return self.cleaned_data
+    
+    # def clean_codigo_acceso(self):
+    #     if  CodigoAcceso.objects.filter(codigo=self.cleaned_data['codigo_acceso']).exist():
+    #         raise forms.ValidationError("Codigo ya existe")
+    #     return self.cleaned_data['codigo_acceso']
+    
+    # def clean_codigo_nombre(self): 
+    #     if CodigoAcceso.objects.filter(nombre=self.cleaned_data['codigo_nombre']):
+    #         raise forms.ValidationError("Nombre ya existe")
+         
+    #     print("===>",self.cleaned_data)
+    #     return self.cleaned_data
 
 
 class IngresoForm(forms.ModelForm):
@@ -184,7 +216,18 @@ class CierreMesForm(forms.ModelForm):
             return self.cleaned_data['mes']
 
 
-class  SeleccionForm(forms.Form):
+class CodigoAccesoForm(forms.ModelForm):
+    
+    class Meta:
+        model = CodigoAcceso
+        fields= (
+            "codigo",
+            "nombre",
+            "tipo",
+        )
+         
+
+class SeleccionForm(forms.Form):
     OPCION_CHOICES = (
         ("1", "Reporte"),
         ("2", "Referencia"),
@@ -222,6 +265,37 @@ class  SeleccionForm(forms.Form):
 
 
 
+class CodigoAcceso2Form(forms.Form):
+    codigo_tipo = forms.ChoiceField(
+        required=False,
+        choices=CodigoAcceso.CHOICES_TIPO,
+        widget=forms.Select(
+            attrs = {
+                'class': 'input-group-field',
+            }
+        )
+    )
+    codigo_acceso = forms.CharField(
+        label='Codigo',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class': 'input-group-field',
+            }
+        )
+    )
+
+    codigo_nombre = forms.CharField(
+        label='Nombre',
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                'placeholder': 'Contraseña',
+                'class': 'input-group-field',
+            }
+        )
+    )
 
 
 

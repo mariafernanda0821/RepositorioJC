@@ -1,51 +1,53 @@
 {% extends 'edificio/base_edificio.html' %}
+{% load static %}
+{% load humanize %}
 {% block panel-content %}
-<section class= "grid-container">
-    <article class = "cell grid-x grid-margin-x align-center ">
-        <h2 style = "color: blue; text-align: center"> Referencia de Pago: </h2>
-    </article>
-    
-    <article class = "cell ">
-        <table>
-                <thead>
-                    <th> {{apart.id}}</th>
-                    <th> {{apart.apartamento}}</th>
-                    <th> {{apart.propietario.nombre}} {{apart.propietario.apellido}}</th> 
-                    <th> {{apart.get_torre_display}} </th> 
-                </thead>
-        </table>
-    </article>
-    <article class = "cell">
-        {% for reporte in reporte %} 
-            <table>
-                <thead>
-                    <th> ID</th>
-                    <th> mes</th>
-                    <th> Fecha </th>
-                    <th> Monto</th> 
-                    <th> Deuda</th> 
-                    <th> Total Pagar </th>  
-                </thead>
-                 
-                <tbody>
-                        <td> {{reporte.id}} </td>
-                        <td> {{reporte.corte_mes.get_mes_display}} </td> 
-                        <td> {{reporte.fecha}} </td> 
-                        <td> {{reporte.monto}} </td> 
-                        <td> {{reporte.deuda}} </td> 
-                        <td> {{reporte.total_pagar}} </td>
-                
-                </tbody> 
-            </table>
-            {%empty%}
-                <h3 style = "color:red"> No existen reporte registrada en estos momentos </h3> 
-        {% endfor %} 
-        <table>
-            {% if pago_total %} 
-                <td style="font-weight: bolder; text-align: center; font-size: 25px;"> Total Pagado:  {{pago_total}}</td>
-            {% endif %}
-        </table>
-    </article>
+<section class="grid-container">
+  <article class="cell grid-x grid-margin-x align-center ">
+    <h2 style="color: blue; text-align: center"> Reportes  de Pago: </h2>
+  </article>
+
+  <article class="cell">
+    <table>
+      <thead>
+        <th> {{apart.id}}</th>
+        <th> {{apart.apartamento}}</th>
+        <th> {{apart.propietario.nombre}} {{apart.propietario.apellido}}</th>
+        <th> {{apart.get_torre_display}} </th>
+      </thead>
+    </table>
+  </article>
+  <article class="cell">
+    {% for reporte in reporte %}
+      <table>
+        <thead>
+          <th> ID</th>
+          <th> mes</th>
+          <th> Fecha </th>
+          <th> Monto</th>
+          <th> Deuda</th>
+          <th> Total Pagar </th>
+        </thead>
+
+        <tbody>
+          <td> {{reporte.id}} </td>
+          <td> {{reporte.corte_mes.get_mes_display}} </td>
+          <td> {{reporte.fecha}} </td>
+          <td> {{reporte.monto | intcomma}} </td>
+          <td> {{reporte.deuda | intcomma}} </td>
+          <td> {{reporte.total_pagar |intcomma}} </td>
+
+        </tbody>
+      </table>
+    {%empty%}
+      <h3 style="color:red"> No existen reporte registrada en estos momentos </h3>
+      {% endfor %}
+      <table>
+        {% if pago_total %}
+        <td style="font-weight: bolder; text-align: center; font-size: 25px;"> Total Pagado: {{pago_total | intcomma}}</td>
+    {% endif %}
+      </table>
+  </article>
 </section>
 
 
