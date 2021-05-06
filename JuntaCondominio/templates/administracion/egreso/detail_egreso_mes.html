@@ -8,7 +8,7 @@
     <div class="cell grid-x grid-margin-x align-center">
       <div class="cell grid-x grid-margin-x">
         <h3 class="cell small-6 align-center"> Gasto del mes: {{mes.get_mes_display}} </h3>
-        <p class="cell small-6 align-right ">{{fecha}} </p>
+        <p class="cell small-6 align-right "> {{fecha}} </p>
       </div>
     </div>
     <div class="cell grid-x grid-margin-x align-center">
@@ -19,7 +19,7 @@
         <a href="{% url 'admin_app:recibo_egreso_mes' mes.id %}" class="warning button" target="_blank">  Generar Informe PDF</a>
       </div>
       <div class="cell small-3">
-        <a href="#" class="warning button"> Enviar PDF </a>
+        <a href="{% url 'admin_app:enviar_egreso' mes.id %}" class="warning button" target="_blank"> Enviar PDF </a>
       </div>
       <div class="cell small-3">
         <a href="{% url 'admin_app:update_mes' mes.id  %}" class="warning button"> Home Mes </a>

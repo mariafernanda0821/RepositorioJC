@@ -17,7 +17,7 @@ class EgresoManager(models.Manager):
 
     def buscar_gasto_por_mes(self, mes):
 
-        return self.filter(corte_mes=mes).order_by("id")
+        return self.filter(corte_mes=mes).order_by("codigo__codigo")
 
     def totalizar_gastos_mes(self, pk):
 
@@ -26,6 +26,7 @@ class EgresoManager(models.Manager):
         z= x['total']
         return z
     
+
     def buscar_fecha(self, fecha1,fecha2):
         #print("======>", fecha1)
         #print("======>", fecha2)
@@ -37,6 +38,7 @@ class EgresoManager(models.Manager):
        # print("=====", resultado)
         return resultado
     #?date_start=2021-01-01&date_end=2021-01-24
+    
     def crear_egreso(self, instance, codigo):
         
         x = self.create(

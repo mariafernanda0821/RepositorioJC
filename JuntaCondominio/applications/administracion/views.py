@@ -31,7 +31,7 @@ from applications.deuda.models import *
 
 from .functions import (
     reporte_vaucher_pdf, reporte_alquiler_pdf, enviar_correos,crear_codigo,
-    reportes_general_pdf, update_corte_mes
+    reportes_general_pdf, update_corte_mes, informe_alquiler_pdf, egreso_pdf,
     )
 
 from applications.usuario.mixins import AdminPermisoMixin, UsuarioPermisoMixin
@@ -189,16 +189,25 @@ class EgresoMesPdf(UsuarioPermisoMixin,View):
     #SE VA A GENERAR EL RECIBO DEL MES CORRESPONDIENTE, se debe actualiza ante de generar el pdf
     #
     def get(self, request, *args, **kwargs):
-        mes = Corte_mes.objects.get(id=self.kwargs['pk'])
-        gastos= Egreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("codigo__codigo")
-        total = Egreso.objects.totalizar_gastos_mes(self.kwargs["pk"]) #ESTOY PASANDO EL MES
-        data = {
-            'mes': mes,
-            'gastos': gastos,
-            'total':  total
-        }
-        pdf = render_to_pdf('administracion/egreso/recibo_mes.html', data)
+        pdf = egreso_pdf(self.kwargs['pk'])
         return HttpResponse(pdf, content_type='application/pdf')
+
+
+class EnviarEgresoPDF(UsuarioPermisoMixin,View):
+    #enviar el deudas
+    def get(self, request, *args, **kwargs):
+        pdf = egreso_pdf(self.kwargs['pk'])
+        asunto = "Informe General de Gasto"
+        mensaje = "Se adjunta los gastos"
+        titulo="gastos.pdf"
+        #correo=["mariadelsocorro2108@gmail.com","miguelgonzalez2112@gmail.com"]
+        correo = ["mariaf0821@gmail.com","mariaf0821@gmail.com"]
+        if enviar_correos(pdf,asunto,mensaje, correo, titulo):
+            #print("=========> se envio el correo")
+            return HttpResponse("Se envio correo exitosamente")
+        else:    
+            return HttpResponse("Ocurrio un error al enviar el correo")
+
 
 #-----------****** FIN VISTA DE EGRESO ********-----------
 
@@ -339,6 +348,14 @@ class ReporteGeneralPdf(UsuarioPermisoMixin,View):
         
         return HttpResponse(pdf, content_type='application/pdf')
 
+
+class InformeAlquilerPdf(UsuarioPermisoMixin,View):
+    #CREO EL VOUCHER O RECIBO DE EGRESO DEL MES individual
+    def get(self, request, *args, **kwargs):
+        #reportes_pdf(id_mes, id_torre)
+        pdf = informe_alquiler_pdf(self.kwargs["pk"])
+        
+        return HttpResponse(pdf, content_type='application/pdf')
 
 
 class EnviarReportePDF(AdminPermisoMixin,View):

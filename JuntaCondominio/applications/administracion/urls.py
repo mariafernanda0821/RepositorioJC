@@ -46,7 +46,11 @@ urlpatterns = [
         views.EgresoDeleteView.as_view(),
         name = "delete_egreso",
     ),
-
+    path(
+        'enviar-egreso/<pk>', #para eliminar un gasto
+        views.EnviarEgresoPDF.as_view(),
+        name = "enviar_egreso",
+    ),
     path(
         'generar-recibo-egreso-mes/<pk>', 
         views.EgresoMesPdf.as_view(), 
@@ -104,6 +108,12 @@ urlpatterns = [
         'reporte-alquiler/<pk>/',
         views.ReporteAlquiler.as_view(),
         name = "reporte_alquiler",
+    ),
+
+    path(
+        "informe-alquiler-pdf/<int:pk>",
+        views.InformeAlquilerPdf.as_view(),
+        name="informe_alquiler_pdf"
     ),
 
 

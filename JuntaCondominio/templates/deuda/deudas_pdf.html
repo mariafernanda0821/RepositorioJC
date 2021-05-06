@@ -83,12 +83,12 @@
         <thead>
           <th>Deuda Acumulada</th>
           <th>Deuda Total</th>
-          <th>Deuda Totalizada </th>
+        {% comment %}   <th>Deuda Totalizada </th> {% endcomment %}
         </thead>
         <tbody>
           <td>{{total_acumulada |intcomma}}</td>
           <td>{{total_deudas |intcomma}}</td>
-          <td>{{total |intcomma}}</td>
+         {% comment %}  <td>{{total |intcomma}}</td> {% endcomment %}
         </tbody>
       </table>
     </div>

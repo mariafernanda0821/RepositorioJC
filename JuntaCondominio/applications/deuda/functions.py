@@ -39,12 +39,12 @@ def deuda_pdf():
     deudas = RegistroDeudas.objects.all().order_by("apartamento")
     total_acumulada = RegistroDeudas.objects.deuda_acumulada()
     total_deudas = RegistroDeudas.objects.deuda_total()
-    total = total_acumulada + total_deudas
+    #total = total_acumulada + total_deudas
     data = {
         'deudas': deudas,
         'total_acumulada':total_acumulada,
         'total_deudas':total_deudas,
-        'total': total,
+     #   'total': total,
         }
     pdf = render_to_pdf('deuda/deudas_pdf.html', data)
     return pdf
@@ -56,7 +56,13 @@ def enviar_correos(pdf, asunto, mensaje, correo,titulo):
     #asunto = "Deuda"
     #mensaje = "Se adjunta deudas " 
     email_remitente = "sanjosecondominio21@gmail.com"
-    email = EmailMessage(asunto, mensaje, email_remitente, [correo])
+    if type(correo) == list: 
+        #print("entre a lista")
+        email = EmailMessage(asunto, mensaje, email_remitente, correo)
+    else:
+        #print("entre variable")
+        email = EmailMessage(asunto, mensaje, email_remitente, [correo,])
+
     email.attach(titulo, pdf.getvalue(), "application/pdf")
     email.content_subtype = pdf  # Main content is now text/html
     email.encoding = 'ISO-8859-1'

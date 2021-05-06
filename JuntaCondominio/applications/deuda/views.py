@@ -170,13 +170,14 @@ class EnviarDeudaPDF(UsuarioPermisoMixin,View):
         asunto = "Deuda"
         mensaje = "Se adjunta deudas"
         titulo="deuda.pdf"
-        correo="mariadelsocorro2108@gmail.com"
+        correo=["mariadelsocorro2108@gmail.com","miguelgonzalez2112@gmail.com"]
         if enviar_correos(pdf,asunto,mensaje, correo, titulo):
             print("=========> se envio el correo")
             return HttpResponseRedirect(
                 reverse("deuda_app:listar_deudas")
             )
-        return []
+        else:
+            return  HttpResponse("Ocurrio un error al enviar el correo")
 
 
 

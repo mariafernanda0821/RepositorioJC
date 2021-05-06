@@ -12,6 +12,23 @@ from applications.edificio.models import *
 from applications.deuda.models import * 
 
 #funcion
+
+def egreso_pdf(mes):
+    mes = Corte_mes.objects.get(id=mes)
+        #gastos= Egreso.objects.filter(corte_mes= self.kwargs['pk']).order_by("codigo__codigo")
+    gastos= Egreso.objects.buscar_gasto_por_mes(mes)
+    total = Egreso.objects.totalizar_gastos_mes(mes) #ESTOY PASANDO EL MES
+    data = {
+            'mes': mes,
+            'gastos': gastos,
+            'total':  total
+        }
+    pdf = render_to_pdf('administracion/egreso/recibo_mes.html', data)
+
+    return pdf
+
+
+
 def reporte_vaucher_pdf(id_reporte):
     reporte = Reporte.objects.get(id=id_reporte)
     gastos=  Egreso.objects.filter(corte_mes = reporte.corte_mes).order_by('codigo__codigo')
@@ -78,7 +95,13 @@ def reportes_general_pdf(id_mes, id_torre):
 def enviar_correos(pdf, asunto, mensaje, correo, titulo):
     
     email_remitente = "sanjosecondominio21@gmail.com"
-    email = EmailMessage(asunto, mensaje, email_remitente, [correo,])
+    if type(correo) == list: 
+        #print("entre a lista")
+        email = EmailMessage(asunto, mensaje, email_remitente, correo)
+    else:
+        #print("entre variable")
+        email = EmailMessage(asunto, mensaje, email_remitente, [correo,])
+    
     email.attach(titulo, pdf.getvalue(), "application/pdf")
     email.content_subtype = pdf  # Main content is now text/html
     email.encoding = 'ISO-8859-1'
@@ -94,6 +117,7 @@ def crear_codigo(self, **params):
     codigo.save()
     return True
 
+
 def update_corte_mes(self, **params):
     verificar = Corte_mes.objects.filter(mes=params["mes"]).exists()
    
@@ -102,3 +126,18 @@ def update_corte_mes(self, **params):
         instance.nota=params["nota"]
         instance.save()
     return verificar
+
+
+
+def informe_alquiler_pdf(id_mes):
+    reportes = Reporte.objects.filter(apartamento__torre="3", corte_mes=id_mes).exclude(apartamento__id=173).order_by("id")
+ 
+    total_pagar = Reporte.objects.total_reporte_por_mes_alquiler(id_mes)
+    data = {
+            'reporte': reportes,
+            'total_pagar': total_pagar,
+            'fecha': timezone.now()
+        }
+
+    pdf = render_to_pdf('administracion/reporte/celtibera.html', data)
+    return pdf
